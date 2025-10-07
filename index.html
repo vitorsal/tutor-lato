@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriais para Gestão dos Cursos Lato Sensu (Padrão PRPG UFG)</title>
+    <style>
+        /* ==================== */
+        /* VARIÁVEIS DE CORES (TEMA: PRPG UFG - VERDE/BRANCO) */
+        /* ==================== */
+        :root {
+            /* Verde forte institucional - Usado em botões/acento */
+            --primary-color: #38761D; 
+            /* Branco para fundo principal */
+            --secondary-color: #FFFFFF;
+            /* Cor de fundo para conteúdo de tutorial (verde claro) */
+            --accent-bg: #E6F3E6; 
+            /* Texto principal */
+            --text-color: #333333; 
+            /* Texto do botão (contraste) */
+            --button-text-color: #FFFFFF; 
+            /* Cor de fundo do botão no hover/ativo */
+            --hover-bg: #4CAF50; 
+            /* Borda separadora */
+            --border-color: #CCCCCC;
+            /* Cor de destaque para subtítulos internos */
+            --detail-highlight-color: #555555;
+        }
+
+        /* ESTILOS GERAIS */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px; /* Limita a largura em telas grandes */
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* ==================== */
+        /* CABEÇALHO (HEADER) */
+        /* ==================== */
+        #header {
+            background-color: var(--primary-color);
+            color: var(--button-text-color);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        #header h1 {
+            margin: 0;
+            font-size: 1.8em;
+            letter-spacing: 1px;
+        }
+
+        /* ==================== */
+        /* TÍTULOS E TEXTOS */
+        /* ==================== */
+        h2 {
+            color: var(--primary-color);
+            margin-top: 25px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-bg);
+            padding-bottom: 8px;
+            font-size: 1.5em;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .p-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        strong {
+            color: var(--detail-highlight-color);
+            font-weight: 700;
+        }
+
+        /* ==================== */
+        /* ESTILO DOS TUTORIAIS (ACORDION) */
+        /* ==================== */
+        .tutorial-header {
+            background-color: var(--primary-color);
+            color: var(--button-text-color);
+            cursor: pointer;
+            padding: 15px 25px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, border-radius 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .tutorial-header:hover {
+            background-color: var(--hover-bg);
+        }
+        
+        .tutorial-header.active {
+            background-color: var(--hover-bg); 
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .tutorial-header.active .icon {
+            transform: rotate(90deg);
+        }
+
+        .content {
+            padding: 0 25px;
+            background-color: var(--accent-bg);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            border-left: 1px solid var(--primary-color);
+            border-right: 1px solid var(--primary-color);
+            border-bottom: 1px solid var(--primary-color);
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        
+        .content-inner {
+            padding: 20px 0;
+        }
+
+        /* Estilos de listas e links */
+        .content ul, .content ol {
+            margin: 10px 0 10px 20px;
+            padding-left: 0;
+        }
+
+        .content li {
+            margin-bottom: 8px;
+        }
+        
+        .content p {
+            margin-bottom: 10px;
+        }
+
+        .content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .content a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Destaques em listas (para o 15.2) */
+        .sub-list li strong {
+            display: inline;
+            color: var(--text-color);
+            font-weight: normal;
+        }
+        
+        .sub-list ul {
+            margin-left: 15px;
+        }
+
+        /* Estilo para e-mail/contato */
+        .email-contato {
+            font-weight: bold;
+            color: #D9534F; /* Um vermelho/laranja sutil para contraste em e-mails */
+        }
+
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <h1>TUTORIAIS PARA GESTÃO DOS CURSOS LATO SENSU</h1>
+    </header>
+
+    <div class="container">
+        
+        <h2>Confira abaixo as principais dúvidas. Clique em cada item para saber mais.</h2>
+        <p class="p-info">Se não encontrar as informações desejadas, entre em contato pelo e-mail: pedagogica.escoladepos@ufg.br </p>
+
+        <button class="tutorial-header">
+            <span>1. CRIAÇÃO DE CURSO (RESOLUÇÃO CEPEC N° 1952/2025)</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>O processo de criação de um novo curso (aquele criado pela primeira vez pela UFG), seja ele Especialização, Residência Profissional ou Treinamento Avançado, é regido pelo Capítulo II da Instrução Normativa PRPG e exige o encaminhamento de uma proposta simplificada.</p>
+                
+                <h3>1.1 O processo deve ser iniciado no SEI:</h3>
+                <p>Na Unidade Acadêmica, Unidade Acadêmica Especial ou Núcleo Interdisciplinar de Pesquisa, Ensino e Extensão proponente, com as seguintes especificações no SEI:</p>
+                <ul>
+                    <li><strong>Tipo de Processo:</strong> “Pós-Graduação Lato Sensu: Criação de Cursos e Turmas”</li>
+                    <li><strong>Especificação:</strong> “Criação do Curso de Especialização [Ou Treinamento Avançado, Ou Residência Profissional] em [NOME DO CURSO]”.</li>
+                </ul>
+
+                <h3>1.2 Documentos para encaminhamento à PRPG</h3>
+                <p>A proposta de criação deve ser encaminhada à Pró-Reitoria de Pós-Graduação (PRPG) com os seguintes documentos obrigatórios:</p>
+                <ol>
+                    <li>Expediente (Ofício ou Despacho) do Diretor da(s) Unidade(s) proponente(s) ou do Coordenador do NIPEE, solicitando a aprovação da criação do curso;</li>
+                    <li>Certidão de Ata do(s) Conselho(s) Diretor(es) da(s) Unidade(s) proponente(s) ou colegiado equivalente, aprovando a proposta de criação do curso;</li>
+                    <li><a href="#" target="_blank">Projeto Pedagógico do Curso (PPC) simplificado</a>.</li>
+                </ol>
+                
+                <p><strong>Importante: Cursos Já Existentes</strong><br>Os cursos que já foram ofertados pela UFG e possuem resolução de aprovação são considerados já criados. Para abrir novas turmas para estes cursos, não é necessário um novo processo de criação. O procedimento exigido é apenas a submissão de um Projeto de Ensino e Plano de Trabalho para a oferta, conforme a nova regulamentação.</p>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>2. OFERTA DE TURMA</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>A oferta de turmas de cursos anteriormente criados pela UFG se dará mediante a aprovação de Projeto de Ensino e Plano de Trabalho, após a análise e verificação de conformidade técnica pela Escola de Pós UFG, PROAD e Centro Integrado de Aprendizagem em Rede – CIAR (se aplicável).</p>
+                
+                <h3>1.1 O processo deve ser iniciado no SEI:</h3>
+                <p>Na Unidade Acadêmica, Unidade Acadêmica Especial ou Núcleo Interdisciplinar de Pesquisa, Ensino e Extensão proponente, com as seguintes especificações no SEI:</p>
+                <ul>
+                    <li><strong>Tipo de Processo:</strong> “Pós-Graduação Lato Sensu: Criação de Cursos e Turmas”</li>
+                    <li><strong>Especificação:</strong> “Oferta da(s) Turma(s) [Número(s) da(s) Turma(s)] do Curso de Especialização [Ou Treinamento Avançado, Ou Residência Profissional] em [NOME DO CURSO].</li>
+                </ul>
+
+                <h3>1.2 Documentos para Encaminhamento à Escola de Pós UFG</h3>
+                <p>O Projeto de Ensino para a oferta das turmas deverá ter vigência de até 5 anos, e, para a análise e autorização, a Unidade deverá encaminhar os seguintes documentos à Escola de Pós UFG:</p>
+                <ol>
+                    <li>Certidão de Ata do Conselho Diretor da Unidade, aprovando a oferta da(s) turma(s) do curso, e indicando o(a) Coordenador(a) e Vice-coordenador(a);</li>
+                    <li><a href="#" target="_blank">Projeto de Ensino</a> com detalhamento do PPC;</li>
+                    <li><a href="#" target="_blank">Plano de Trabalho e Planilhas Financeiras</a> da(s) turma(s), elaborados de acordo com as orientações e normativas da PROAD, ou declaração informando que a Unidade é capaz de ofertar o curso sem arrecadação financeira;</li>
+                    <li><a href="#" target="_blank">Declaração</a> do(a) Coordenador(a) de que a oferta não se caracteriza reapresentação reiterada de curso, conforme vetado pela legislação vigente;</li>
+                    <li>Declaração dos(as) técnicos(as)-administrativos(as) em educação (TAEs) da UFG para desempenho das atividades;</li>
+                    <li>Declaração assinada pelos(as) professores(as) com vínculo funcional com a UFG para desempenho das atividades;</li>
+                    <li>Termo de ciência para a participação de profissionais externos à universidade;</li>
+                    <li>Justificativa consubstanciada para a inclusão de professores especialistas sem a titulação mínima de mestre no quadro docente do curso, quando for o caso.</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>3. EDITAL DE PROCESSO SELETIVO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>O Edital deve ser confeccionado de acordo com a Instrução Normativa PRPG e os modelos descritos abaixo:</p>
+                <ul>
+                    <li><a href="#" target="_blank">Modelo para Edital</a>;</li>
+                    <li><a href="#" target="_blank">Autodeclaração</a> para a inscrição de pessoas pertencentes a grupos minorizados;</li>
+                    <li><a href="#" target="_blank">Formulário</a> para interposição de recursos;</li>
+                    <li><a href="#" target="_blank">Resumo do Currículo</a> Profissional e Acadêmico (se aplicável).</li>
+                </ul>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>4. GESTÃO FINANCEIRA DO CURSO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>A PROAD é responsável pela análise e o acompanhamento financeiro dos cursos de Pós-Graduação Lato Sensu na UFG.</p>
+                <p>Para maiores informações, <a href="https://www.proad.ufg.br/p/17180-especializacao" target="_blank">clique aqui</a> ou entre em contato com a Diretoria Financeira de Projetos: <strong class="email-contato">dfp.proad@ufg.br</strong>.</p>
+            </div>
+        </div>
+        
+        <button class="tutorial-header">
+            <span>5. GESTÃO DO CURSO NO SIGAA</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>Consulte o tutorial do "<a href="#" target="_blank">Sistema SIGAA Módulo Lato Sensu</a>” para orientações sobre:</p>
+                <ol>
+                    <li>Inscrição do discente;</li>
+                    <li>Matrícula e registro das atividades acadêmicas do discente;</li>
+                    <li>Instruções para atividades no Portal do Docente e Portal Discente.</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>6. INDICAÇÃO E SUBSTITUIÇÃO DE SECRETÁRIO E APOIO ADMINISTRATIVO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>A indicação ou substituição do(a) secretário(a)/apoio administrativo deve ser informada pela coordenação do curso, por meio de despacho no processo SEI de oferta da turma, à PRPG, que realizará o devido cadastro/atualização no SIGAA.</p>
+                <ol>
+                    <li>O despacho de Indicação ou solicitação de alteração do Secretário e Apoio Administrativo deve ser inserido no processo de oferta da turma.</li>
+                    <li>O despacho deve ser assinado pelo(a) Coordenador ou pelo Vice-Coordenador do curso.</li>
+                    <li>O processo deve ser enviado à PRPG.</li>
+                    <li>A PRPG realizará o cadastro/atualização no SIGAA para que o usuário tenha as devidas permissões e vínculos.</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>7. SUBSTITUIÇÃO DE PROFESSOR</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>A substituição deve ser solicitada pelo processo SEI de Oferta da Turma, com a adição dos documentos listados abaixo, e encaminhado à PRPG.</p>
+                <ol>
+                    <li>Solicitação por meio de um despacho inserido no processo SEI de Oferta da Turma, assinado pelo Coordenador ou Vice-Coordenador;</li>
+                    <li><a href="#" target="_blank">Formulário SEI</a> de substituição/inclusão/exclusão de docentes, que deve conter as informações completas sobre a alteração e a distribuição de carga horária das disciplinas;</li>
+                    <li><a href="#" target="_blank">Declaração ou Termo de Ciência</a> do professor que será inserido no curso, conforme a categoria: TAE, docente da UFG ou profissional externo;</li>
+                    <li>Se o professor for externo à UFG, o Despacho deve incluir, obrigatoriamente, a seguinte lista de dados abaixo, ou se preferir preencher o <a href="#" target="_blank">formulário de cadastro de docente externo</a>:
+                        <ul>
+                            <li>Nome Completo, Nome Oficial, Cpf, Nome Da Mãe, Sexo, Data De Nascimento, Estado Civil, E-Mail;</li>
+                            <li>Endereço Completo (com CEP), Cidade/Estado (Residência), Cidade/Estado (Nascimento);</li>
+                            <li>RG (Órgão, Estado, Data de Expedição), Link Currículo Lattes.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p>Obs.: É importante lembrar que, caso seja necessário encaminhar os dados dos professores via SEI no processo de criação da turma, o documento (despacho) deve ser classificado como **restrito**, uma vez que contém informações pessoais.</p>
+                <p>O processo deve ser encaminhado à PRPG para análise, aprovação e alteração no SIGAA.</p>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>8. INDICAÇÃO OU MUDANÇA NA COORDENAÇÃO OU VICE-COORDENAÇÃO DO CURSO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <ol>
+                    <li>A indicação ou substituição do coordenador ou vice coordenador deve ser aprovada em reunião do Colegiado do Curso;</li>
+                    <li>A ata da reunião do colegiado do curso (composta por 5 docentes do curso) deve ser assinada por todos os membros;</li>
+                    <li>A substituição deve ser homologada pelo Conselho Diretor da Unidade;</li>
+                    <li>A Certidão de Ata deve ser enviada via sistema (SEI) no processo de oferta da turma à Escola de Pós UFG;</li>
+                    <li>A Escola de Pós UFG fará a verificação, a publicação da Portaria de Nomeação e a consequente alteração no SIGAA.</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>9. PRORROGAÇÃO DE TURMA</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <ol>
+                    <li>Atualizar o cronograma do Projeto de Ensino, indicando a nova data final da turma, e inserí-lo no processo SEI de oferta de turma;</li>
+                    <li>Inserir um despacho solicitando a alteração no SIGAA e a prorrogação;</li>
+                    <li>O processo deve ser encaminhado à Escola de Pós UFG;</li>
+                    <li>A Escola de Pós UFG envia o processo à PROAD para análise, manifestação e alteração de contrato ou TED (Termo de Execução Descentralizada), caso haja impacto financeiro ou contratual;</li>
+                    <li>Após a manifestação favorável da PROAD, a Escola de Pós UFG procede à alteração do cronograma no SIGAA.</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>10. SOLICITAÇÃO DE EMISSÃO DE CERTIFICADO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <h3>1ª Via do Certificado</h3>
+                <p>A Coordenação deve abrir um processo **SEI individual para cada aluno concluinte**.</p>
+                <p><strong>Recomendação:</strong> Enviar primeiramente apenas 1 processo de 1 aluno do curso, para verificação inicial pela Coordenação de Assuntos Acadêmicos da PRPG. Após validação, os demais processos podem ser enviados.</p>
+                <p><strong>Documentos a serem inseridos no processo:</strong></p>
+                <ol>
+                    <li>Formulário específico, nato digital no SEI, assinado pelo Coordenador do curso;</li>
+                    <li>Histórico Escolar do aluno;</li>
+                    <li>Enviar o processo à Biblioteca da UFG para que seja inserida a Declaração de “nada consta” emitida pelo Sistema de Bibliotecas;</li>
+                    <li>Comprovante de quitação da taxa de expedição de certificado (custo de R$ 32,00 por certificado; para obter a GRU, entrar em contato com <strong class="email-contato">dfp.proad@ufg.br</strong>).</li>
+                    <li>Após a inserção de todos os documentos, o processo deve ser encaminhado à **PRPG** para análise.</li>
+                </ol>
+
+                <h3>2ª Via do Certificado</h3>
+                <p>A emissão da 2ª via é solicitada em casos de extravio ou dano, possuindo uma taxa fixa (R$ 132,00) e requerendo a instrução de documentos específicos no processo SEI:</p>
+                <ol>
+                    <li>Requerimento de 2ª Via de Certificado, preenchido e assinado pelo Coordenador do curso ou por outro servidor da Unidade Acadêmica;</li>
+                    <li>Comprovante de pagamento da taxa de 2ª via no valor de **R$ 132,00** (a Unidade Acadêmica deve providenciar a GRU para pagamento);</li>
+                    <li>Caso o discente egresso tenha mudado de nome, inserir cópia de Documento de Identificação Oficial atualizado ou certidão de casamento/averbação de divórcio.</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>11. RELATÓRIO FINAL DE CURSO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>No prazo de **60 (sessenta) dias** após o término da vigência dos Projetos de Ensino, a coordenação deverá encaminhar:</p>
+                <ul>
+                    <li>À Escola de Pós UFG: o **relatório acadêmico final**;</li>
+                    <li>À PROAD: o **relatório financeiro final**.</li>
+                </ul>
+                <p>A Escola de Pós UFG e a PROAD terão o prazo de **30 (trinta) dias** para apreciação e aprovação dos relatórios.</p>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>12. PARCERIA/CONTRATO COM OUTRA INSTITUIÇÃO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <h3>Documentos da Instituição Contratante:</h3>
+                <p>A instituição contratante deverá encaminhar à UFG os seguintes documentos:</p>
+                <ol>
+                    <li>Manifestação de interesse (conforme modelo recomendado pelo Setor de Convênios);</li>
+                    <li>Ato constitutivo, Estatuto ou Contrato Social em vigor, e CNPJ;</li>
+                    <li>Documentos pessoais do representante legal (ou procurador);</li>
+                    <li>Comprovante de funcionamento no endereço declarado;</li>
+                    <li>**Certidões de regularidade fiscal e trabalhista** (União, FGTS, CNDT, CEIS, CNJ, Lista de Inidôneos – TCU);</li>
+                    <li>Declaração de cumprimento do Art. 7º da Constituição Federal e de inexistência de conflito de interesse.</li>
+                </ol>
+
+                <h3>Minuta do Contrato e Plano de Trabalho:</h3>
+                <p>Deverão ser preenchidos pelo(a) Coordenador(a) e validados junto à contratante, contendo:</p>
+                <ul>
+                    <li>Valor total do curso, Cronograma de repasse dos recursos, Número de vagas;</li>
+                    <li>Período de oferta da turma, Público-alvo, Obrigações de cada partícipe.</li>
+                </ul>
+
+                <h3>Fluxo de Aprovação:</h3>
+                <p>O processo segue para:</p>
+                <ol>
+                    <li>Direção da Unidade (Parecer e Certidão de Ata do Conselho Diretor);</li>
+                    <li>Análise da **PRPG** e da **PROAD**;</li>
+                    <li>Análise jurídica pela **Procuradoria**;</li>
+                    <li>Assinatura.</li>
+                </ol>
+                <p><strong>Atenção:</strong> O processo seletivo, matrículas e início das aulas somente poderão ocorrer após a assinatura do respectivo instrumento legal (convênio ou contrato).</p>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>13. VERIFICAÇÃO DE AUTENTICIDADE OU VERACIDADE DE CERTIFICADO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>Para verificar se um certificado foi expedido e registrado pela Universidade Federal de Goiás (UFG), envie um e-mail para a Coordenação de Expedição e Registro de Diplomas (CERD/CGA/UFG) através do endereço: <strong class="email-contato">diplomas.cga@ufg.br</strong>.</p>
+                <p>No e-mail, é necessário anexar uma cópia escaneada do certificado a ser verificado.</p>
+                <p>Para casos de certificado extraviado ou danificado, consulte as orientações para solicitação de segunda via do certificado (Item 10).</p>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>14. MATRÍCULA E RENOVAÇÃO DE MATRÍCULA</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>A **matrícula é de responsabilidade da Coordenação**.</p>
+                <ol>
+                    <li>A matrícula do(a) discente deverá ser realizada apenas após a assinatura do contrato.</li>
+                    <li>Os(as) discentes inadimplentes perderão o direito à renovação da matrícula semestral.</li>
+                    <li>A matrícula deve ser efetuada exclusivamente para as disciplinas do semestre vigente.</li>
+                    <li>Para cadastro ou atualização no SIGAA, consultar o **Item 6. Indicação e Substituição de Secretário e Apoio Administrativo**.</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>15. INATIVAÇÃO OU EXCLUSÃO DE MATRÍCULA</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <h3>15.1. Exclusão de Matrícula (Uso Específico)</h3>
+                <p>Aplica-se a casos de **erro na matrícula** (Ex.: Matrículas duplicadas ou curso incorreto).</p>
+                <p>A Coordenação deve enviar solicitação por e-mail à Escola de Pós-Graduação: <strong class="email-contato">pedagogica.escoladepos@ufg.br</strong></p>
+
+                <h3>15.2. Inativação de Matrícula (Desligamento ou Desistência)</h3>
+                <p>Deve ser realizada no SIGAA nos seguintes casos:</p>
+                <ul class="sub-list">
+                    <li>15.2.1. Desistência do(a) Discente:
+                        <ol>
+                            <li>O(a) discente assina o Termo de Desistência e encaminha à coordenação.</li>
+                            <li>A coordenação encaminha o termo ao analista da Fundação para confirmação e acertos financeiros.</li>
+                            <li>Após confirmação, a coordenação ajusta o plano de trabalho no SEI e encaminha a solicitação de inativação à **PRPG** (que fará o procedimento no SIGAA).</li>
+                        </ol>
+                    </li>
+                    <li>15.2.2. Desligamento por Inobservância das Normas da Universidade:
+                        <ol>
+                            <li>A Coordenação encaminha os motivos do desligamento à Fundação.</li>
+                            <li>A Fundação assina o Termo de Cancelamento e realiza os acertos financeiros.</li>
+                            <li>A Coordenação envia a solicitação de desligamento do SIGAA à **PRPG** (que notifica a PROAD e inativa).</li>
+                        </ol>
+                    </li>
+                    <li>15.2.3. Desligamento por não renovação de matrícula por mais de 1 semestre:
+                        <ol>
+                            <li>A Coordenação solicita a lista de inadimplentes (mais de 90 dias ou 3 mensalidades) à Fundação.</li>
+                            <li>A Coordenação envia solicitação de desligamento à Fundação.</li>
+                            <li>A Fundação assina o Termo de Cancelamento e realiza acertos.</li>
+                            <li>A Coordenação envia a solicitação à **PRPG**, ajusta planilhas no SEI e a PRPG notifica a PROAD e inativa.</li>
+                        </ol>
+                    </li>
+                    <li>15.2.4. Extinção do Curso por Inviabilidade:
+                        <ol>
+                            <li>A Coordenação encaminha os motivos à Fundação.</li>
+                            <li>A Fundação assina o Termo de Cancelamento e realiza acertos.</li>
+                            <li>A Coordenação envia a solicitação à **PRPG** (que notifica a PROAD e inativa).</li>
+                        </ol>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+      <button class="tutorial-header">
+            <span>16. DECLARAÇÃO DE MATRÍCULA</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <h3>Emissão pelo Próprio Discente (Recomendado):</h3>
+                <ol>
+                    <li>Acesse o SIGAA – Portal do Discente;</li>
+                    <li>Menu superior > “Ensino”;</li>
+                    <li>Selecione “Declaração de Matrícula” ou “Declaração de Vínculo”.</li>
+                </ol>
+                <p>Observação: A emissão é automática, com validade institucional e código de verificação.</p>
+
+                <p><strong>❌ Caso Não Consiga Emitir no SIGAA:</strong></p>
+                <ul>
+                    <li>O(a) discente deve tirar um **print** da tela com o erro e enviar por e-mail para a Coordenação do Curso, solicitando a emissão.</li>
+                    <li>Se não tiver login/senha, acesse: <a href="https://cercomp.ufg.br/p/39103-tutorial-criar-login-unico" target="_blank">Tutorial: Criar Login Único da UFG</a>.</li>
+                </ul>
+            </div>
+        </div>
+
+     <button class="tutorial-header">
+            <span>17. ALTERAÇÃO DE NOTA DE ALUNO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <h3>🕒 Durante o período de oferta da turma</h3>
+                <p>As alterações podem ser realizadas diretamente no **SIGAA** pelos(as) docentes responsáveis ou pela coordenação.</p>
+                <p>📌 Consulte o Manual do SIGAA – Módulo Lato Sensu (Item 5) para detalhes.</p>
+                
+                <h3>⏳ Fora do período de oferta da turma</h3>
+                <p>A alteração só poderá ser feita mediante abertura de **processo SEI**:</p>
+                <ol>
+                    <li>Abrir processo tipo: **Pós-Graduação Lato Sensu: Revisão de Notas e Frequência**</li>
+                    <li>Incluir despacho com justificativa para o atraso e solicitação de alteração.</li>
+                    <li>Encaminhar o processo: **Direção da Unidade** (para aprovação) > **PRPG** (para alteração no SIGAA).</li>
+                </ol>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>18. LIBERAÇÃO DE ACESSO A TURMA</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>O acesso à turma no SIGAA (lançamento de notas, frequências, emissão de certificados) é restrito a perfis autorizados:</p>
+                <ul>
+                    <li><strong>Coordenadores(as) e Vice-Coordenadores(as):</strong> Acesso automático e liberado durante toda a oferta.</li>
+                    <li><strong>Docentes da turma:</strong> Acesso durante o período da disciplina.</li>
+                    <li><strong>Secretários(as) e Apoios Administrativos:</strong> Precisam ser formalmente indicados (Consultar **Item 6**).</li>
+                </ul>
+                
+                <h3>⏳ Prazo de Acesso após o Término da Turma</h3>
+                <p>O acesso permanece disponível por até **60 dias** após o término das aulas. Após esse prazo, o sistema bloqueia automaticamente os acessos. Lançamentos devem ser feitos antes do bloqueio.</p>
+            </div>
+        </div>
+
+        <button class="tutorial-header">
+            <span>19. ALUNO DE ESPECIALIZAÇÃO DESEJA REALIZAR ESTÁGIO</span>
+            <span class="icon">►</span>
+        </button>
+        <div class="content">
+            <div class="content-inner">
+                <p>Seguir as orientações disponíveis na página:</p>
+                <p><a href="https://prpg.ufg.br/p/documentos-estagio-nao-obrigatorio" target="_blank">Documentos Estágio Não Obrigatório (PRPG UFG)</a></p>
+            </div>
+        </div>
+
+        <p class="p-info" style="margin-top: 30px; text-align: center;">© Universidade Federal de Goiás - PRPG. Todos os direitos reservados.</p>
+    </div>
+
+    <script>
+        // Função JavaScript para o efeito Acordeão (Collapsible)
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var acc = document.getElementsByClassName("tutorial-header");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function() {
+                    // Alterna a classe 'active' no header
+                    this.classList.toggle("active");
+
+                    // Pega o painel de conteúdo
+                    var content = this.nextElementSibling;
+                    
+                    // Lógica para abrir/fechar o conteúdo
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        // Calcula o scroll height para o efeito de transição suave
+                        // Nota: O + 40 é um buffer para garantir que todo o conteúdo apareça, especialmente o padding inferior.
+                        content.style.maxHeight = (content.scrollHeight + 40) + "px";
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
