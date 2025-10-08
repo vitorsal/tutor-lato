@@ -3,27 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutoriais para Gestão dos Cursos Lato Sensu (Padrão PRPG UFG)</title>
+    <title>Tutoriais para Gestão dos Cursos Lato Sensu (UFG PRPG)</title>
     <style>
         /* ==================== */
         /* VARIÁVEIS DE CORES (TEMA: PRPG UFG - VERDE/BRANCO) */
         /* ==================== */
         :root {
-            /* Verde forte institucional - Usado em botões/acento */
             --primary-color: #38761D; 
-            /* Branco para fundo principal */
             --secondary-color: #FFFFFF;
-            /* Cor de fundo para conteúdo de tutorial (verde claro) */
             --accent-bg: #E6F3E6; 
-            /* Texto principal */
             --text-color: #333333; 
-            /* Texto do botão (contraste) */
             --button-text-color: #FFFFFF; 
-            /* Cor de fundo do botão no hover/ativo */
             --hover-bg: #4CAF50; 
-            /* Borda separadora */
             --border-color: #CCCCCC;
-            /* Cor de destaque para subtítulos internos */
             --detail-highlight-color: #555555;
         }
 
@@ -39,7 +31,7 @@
 
         .container {
             width: 90%;
-            max-width: 1000px; /* Limita a largura em telas grandes */
+            max-width: 1000px;
             margin: 40px auto;
             padding: 20px;
         }
@@ -63,7 +55,49 @@
         }
 
         /* ==================== */
-        /* TÍTULOS E TEXTOS */
+        /* ESTILO DA BARRA DE BUSCA */
+        /* ==================== */
+        .search-box {
+            margin-bottom: 25px;
+            padding: 10px;
+            background-color: var(--accent-bg);
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+        }
+
+        /* ==================== */
+        /* ESTILO DE DESTAQUE DA BUSCA */
+        /* ==================== */
+        .highlight {
+            background-color: yellow; /* Cor de destaque amarela */
+            font-weight: bold;
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1em;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #searchInput:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(56, 118, 29, 0.5);
+        }
+        
+        /* Oculta itens que não correspondem à pesquisa */
+        .tutorial-item.hidden {
+            display: none !important;
+        }
+        
+        /* ==================== */
+        /* ESTILO DOS TUTORIAIS (ACORDION) */
         /* ==================== */
         h2 {
             color: var(--primary-color);
@@ -82,20 +116,6 @@
             font-weight: bold;
         }
         
-        .p-info {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 5px;
-        }
-        
-        strong {
-            color: var(--detail-highlight-color);
-            font-weight: 700;
-        }
-
-        /* ==================== */
-        /* ESTILO DOS TUTORIAIS (ACORDION) */
-        /* ==================== */
         .tutorial-header {
             background-color: var(--primary-color);
             color: var(--button-text-color);
@@ -111,7 +131,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-radius: 8px; 
+            border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
 
@@ -125,12 +145,16 @@
             border-bottom-right-radius: 0;
         }
 
-        .icon {
+        /* Usamos o ::after para gerar e animar o ícone, limpando o HTML */
+        .tutorial-header::after {
+            content: "►"; /* Ícone de seta */
+            margin-left: 10px;
             font-size: 1.2em;
             transition: transform 0.3s;
         }
 
-        .tutorial-header.active .icon {
+        /* Gira o ícone de seta quando o item está aberto */
+        .tutorial-header.active::after {
             transform: rotate(90deg);
         }
 
@@ -151,20 +175,6 @@
             padding: 20px 0;
         }
 
-        /* Estilos de listas e links */
-        .content ul, .content ol {
-            margin: 10px 0 10px 20px;
-            padding-left: 0;
-        }
-
-        .content li {
-            margin-bottom: 8px;
-        }
-        
-        .content p {
-            margin-bottom: 10px;
-        }
-
         .content a {
             color: var(--primary-color);
             text-decoration: none;
@@ -175,23 +185,10 @@
             text-decoration: underline;
         }
         
-        /* Destaques em listas (para o 15.2) */
-        .sub-list li strong {
-            display: inline;
-            color: var(--text-color);
-            font-weight: normal;
-        }
-        
-        .sub-list ul {
-            margin-left: 15px;
-        }
-
-        /* Estilo para e-mail/contato */
         .email-contato {
             font-weight: bold;
-            color: #D9534F; /* Um vermelho/laranja sutil para contraste em e-mails */
+            color: #D9534F;
         }
-
     </style>
 </head>
 <body>
@@ -203,11 +200,14 @@
     <div class="container">
         
         <h2>Clique em cada item para saber mais.</h2>
-        <p class="p-info">Se não encontrar as informações desejadas, entre em contato pelo e-mail: pedagogica.escoladepos@ufg.br </p>
+        <p class="p-info">Se não encontrar as informações desejadas, entre em contato pelo e-mail: pedagogica.escoladepos@ufg.br</p>
 
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar por palavra-chave ou item..." aria-label="Buscar tutoriais">
+        </div>
+        
         <button class="tutorial-header">
             <span>1. CRIAÇÃO DE CURSO (RESOLUÇÃO CEPEC N° 1952/2025)</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -225,7 +225,7 @@
                 <ol>
                     <li>Expediente (Ofício ou Despacho) do Diretor da(s) Unidade(s) proponente(s) ou do Coordenador do NIPEE, solicitando a aprovação da criação do curso;</li>
                     <li>Certidão de Ata do(s) Conselho(s) Diretor(es) da(s) Unidade(s) proponente(s) ou colegiado equivalente, aprovando a proposta de criação do curso;</li>
-                    <li><a href="#" target="_blank">Projeto Pedagógico do Curso (PPC) simplificado</a>.</li>
+                    <li><a href="https://docs.google.com/document/d/1WxvPwlpHzaczK1KZSib6k6e5YVmKyFzUDfWoM7Yp3Vg/edit?usp=sharing" target="_blank">Projeto Pedagógico do Curso (PPC) simplificado</a>.</li>
                 </ol>
                 
                 <p><strong>Importante: Cursos Já Existentes</strong><br>Os cursos que já foram ofertados pela UFG e possuem resolução de aprovação são considerados já criados. Para abrir novas turmas para estes cursos, não é necessário um novo processo de criação. O procedimento exigido é apenas a submissão de um Projeto de Ensino e Plano de Trabalho para a oferta, conforme a nova regulamentação.</p>
@@ -234,7 +234,6 @@
 
         <button class="tutorial-header">
             <span>2. OFERTA DE TURMA</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -251,9 +250,9 @@
                 <p>O Projeto de Ensino para a oferta das turmas deverá ter vigência de até 5 anos, e, para a análise e autorização, a Unidade deverá encaminhar os seguintes documentos à Escola de Pós UFG:</p>
                 <ol>
                     <li>Certidão de Ata do Conselho Diretor da Unidade, aprovando a oferta da(s) turma(s) do curso, e indicando o(a) Coordenador(a) e Vice-coordenador(a);</li>
-                    <li><a href="#" target="_blank">Projeto de Ensino</a> com detalhamento do PPC;</li>
-                    <li><a href="#" target="_blank">Plano de Trabalho e Planilhas Financeiras</a> da(s) turma(s), elaborados de acordo com as orientações e normativas da PROAD, ou declaração informando que a Unidade é capaz de ofertar o curso sem arrecadação financeira;</li>
-                    <li><a href="#" target="_blank">Declaração</a> do(a) Coordenador(a) de que a oferta não se caracteriza reapresentação reiterada de curso, conforme vetado pela legislação vigente;</li>
+                    <li><a href="https://docs.google.com/document/d/15xQ2gVhAOpApLa3x8xlhhTL6GsnhfC764jbXsqVJzIA/edit?usp=sharing" target="_blank">Projeto de Ensino</a> com detalhamento do PPC;</li>
+                    <li><a href="https://files.cercomp.ufg.br/weby/up/1333/o/PLANO_DE_TRABALHO_-_Curso_especializacao_com_gestao_na_fundacao_-_Open_Document.odt" target="_blank">Plano de Trabalho e Planilhas Financeiras</a> da(s) turma(s), elaborados de acordo com as orientações e normativas da PROAD, ou declaração informando que a Unidade é capaz de ofertar o curso sem arrecadação financeira;</li>
+                    <li><a href="https://docs.google.com/document/d/1VemhWFywL8QAwHaJY6aG8Ij9ej0vsc5HY3dxLvNZHaQ/edit?usp=sharing" target="_blank">Declaração</a> do(a) Coordenador(a) de que a oferta não se caracteriza reapresentação reiterada de curso, conforme vetado pela legislação vigente;</li>
                     <li>Declaração dos(as) técnicos(as)-administrativos(as) em educação (TAEs) da UFG para desempenho das atividades;</li>
                     <li>Declaração assinada pelos(as) professores(as) com vínculo funcional com a UFG para desempenho das atividades;</li>
                     <li>Termo de ciência para a participação de profissionais externos à universidade;</li>
@@ -264,23 +263,21 @@
 
         <button class="tutorial-header">
             <span>3. EDITAL DE PROCESSO SELETIVO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
                 <p>O Edital deve ser confeccionado de acordo com a Instrução Normativa PRPG e os modelos descritos abaixo:</p>
                 <ul>
-                    <li><a href="#" target="_blank">Modelo para Edital</a>;</li>
-                    <li><a href="#" target="_blank">Autodeclaração</a> para a inscrição de pessoas pertencentes a grupos minorizados;</li>
-                    <li><a href="#" target="_blank">Formulário</a> para interposição de recursos;</li>
-                    <li><a href="#" target="_blank">Resumo do Currículo</a> Profissional e Acadêmico (se aplicável).</li>
+                    <li><a href="https://docs.google.com/document/d/1rZkib5TWGlbGFdtc2LBT_z69VwkKDB4c/edit?usp=sharing" target="_blank">Modelo para Edital</a>;</li>
+                    <li><a href="https://files.cercomp.ufg.br/weby/up/1333/o/AUTODECLARACAO.docx" target="_blank">Autodeclaração</a> para a inscrição de pessoas pertencentes a grupos minorizados;</li>
+                    <li><a href="https://docs.google.com/document/d/1IQTHSHRNh3BJnzLU13ve-f80AnlX00KC/edit?usp=sharing" target="_blank">Formulário</a> para interposição de recursos;</li>
+                    <li><a href="https://docs.google.com/document/d/1iNsEqiHaRMYjt59czrG59fPAMrds5lKv/edit?usp=sharing" target="_blank">Resumo do Currículo</a> Profissional e Acadêmico (se aplicável).</li>
                 </ul>
             </div>
         </div>
 
         <button class="tutorial-header">
             <span>4. GESTÃO FINANCEIRA DO CURSO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -291,11 +288,10 @@
         
         <button class="tutorial-header">
             <span>5. GESTÃO DO CURSO NO SIGAA</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
-                <p>Consulte o tutorial do "<a href="#" target="_blank">Sistema SIGAA Módulo Lato Sensu</a>” para orientações sobre:</p>
+                <p>Consulte o tutorial do "<a href="https://files.cercomp.ufg.br/weby/up/1333/o/Manual_SIGAA_Lato_Sensu_-__Coordena%C3%A7%C3%A3o_ATUALIZADO_20_03_24.pdf" target="_blank">Sistema SIGAA Módulo Lato Sensu</a>” para orientações sobre:</p>
                 <ol>
                     <li>Inscrição do discente;</li>
                     <li>Matrícula e registro das atividades acadêmicas do discente;</li>
@@ -306,7 +302,6 @@
 
         <button class="tutorial-header">
             <span>6. INDICAÇÃO E SUBSTITUIÇÃO DE SECRETÁRIO E APOIO ADMINISTRATIVO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -322,7 +317,6 @@
 
         <button class="tutorial-header">
             <span>7. SUBSTITUIÇÃO DE PROFESSOR</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -330,8 +324,8 @@
                 <ol>
                     <li>Solicitação por meio de um despacho inserido no processo SEI de Oferta da Turma, assinado pelo Coordenador ou Vice-Coordenador;</li>
                     <li><a href="#" target="_blank">Formulário SEI</a> de substituição/inclusão/exclusão de docentes, que deve conter as informações completas sobre a alteração e a distribuição de carga horária das disciplinas;</li>
-                    <li><a href="#" target="_blank">Declaração ou Termo de Ciência</a> do professor que será inserido no curso, conforme a categoria: TAE, docente da UFG ou profissional externo;</li>
-                    <li>Se o professor for externo à UFG, o Despacho deve incluir, obrigatoriamente, a seguinte lista de dados abaixo, ou se preferir preencher o <a href="#" target="_blank">formulário de cadastro de docente externo</a>:
+                    <li><a href="https://docs.google.com/document/d/1bgkkiC4RgrxY6scL9yczuokI1G3kMRu-lmpFmR6T4mA/edit?usp=sharing" target="_blank">Declaração ou Termo de Ciência</a> do professor que será inserido no curso, conforme a categoria: TAE, docente da UFG ou profissional externo;</li>
+                    <li>Se o professor for externo à UFG, o Despacho deve incluir, obrigatoriamente, a seguinte lista de dados abaixo, ou se preferir preencher o <a href="https://docs.google.com/forms/d/e/1FAIpQLSfHbwxvpieCHPHXJ6ztDLpU1a-NS97Y5-j20RPnGSbz8q8FbA/viewform" target="_blank">formulário de cadastro de docente externo</a>:
                         <ul>
                             <li>Nome Completo, Nome Oficial, Cpf, Nome Da Mãe, Sexo, Data De Nascimento, Estado Civil, E-Mail;</li>
                             <li>Endereço Completo (com CEP), Cidade/Estado (Residência), Cidade/Estado (Nascimento);</li>
@@ -346,7 +340,6 @@
 
         <button class="tutorial-header">
             <span>8. INDICAÇÃO OU MUDANÇA NA COORDENAÇÃO OU VICE-COORDENAÇÃO DO CURSO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -355,14 +348,13 @@
                     <li>A ata da reunião do colegiado do curso (composta por 5 docentes do curso) deve ser assinada por todos os membros;</li>
                     <li>A substituição deve ser homologada pelo Conselho Diretor da Unidade;</li>
                     <li>A Certidão de Ata deve ser enviada via sistema (SEI) no processo de oferta da turma à Escola de Pós UFG;</li>
-                    <li>A Escola de Pós UFG fará a verificação, a publicação da Portaria de Nomeação e a consequente alteração no SIGAA.</li>
+                    <li>A Escola de Pós UFG fará a verificação, a publicação da Portaria de Nomeação e a consequente alteração no SIGAA;</li>
                 </ol>
             </div>
         </div>
 
         <button class="tutorial-header">
             <span>9. PRORROGAÇÃO DE TURMA</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -378,7 +370,6 @@
 
         <button class="tutorial-header">
             <span>10. SOLICITAÇÃO DE EMISSÃO DE CERTIFICADO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -406,7 +397,6 @@
 
         <button class="tutorial-header">
             <span>11. RELATÓRIO FINAL DE CURSO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -421,7 +411,6 @@
 
         <button class="tutorial-header">
             <span>12. PARCERIA/CONTRATO COM OUTRA INSTITUIÇÃO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -457,7 +446,6 @@
 
         <button class="tutorial-header">
             <span>13. VERIFICAÇÃO DE AUTENTICIDADE OU VERACIDADE DE CERTIFICADO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -469,7 +457,6 @@
 
         <button class="tutorial-header">
             <span>14. MATRÍCULA E RENOVAÇÃO DE MATRÍCULA</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -485,7 +472,6 @@
 
         <button class="tutorial-header">
             <span>15. INATIVAÇÃO OU EXCLUSÃO DE MATRÍCULA</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -496,21 +482,21 @@
                 <h3>15.2. Inativação de Matrícula (Desligamento ou Desistência)</h3>
                 <p>Deve ser realizada no SIGAA nos seguintes casos:</p>
                 <ul class="sub-list">
-                    <li>15.2.1. Desistência do(a) Discente:
+                    <li>Desistência do(a) Discente:
                         <ol>
                             <li>O(a) discente assina o Termo de Desistência e encaminha à coordenação.</li>
                             <li>A coordenação encaminha o termo ao analista da Fundação para confirmação e acertos financeiros.</li>
                             <li>Após confirmação, a coordenação ajusta o plano de trabalho no SEI e encaminha a solicitação de inativação à **PRPG** (que fará o procedimento no SIGAA).</li>
                         </ol>
                     </li>
-                    <li>15.2.2. Desligamento por Inobservância das Normas da Universidade:
+                    <li>Desligamento por Inobservância das Normas da Universidade:
                         <ol>
                             <li>A Coordenação encaminha os motivos do desligamento à Fundação.</li>
                             <li>A Fundação assina o Termo de Cancelamento e realiza os acertos financeiros.</li>
                             <li>A Coordenação envia a solicitação de desligamento do SIGAA à **PRPG** (que notifica a PROAD e inativa).</li>
                         </ol>
                     </li>
-                    <li>15.2.3. Desligamento por não renovação de matrícula por mais de 1 semestre:
+                    <li>Desligamento por não renovação de matrícula por mais de 1 semestre:
                         <ol>
                             <li>A Coordenação solicita a lista de inadimplentes (mais de 90 dias ou 3 mensalidades) à Fundação.</li>
                             <li>A Coordenação envia solicitação de desligamento à Fundação.</li>
@@ -518,20 +504,19 @@
                             <li>A Coordenação envia a solicitação à **PRPG**, ajusta planilhas no SEI e a PRPG notifica a PROAD e inativa.</li>
                         </ol>
                     </li>
-                    <li>15.2.4. Extinção do Curso por Inviabilidade:
+                    <li>Extinção do Curso por Inviabilidade:
                         <ol>
                             <li>A Coordenação encaminha os motivos à Fundação.</li>
                             <li>A Fundação assina o Termo de Cancelamento e realiza acertos.</li>
-                            <li>A Coordenação envia a solicitação à **PRPG** (que notifica a PROAD e inativa).</li>
+                            <li>A Coordenação envia a solicitação de desligamento do SIGAA à **PRPG** (que notifica a PROAD e inativa).</li>
                         </ol>
                     </li>
                 </ul>
             </div>
         </div>
 
-      <button class="tutorial-header">
+        <button class="tutorial-header">
             <span>16. DECLARAÇÃO DE MATRÍCULA</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -551,9 +536,8 @@
             </div>
         </div>
 
-     <button class="tutorial-header">
+        <button class="tutorial-header">
             <span>17. ALTERAÇÃO DE NOTA DE ALUNO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -573,7 +557,6 @@
 
         <button class="tutorial-header">
             <span>18. LIBERAÇÃO DE ACESSO A TURMA</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -591,7 +574,6 @@
 
         <button class="tutorial-header">
             <span>19. ALUNO DE ESPECIALIZAÇÃO DESEJA REALIZAR ESTÁGIO</span>
-            <span class="icon">►</span>
         </button>
         <div class="content">
             <div class="content-inner">
@@ -599,36 +581,161 @@
                 <p><a href="https://prpg.ufg.br/p/documentos-estagio-nao-obrigatorio" target="_blank">Documentos Estágio Não Obrigatório (PRPG UFG)</a></p>
             </div>
         </div>
-
         <p class="p-info" style="margin-top: 30px; text-align: center;">© Universidade Federal de Goiás - PRPG. Todos os direitos reservados.</p>
     </div>
 
     <script>
-        // Função JavaScript para o efeito Acordeão (Collapsible)
-        document.addEventListener('DOMContentLoaded', (event) => {
-            var acc = document.getElementsByClassName("tutorial-header");
-            var i;
+    document.addEventListener('DOMContentLoaded', (event) => {
+        var acc = document.getElementsByClassName("tutorial-header");
+        var searchInput = document.getElementById('searchInput');
 
-            for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function() {
-                    // Alterna a classe 'active' no header
-                    this.classList.toggle("active");
+        var tutorialItems = [];
+        
+        // --- PREPARAÇÃO FINAL: ENVOLVIMENTO DOS ITENS ---
+        // Envolve cada cabeçalho/conteúdo em um div.tutorial-item para que o filtro JS funcione.
+        for (var i = 0; i < acc.length; i++) {
+            var header = acc[i];
+            var content = acc[i].nextElementSibling;
 
-                    // Pega o painel de conteúdo
-                    var content = this.nextElementSibling;
+            var wrapper = document.createElement('div');
+            wrapper.classList.add('tutorial-item');
+            
+            header.parentNode.insertBefore(wrapper, header);
+            wrapper.appendChild(header);
+            wrapper.appendChild(content);
+
+            tutorialItems.push({
+                header: header,
+                content: content,
+                parent: wrapper,
+                // Salva o HTML original para restaurar após a busca
+                originalHeaderText: header.innerHTML,
+                originalContentHTML: content.innerHTML
+            });
+        }
+
+
+        // --- FUNÇÃO PADRÃO DO ACORDEÃO ---
+        function toggleAccordion(header, content) {
+            header.classList.toggle("active");
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                // Calcula o scroll height + buffer
+                content.style.maxHeight = (content.scrollHeight + 40) + "px";
+            }
+        }
+
+        // Adiciona o evento de clique a todos os cabeçalhos
+        tutorialItems.forEach(function(item) {
+            item.header.addEventListener("click", function() {
+                toggleAccordion(item.header, item.content);
+            });
+        });
+        
+        // --- FUNÇÃO DE DESTAQUE DO TEXTO ---
+        function highlightText(text, term) {
+            if (!term) return text;
+            
+            // Cria uma expressão regular para o termo, ignorando caixa (i) e globalmente (g)
+            // e escapa caracteres especiais
+            const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedTerm})`, 'gi');
+            
+            // Substitui o termo encontrado por ele mesmo envolto na tag <span class="highlight">
+            // Usa uma função de substituição para garantir que o $1 (termo original) mantenha a caixa original
+            return text.replace(regex, (match, p1) => `<span class="highlight">${match}</span>`);
+
+        }
+
+        // --- FUNÇÃO DE BUSCA E FILTRO ---
+        function filterTutorials() {
+            var searchTerm = searchInput.value.toLowerCase().trim();
+
+            tutorialItems.forEach(function(item) {
+                
+                // 1. Restaura o HTML original antes de filtrar
+                item.header.innerHTML = item.originalHeaderText;
+                item.content.innerHTML = item.originalContentHTML;
+
+                var headerText = item.header.textContent.toLowerCase();
+                var contentText = item.content.textContent.toLowerCase();
+                
+                // Verifica se o termo de busca está no título OU no conteúdo
+                if (headerText.includes(searchTerm) || contentText.includes(searchTerm)) {
+                    // Item corresponde à busca:
                     
-                    // Lógica para abrir/fechar o conteúdo
-                    if (content.style.maxHeight) {
-                        content.style.maxHeight = null;
+                    // 1. Torna o item visível
+                    item.parent.classList.remove('hidden');
+
+                    if (searchTerm.length > 2) {
+                        // 2. Expande o item automaticamente se o termo tiver mais de 2 letras
+                        item.header.classList.add("active");
+                        item.content.style.maxHeight = (item.content.scrollHeight + 40) + "px";
+                        
+                        // 3. NOVO: Aplica o destaque ao HTML. Deve-se re-aplicar o destaque no content-inner
+                        
+                        // Para o cabeçalho, podemos aplicar diretamente no span
+                        var spanContent = item.header.querySelector('span');
+                        if(spanContent) {
+                             spanContent.innerHTML = highlightText(spanContent.innerHTML, searchTerm);
+                        } else {
+                             item.header.innerHTML = highlightText(item.originalHeaderText, searchTerm);
+                        }
+                        
+                        // Para o conteúdo, usamos o original Content HTML para evitar aninhar tags.
+                        // O innerHTML do content já é a versão restaurada sem destaque, mas com o inner-content.
+                        var innerContentDiv = item.content.querySelector('.content-inner');
+                        if (innerContentDiv) {
+                            innerContentDiv.innerHTML = highlightText(item.originalContentHTML, searchTerm);
+                        }
+                        
                     } else {
-                        // Calcula o scroll height para o efeito de transição suave
-                        // Nota: O + 40 é um buffer para garantir que todo o conteúdo apareça, especialmente o padding inferior.
-                        content.style.maxHeight = (content.scrollHeight + 40) + "px";
+                        // 3. Se a busca for muito curta (ou vazia), mantém o estado fechado
+                        item.header.classList.remove("active");
+                        item.content.style.maxHeight = null;
+                        // NÃO aplica destaque para termos muito curtos/vazios
+                        
+                        // Garante que o span interno do cabeçalho também volte ao normal
+                        var spanContent = item.header.querySelector('span');
+                        if(spanContent) {
+                             spanContent.textContent = item.originalHeaderText; // Não é o ideal, mas funciona para texto simples.
+                        }
+                        
+                        // O innerHTML do content-inner deve ser restaurado, o que já está sendo feito no início do loop.
                     }
+
+                } else {
+                    // Item NÃO corresponde à busca:
+                    
+                    // 1. Torna o item invisível
+                    item.parent.classList.add('hidden');
+                    
+                    // 2. Garante que o item esteja fechado antes de esconder
+                    item.header.classList.remove("active");
+                    item.content.style.maxHeight = null;
+                }
+            });
+
+            // Se a busca estiver vazia, garante que todos os itens estejam visíveis e fechados
+            if (searchTerm === "") {
+                tutorialItems.forEach(function(item) {
+                    item.parent.classList.remove('hidden');
+                    item.header.classList.remove("active");
+                    item.content.style.maxHeight = null;
+                    
+                    // Restaura o HTML original (sem destaque)
+                    item.header.innerHTML = item.originalHeaderText;
+                    item.content.innerHTML = item.originalContentHTML;
                 });
             }
-        });
-    </script>
+        }
+        
+        // Adiciona o evento de busca em tempo real (a cada letra digitada)
+        searchInput.addEventListener('keyup', filterTutorials);
+    });
+</script>
 
 </body>
 </html>
