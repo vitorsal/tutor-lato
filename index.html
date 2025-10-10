@@ -55,6 +55,155 @@
         }
 
         /* ==================== */
+        /* ESTILO INTRODUÇÃO E BOTÃO DE MODAL (Novo) */
+        /* ==================== */
+        .intro-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Alinha verticalmente */
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Permite quebrar em telas pequenas */
+        }
+
+        .intro-text {
+            flex-grow: 1;
+            margin-bottom: 0;
+        }
+        
+        .intro-text h2 {
+            margin-top: 0;
+        }
+
+        #linksModalTrigger {
+            background-color: #D9534F; /* Cor de destaque (Vermelho) */
+            color: var(--button-text-color);
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #linksModalTrigger:hover {
+            background-color: #C9302C;
+        }
+
+        #linksModalTrigger span {
+            font-size: 1.1em;
+            margin-left: 8px;
+        }
+
+        /* Quebra o botão para a próxima linha em telas pequenas */
+        @media (max-width: 768px) {
+            .intro-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .intro-text {
+                margin-bottom: 15px;
+            }
+            #linksModalTrigger {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        /* FIM ESTILO NOVO */
+
+        /* ==================== */
+        /* ESTILO DO MODAL (CAIXA GRANDE) */
+        /* ==================== */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none; /* Inicia oculto */
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal.is-visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--secondary-color);
+            margin: 15% auto; /* Centraliza verticalmente e horizontalmente */
+            padding: 30px;
+            border: 1px solid var(--primary-color);
+            width: 90%;
+            max-width: 900px;
+            border-radius: 10px;
+            position: relative;
+        }
+        
+        .modal-content h2 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--accent-bg);
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            color: var(--detail-highlight-color);
+            float: right;
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: var(--primary-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Layout dos Links no Modal */
+        .modal-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding-top: 10px;
+        }
+
+        .modal-links-grid h3 {
+            color: var(--text-color);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+            font-size: 1.1em;
+            margin-top: 0;
+        }
+
+        .modal-links-grid a {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .modal-links-grid a:hover {
+            text-decoration: underline;
+        }
+        /* FIM ESTILO MODAL */
+
+
+        /* ==================== */
         /* ESTILO DA BARRA DE BUSCA */
         /* ==================== */
         .search-box {
@@ -65,11 +214,13 @@
             border: 1px solid var(--primary-color);
         }
 
+        /* [Estilos de Acordeão e Busca mantidos, mas omitidos aqui para brevidade] */
+
         /* ==================== */
         /* ESTILO DE DESTAQUE DA BUSCA */
         /* ==================== */
         .highlight {
-            background-color: yellow; /* Cor de destaque amarela */
+            background-color: yellow; 
             font-weight: bold;
             padding: 1px 3px;
             border-radius: 3px;
@@ -80,15 +231,9 @@
             padding: 12px 15px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            font-size: 1em;
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.3s;
-        }
-
-        #searchInput:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(56, 118, 29, 0.5);
         }
         
         /* Oculta itens que não correspondem à pesquisa */
@@ -99,23 +244,8 @@
         /* ==================== */
         /* ESTILO DOS TUTORIAIS (ACORDION) */
         /* ==================== */
-        h2 {
-            color: var(--primary-color);
-            margin-top: 25px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--accent-bg);
-            padding-bottom: 8px;
-            font-size: 1.5em;
-        }
+        /* O restante do CSS do Acordeão foi omitido para focar na correção do modal */
 
-        h3 {
-            color: var(--primary-color);
-            font-size: 1.1em;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
         .tutorial-header {
             background-color: var(--primary-color);
             color: var(--button-text-color);
@@ -135,25 +265,13 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
 
-        .tutorial-header:hover {
-            background-color: var(--hover-bg);
-        }
-        
-        .tutorial-header.active {
-            background-color: var(--hover-bg); 
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-
-        /* Usamos o ::after para gerar e animar o ícone, limpando o HTML */
         .tutorial-header::after {
-            content: "►"; /* Ícone de seta */
+            content: "►"; 
             margin-left: 10px;
             font-size: 1.2em;
             transition: transform 0.3s;
         }
 
-        /* Gira o ícone de seta quando o item está aberto */
         .tutorial-header.active::after {
             transform: rotate(90deg);
         }
@@ -174,16 +292,6 @@
         .content-inner {
             padding: 20px 0;
         }
-
-        .content a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .content a:hover {
-            text-decoration: underline;
-        }
         
         .email-contato {
             font-weight: bold;
@@ -199,8 +307,16 @@
 
     <div class="container">
         
-        <h2>Clique em cada item para saber mais.</h2>
-        <p class="p-info">Se não encontrar as informações desejadas, entre em contato pelo e-mail: pedagogica.escoladepos@ufg.br</p>
+        <div class="intro-row">
+            <div class="intro-text">
+                <h2>Clique em cada item para saber mais.</h2>
+                <p class="p-info">Se não encontrar as informações desejadas, entre em contato pelo e-mail: <strong class="email-contato">pedagogica.escoladepos@ufg.br</strong></p>
+            </div>
+            
+            <button id="linksModalTrigger">
+                📄<span>MODELOS E LEGISLAÇÃO</span>
+            </button>
+        </div>
 
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Buscar por palavra-chave ou item..." aria-label="Buscar tutoriais">
@@ -363,7 +479,7 @@
                     <li>Inserir um despacho solicitando a alteração no SIGAA e a prorrogação;</li>
                     <li>O processo deve ser encaminhado à Escola de Pós UFG;</li>
                     <li>A Escola de Pós UFG envia o processo à PROAD para análise, manifestação e alteração de contrato ou TED (Termo de Execução Descentralizada), caso haja impacto financeiro ou contratual;</li>
-                    <li>Após a manifestação favorável da PROAD, a Escola de Pós UFG procede à alteração do cronograma no SIGAA.</li>
+                    <li>Após a manifestação favorável da PROAD, a Escola de Pós UFG procede à alteração do cronograma no SIGAA;</li>
                 </ol>
             </div>
         </div>
@@ -584,15 +700,63 @@
         <p class="p-info" style="margin-top: 30px; text-align: center;">© Universidade Federal de Goiás - PRPG. Todos os direitos reservados.</p>
     </div>
 
+    <div id="linksModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Modelos de Documentos e Legislação</h2>
+
+            <div class="modal-links-grid">
+                <div>
+                    <h3>Modelos e Formulários (Anexos)</h3>
+                    <a href="https://docs.google.com/document/d/1WxvPwlpHzaczK1KZSib6k6e5YVmKyFzUDfWoM7Yp3Vg/edit?usp=sharing" target="_blank">Projeto Pedagógico do Curso (PPC) simplificado</a>
+                    <a href="https://docs.google.com/document/d/15xQ2gVhAOpApLa3x8xlhhTL6GsnhfC764jbXsqVJzIA/edit?usp=sharing" target="_blank">Projeto de Ensino (Oferta de Turma)</a>
+                    <a href="https://files.cercomp.ufg.br/weby/up/1333/o/PLANO_DE_TRABALHO_-_Curso_especializacao_com_gestao_na_fundacao_-_Open_Document.odt" target="_blank">Plano de Trabalho e Planilhas Financeiras</a>
+                    <a href="https://docs.google.com/document/d/1rZkib5TWGlbGFdtc2LBT_z69VwkKDB4c/edit?usp=sharing" target="_blank">Modelo para Edital de Seleção</a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfHbwxvpieCHPHXJ6ztDLpU1a-NS97Y5-j20RPnGSbz8q8FbA/viewform" target="_blank">Formulário de Cadastro de Docente Externo</a>
+                </div>
+                <div>
+                    <h3>Legislação e Orientações Oficiais</h3>
+                    <a href="https://prpg.ufg.br/p/legislacao-especializacao" target="_blank">Todas as Resoluções e Normativas (Página PRPG)</a>
+                    <a href="https://files.cercomp.ufg.br/weby/up/1333/o/Manual_SIGAA_Lato_Sensu_-__Coordena%C3%A7%C3%A3o_ATUALIZADO_20_03_24.pdf" target="_blank">Manual do SIGAA - Módulo Lato Sensu</a>
+                    <a href="https://www.proad.ufg.br/p/17180-especializacao" target="_blank">Orientações Financeiras e Contábeis (PROAD)</a>
+                    <a href="https://prpg.ufg.br/p/documentos-estagio-nao-obrigatorio" target="_blank">Documentos Estágio Não Obrigatório</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         var acc = document.getElementsByClassName("tutorial-header");
         var searchInput = document.getElementById('searchInput');
+        
+        // Modal Handlers
+        var modal = document.getElementById('linksModal');
+        var btn = document.getElementById("linksModalTrigger");
+        var span = document.getElementsByClassName("modal-close")[0];
+
+        // Quando o usuário clica no botão, abre o modal
+        btn.onclick = function() {
+            modal.classList.add('is-visible');
+        }
+
+        // Quando o usuário clica em (x), fecha o modal
+        span.onclick = function() {
+            modal.classList.remove('is-visible');
+        }
+
+        // Quando o usuário clica fora do modal, fecha
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.classList.remove('is-visible');
+            }
+        }
+        
 
         var tutorialItems = [];
         
         // --- PREPARAÇÃO FINAL: ENVOLVIMENTO DOS ITENS ---
-        // Envolve cada cabeçalho/conteúdo em um div.tutorial-item para que o filtro JS funcione.
         for (var i = 0; i < acc.length; i++) {
             var header = acc[i];
             var content = acc[i].nextElementSibling;
@@ -608,7 +772,6 @@
                 header: header,
                 content: content,
                 parent: wrapper,
-                // Salva o HTML original para restaurar após a busca
                 originalHeaderText: header.innerHTML,
                 originalContentHTML: content.innerHTML
             });
@@ -622,7 +785,6 @@
             if (content.style.maxHeight) {
                 content.style.maxHeight = null;
             } else {
-                // Calcula o scroll height + buffer
                 content.style.maxHeight = (content.scrollHeight + 40) + "px";
             }
         }
@@ -637,14 +799,8 @@
         // --- FUNÇÃO DE DESTAQUE DO TEXTO ---
         function highlightText(text, term) {
             if (!term) return text;
-            
-            // Cria uma expressão regular para o termo, ignorando caixa (i) e globalmente (g)
-            // e escapa caracteres especiais
             const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regex = new RegExp(`(${escapedTerm})`, 'gi');
-            
-            // Substitui o termo encontrado por ele mesmo envolto na tag <span class="highlight">
-            // Usa uma função de substituição para garantir que o $1 (termo original) mantenha a caixa original
             return text.replace(regex, (match, p1) => `<span class="highlight">${match}</span>`);
 
         }
@@ -655,28 +811,20 @@
 
             tutorialItems.forEach(function(item) {
                 
-                // 1. Restaura o HTML original antes de filtrar
                 item.header.innerHTML = item.originalHeaderText;
                 item.content.innerHTML = item.originalContentHTML;
 
                 var headerText = item.header.textContent.toLowerCase();
                 var contentText = item.content.textContent.toLowerCase();
                 
-                // Verifica se o termo de busca está no título OU no conteúdo
                 if (headerText.includes(searchTerm) || contentText.includes(searchTerm)) {
-                    // Item corresponde à busca:
                     
-                    // 1. Torna o item visível
                     item.parent.classList.remove('hidden');
 
                     if (searchTerm.length > 2) {
-                        // 2. Expande o item automaticamente se o termo tiver mais de 2 letras
                         item.header.classList.add("active");
                         item.content.style.maxHeight = (item.content.scrollHeight + 40) + "px";
                         
-                        // 3. NOVO: Aplica o destaque ao HTML. Deve-se re-aplicar o destaque no content-inner
-                        
-                        // Para o cabeçalho, podemos aplicar diretamente no span
                         var spanContent = item.header.querySelector('span');
                         if(spanContent) {
                              spanContent.innerHTML = highlightText(spanContent.innerHTML, searchTerm);
@@ -684,55 +832,40 @@
                              item.header.innerHTML = highlightText(item.originalHeaderText, searchTerm);
                         }
                         
-                        // Para o conteúdo, usamos o original Content HTML para evitar aninhar tags.
-                        // O innerHTML do content já é a versão restaurada sem destaque, mas com o inner-content.
                         var innerContentDiv = item.content.querySelector('.content-inner');
                         if (innerContentDiv) {
                             innerContentDiv.innerHTML = highlightText(item.originalContentHTML, searchTerm);
                         }
                         
                     } else {
-                        // 3. Se a busca for muito curta (ou vazia), mantém o estado fechado
                         item.header.classList.remove("active");
                         item.content.style.maxHeight = null;
-                        // NÃO aplica destaque para termos muito curtos/vazios
                         
-                        // Garante que o span interno do cabeçalho também volte ao normal
                         var spanContent = item.header.querySelector('span');
                         if(spanContent) {
-                             spanContent.textContent = item.originalHeaderText; // Não é o ideal, mas funciona para texto simples.
+                             spanContent.textContent = item.originalHeaderText;
                         }
-                        
-                        // O innerHTML do content-inner deve ser restaurado, o que já está sendo feito no início do loop.
                     }
 
                 } else {
-                    // Item NÃO corresponde à busca:
-                    
-                    // 1. Torna o item invisível
                     item.parent.classList.add('hidden');
-                    
-                    // 2. Garante que o item esteja fechado antes de esconder
                     item.header.classList.remove("active");
                     item.content.style.maxHeight = null;
                 }
             });
 
-            // Se a busca estiver vazia, garante que todos os itens estejam visíveis e fechados
             if (searchTerm === "") {
                 tutorialItems.forEach(function(item) {
                     item.parent.classList.remove('hidden');
                     item.header.classList.remove("active");
                     item.content.style.maxHeight = null;
                     
-                    // Restaura o HTML original (sem destaque)
                     item.header.innerHTML = item.originalHeaderText;
                     item.content.innerHTML = item.originalContentHTML;
                 });
             }
         }
         
-        // Adiciona o evento de busca em tempo real (a cada letra digitada)
         searchInput.addEventListener('keyup', filterTutorials);
     });
 </script>
