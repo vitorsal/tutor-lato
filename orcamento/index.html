@@ -99,7 +99,7 @@
             padding-bottom: 0;
             margin-bottom: 15px;
             font-weight: 500;
-            display: flex; /* Permite alinhar o pseudo-elemento com o texto */
+            display: flex;
             align-items: center;
         }
         /* NOVO ESTILO: Tira o emoji e insere um número estilizado */
@@ -291,6 +291,24 @@
             color: var(--heading-color);
         }
 
+        /* Tabela de Docentes no Resumo (Etapa 1) */
+        #docente-resumo-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+        #docente-resumo-table th, #docente-resumo-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: left;
+            font-size: 0.85em;
+        }
+        #docente-resumo-table th {
+            background-color: #F0F0F0;
+            font-weight: 600;
+        }
+
         /* Alerta de Teto Salarial Geral */
         .alert-teto {
             color: var(--alert-color);
@@ -311,8 +329,36 @@
             gap: 15px;
             margin-top: 15px;
         }
-        .apoio-ensino-item label {
+        .apoio-ensino-consolidado {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px;
+            background-color: var(--highlight-bg);
+            border-radius: 6px;
+        }
+        .apoio-input-group {
+             display: flex;
+             gap: 8px;
+             align-items: center;
+        }
+        .apoio-input-group input.qtd-input {
+            width: 100%;
+            text-align: center;
+        }
+        .apoio-input-group input.valor-input {
+            width: 100%;
+            text-align: right; 
+        }
+        .apoio-ensino-item {
+             /* Estilo para os campos de distribuição condicional */
+             margin-top: 10px;
+        }
+        .justificativa-alert {
+            color: var(--alert-color);
             font-size: 0.9em;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
         
         label {
@@ -389,7 +435,7 @@
                 </button>
             </div>
 
-            <h3 class="hidden-before-analysis" id="dadosExtraidosTitle">Dados Extraídos</h3>
+            <h3 class="hidden-before-analysis" id="dadosExtraidosTitle">Dados Extraídos do Projeto de Ensino</h3>
             <div id="resultado" class="hidden-before-analysis">Aguardando análise do projeto...</div>
 
             <div class="navigation-buttons hidden-before-analysis" id="navigationButtonContainer">
@@ -398,9 +444,9 @@
         </div>
 
         <div id="step-2" class="step">
-            <h2 data-step="2">Equipe do Curso</h2>
+            <h2 data-step="2">Docentes e Coordenação</h2>
             
-            <h3 class="orcamento-section-title">Remuneração Docente (Hora/Aula e Orientação)</h3>
+            <h3 class="orcamento-section-title">Remuneração: Docência (Hora-Aula) e Orientação</h3>
             <div class="input-grid">
                 <div>
                     <label for="horaAulaDoutor">👨‍🏫 Valor H/A - Doutor (R$):</label>
@@ -424,16 +470,16 @@
                 </div>
             </div>
 
-            <h3 class="orcamento-section-title" style="margin-top: 30px;">Equipe de Coordenação(Remuneração Fixa Mensal)</h3>
+            <h3 class="orcamento-section-title" style="margin-top: 30px;">Remuneração: Coordenação(Valor fixo mensal)</h3>
             
             <div class="input-grid">
                 <div>
-                    <label for="coord">Coordenador (8,5h x R$ 238,09):</label>
+                    <label for="coord">Coordenador (Valor teto 8,5h x R$ 238,09):</label>
                     <input type="number" id="coord" value="2023.77" oninput="checkTetoIndividual('coord', 2023.77); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
                     <p id="alertCoord" class="alert-input">Valor excede o limite máximo mensal (R$ 2.023,77).</p> 
                 </div>
                 <div>
-                    <label for="apoio">Apoio Administrativo (10h x R$ 148,80):</label>
+                    <label for="apoio">Apoio Administrativo (Valor teto 10h x R$ 148,80):</label>
                     <input type="number" id="apoio" value="1488.00" oninput="checkTetoIndividual('apoio', 1488.00); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
                     <p id="alertApoio" class="alert-input">Valor excede o limite máximo mensal (R$ 1.488,00).</p> 
                 </div>
@@ -446,50 +492,63 @@
         </div>
 
         <div id="step-3" class="step">
-            <h2 data-step="3">Bolsas, Serviços e Apoio ao Ensino</h2>
+            <h2 data-step="3">Apoio ao Ensino</h2>
 
-            <h3 class="orcamento-section-title">Remuneração Mensal</h3>
+            <h3 class="orcamento-section-title" style="margin-top: 0;">Quantidade de apoio e o valor mensal</h3>
+            
+            <div class="apoio-ensino-consolidado">
+                <div class="input-grid" style="margin-top: 0; grid-template-columns: 1fr 1fr;">
+                    <div class="apoio-input-group" style="flex-direction: column; align-items: start; gap: 0;">
+                        <label for="qtdApoioEnsinoTotal">Quantidade Total de Apoios:</label>
+                        <input type="number" id="qtdApoioEnsinoTotal" value="0" min="0" oninput="checkApoioUnicoValue(); calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" placeholder="Ex: 4" />
+                    </div>
+                    <div class="apoio-input-group" style="flex-direction: column; align-items: start; gap: 0;">
+                        <label for="valApoioEnsinoUnico">Valor Mensal POR APOIO (R$):</label>
+                        <input type="number" id="valApoioEnsinoUnico" value="1500.00" oninput="checkTetoIndividual('valApoioEnsinoUnico', 3422.50); checkApoioUnicoValue(); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" class="valor-input" placeholder="Ex: 1500.00" />
+                        <p id="alertValApoioEnsinoUnico" class="alert-input">Valor excede o limite máximo mensal (R$ 3.422,50).</p>
+                    </div>
+                </div>
+
+                <div id="apoioJustificativa" class="apoio-ensino-item hidden-before-analysis">
+                    <p class="justificativa-alert">
+                        ⚠️ **Justificativa de Teto:** O valor mensal ultrapassa R$ 1.726,10 (Teto Superior Comp.). Distribua a Qtd Total de Apoios entre os níveis abaixo para verificar o teto individual:
+                    </p>
+                    
+                    <div class="input-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div>
+                            <label for="qtdDoutorJust">Qtd Doutor (Teto: 3.422,50):</label>
+                            <input type="number" id="qtdDoutorJust" value="0" min="0" oninput="checkTotalApoios();" class="qtd-input" placeholder="0" />
+                        </div>
+                        <div>
+                            <label for="qtdMestreJust">Qtd Mestre (Teto: 2.291,60):</label>
+                            <input type="number" id="qtdMestreJust" value="0" min="0" oninput="checkTotalApoios();" class="qtd-input" placeholder="0" />
+                        </div>
+                        <div>
+                            <label for="qtdEspecJust">Qtd Especialista (Teto: 2.053,50):</label>
+                            <input type="number" id="qtdEspecJust" value="0" min="0" oninput="checkTotalApoios();" class="qtd-input" placeholder="0" />
+                        </div>
+                    </div>
+                    <p id="alertApoioJustificativa" class="alert-input" style="display: none;"></p>
+                </div>
+            </div>
+
+            <h3 class="orcamento-section-title" style="margin-top: 30px;">Outros</h3>
 
             <div class="input-grid">
                 <div>
-                    <label for="tutor">Tutor UFG (10h x R$ 288,68):</label>
+                    <label for="tutor">Tutor UFG (Valor teto 10h x R$ 288,68):</label>
                     <input type="number" id="tutor" value="0.00" oninput="checkTetoIndividual('tutor'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
                     <p id="alertTutor" class="alert-input"></p> 
                 </div>
                 <div>
-                    <label for="materialMultimidia">Elaboração Material Multimídia (10h x R$ 437,49):</label>
+                    <label for="materialMultimidia">Elaboração Material Multimídia (Valor teto 10h x R$ 437,49):</label>
                     <input type="number" id="materialMultimidia" value="0.00" oninput="checkTetoIndividual('materialMultimidia'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
                     <p id="alertMaterialMultimidia" class="alert-input"></p> 
                 </div>
                 <div>
-                    <label for="palestrantes">Palestrantes/Convidados (Total Mensal R$):</label>
+                    <label for="palestrantes">Palestrantes/Convidados (Total R$):</label>
                     <input type="number" id="palestrantes" value="0.00" oninput="checkTetoIndividual('palestrantes'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
                     <p id="alertPalestrantes" class="alert-input"></p> 
-                </div>
-            </div>
-
-            <h3 class="orcamento-section-title" style="margin-top: 30px;">Apoio ao Ensino (Base Horária Mensal - Quantidade)</h3>
-            <p>Informe o **número de apoios** contratados (10h mensais) para cada nível:</p>
-            <div class="input-grid">
-                <div class="apoio-ensino-item">
-                    <label for="qtdApoioEnsinoDoutor">Doutor (R$ 342,25 / h):</label>
-                    <input type="number" id="qtdApoioEnsinoDoutor" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
-                </div>
-                <div class="apoio-ensino-item">
-                    <label for="qtdApoioEnsinoMestre">Mestre (R$ 229,16 / h):</label>
-                    <input type="number" id="qtdApoioEnsinoMestre" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
-                </div>
-                <div class="apoio-ensino-item">
-                    <label for="qtdApoioEnsinoEspec">Especialista (R$ 205,35 / h):</label>
-                    <input type="number" id="qtdApoioEnsinoEspec" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
-                </div>
-                <div class="apoio-ensino-item">
-                    <label for="qtdApoioEnsinoSup">Superior Comp. (R$ 172,61 / h):</label>
-                    <input type="number" id="qtdApoioEnsinoSup" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
-                </div>
-                <div class="apoio-ensino-item">
-                    <label for="qtdApoioEnsinoMedio">Médio Comp. (R$ 116,07 / h):</label>
-                    <input type="number" id="qtdApoioEnsinoMedio" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
                 </div>
             </div>
 
@@ -502,7 +561,7 @@
         <div id="step-4" class="step">
             <h2 data-step="4">Custos Adicionais (Insumos e Serviços)</h2>
 
-            <h3 class="orcamento-section-title">Despesas Variáveis (Total Projeto)</h3>
+            <h3 class="orcamento-section-title">Despesas, materiais e serviços</h3>
 
             <div class="input-grid" id="custosAdicionaisContainer">
                 <div>
@@ -571,12 +630,14 @@
 
         // CONSTANTES DE VALOR/HORA PARA CÁLCULO DE CUSTO MENSAL BASE (10H)
         const CUSTOS_APOIO_ENSINO_BASE = {
-            DOUTOR: 3422.50, // 10h x 342,25
-            MESTRE: 2291.60, // 10h x 229,16
-            ESPEC: 2053.50,  // 10h x 205,35
-            SUP: 1726.10,    // 10h x 172,61
-            MEDIO: 1160.70   // 10h x 116,07
+            DOUTOR: 3422.50,
+            MESTRE: 2291.60,
+            ESPEC: 2053.50,
+            SUP: 1726.10, // TETO DE CORTE PARA JUSTIFICATIVA
+            MEDIO: 1160.70
         };
+        const TETO_DOUTOR_MENSAL = CUSTOS_APOIO_ENSINO_BASE.DOUTOR;
+        const TETO_SUPERIOR_MENSAL = CUSTOS_APOIO_ENSINO_BASE.SUP; // R$ 1.726,10
 
         let dadosExtraidos = {
             nomeCurso: null,
@@ -613,6 +674,25 @@
                     return;
                 }
             }
+             if (currentStep === 3) {
+                // Checa a justificativa antes de avançar para a Etapa 4/5
+                const valApoio = parseFloat(document.getElementById('valApoioEnsinoUnico').value) || 0;
+                
+                if (valApoio > TETO_SUPERIOR_MENSAL) {
+                    const totalQtd = parseInt(document.getElementById('qtdApoioEnsinoTotal').value) || 0;
+                    const qtdDoutor = parseInt(document.getElementById('qtdDoutorJust').value) || 0;
+                    const qtdMestre = parseInt(document.getElementById('qtdMestreJust').value) || 0;
+                    const qtdEspec = parseInt(document.getElementById('qtdEspecJust').value) || 0;
+                    const soma = qtdDoutor + qtdMestre + qtdEspec;
+
+                    if (soma !== totalQtd) {
+                        document.getElementById('alertApoioJustificativa').textContent = `A soma das quantidades de Doutor, Mestre e Especialista (${soma}) deve ser igual à Quantidade Total de Apoios (${totalQtd}). Por favor, ajuste a distribuição.`;
+                        document.getElementById('alertApoioJustificativa').style.display = 'block';
+                        return;
+                    }
+                }
+            }
+            
             // Força o recálculo do orçamento na transição para a tela final (Etapa 5)
             if (nextNum === 5) {
                 calcularOrcamento();
@@ -660,12 +740,15 @@
 
         function formatarInputMonetario(inputId) {
             const inputElement = document.getElementById(inputId);
+            let value = parseFloat(inputElement.value) || 0;
+
+            // Se for campo de quantidade, formatamos como inteiro e saímos.
             if (inputElement.classList.contains('qtd-input')) {
-                inputElement.value = parseInt(inputElement.value) || 0;
+                inputElement.value = parseInt(value);
                 return;
             }
 
-            let value = parseFloat(inputElement.value) || 0;
+            // Para campos monetários, formatamos com duas casas decimais.
             inputElement.value = value.toFixed(2);
         }
 
@@ -682,7 +765,7 @@
                  if (value > max) {
                     inputElement.value = max.toFixed(2);
                     if (alertElement) {
-                        // Verifica se é limite por hora (H/A) ou limite mensal (Coord/Apoio)
+                        // Verifica se é limite por hora (H/A) ou limite mensal (Coord/Apoio ou Apoio Ensino)
                         const isHourly = inputId.includes('Aula') || inputId === 'valOrientacaoHora';
                         const unit = isHourly ? 'hora' : 'mensal';
                         const maxDisplay = max.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -697,6 +780,54 @@
                 // Para outros campos sem teto máximo definido
                 if (alertElement) alertElement.style.display = 'none';
             }
+            
+            // NOVO: Chama a checagem condicional após a checagem de teto do valor único do apoio
+            if (inputId === 'valApoioEnsinoUnico') {
+                 checkApoioUnicoValue();
+            }
+        }
+        
+        // NOVO: Lógica para exibir/ocultar a justificativa de Apoio ao Ensino
+        function checkApoioUnicoValue() {
+             const valApoio = parseFloat(document.getElementById('valApoioEnsinoUnico').value) || 0;
+             const justificativaBlock = document.getElementById('apoioJustificativa');
+             
+             // O campo de justificação aparece se o valor for MAIOR que o teto Superior Comp.
+             if (valApoio > TETO_SUPERIOR_MENSAL) {
+                 justificativaBlock.classList.remove('hidden-before-analysis');
+             } else {
+                 justificativaBlock.classList.add('hidden-before-analysis');
+                 // Limpa os campos de justificativa quando escondidos
+                 document.getElementById('qtdDoutorJust').value = 0;
+                 document.getElementById('qtdMestreJust').value = 0;
+                 document.getElementById('qtdEspecJust').value = 0;
+                 document.getElementById('alertApoioJustificativa').style.display = 'none';
+             }
+             // Chama o check total apoios para atualizar o alerta de soma
+             checkTotalApoios();
+             calcularOrcamento(); // Recalcula após mudança de estado
+        }
+        
+        // NOVO: Lógica para checar se a soma das justificativas bate com o total
+        function checkTotalApoios() {
+            const totalQtd = parseInt(document.getElementById('qtdApoioEnsinoTotal').value) || 0;
+            const qtdDoutor = parseInt(document.getElementById('qtdDoutorJust').value) || 0;
+            const qtdMestre = parseInt(document.getElementById('qtdMestreJust').value) || 0;
+            const qtdEspec = parseInt(document.getElementById('qtdEspecJust').value) || 0;
+            const alertElement = document.getElementById('alertApoioJustificativa');
+            const soma = qtdDoutor + qtdMestre + qtdEspec;
+            
+            // Força a exibição do alerta se a soma não bater com a quantidade total
+            if (soma > totalQtd) {
+                 alertElement.textContent = `A soma das quantidades (${soma}) excede a Quantidade Total (${totalQtd}). Por favor, ajuste.`;
+                 alertElement.style.display = 'block';
+            } else if (soma < totalQtd) {
+                 alertElement.textContent = `A soma das quantidades (${soma}) é menor que a Quantidade Total (${totalQtd}).`;
+                 alertElement.style.display = 'block';
+            } else {
+                 alertElement.style.display = 'none';
+            }
+             calcularOrcamento(); // Recalcula a projeção em tempo real
         }
 
 
@@ -905,12 +1036,17 @@
             const tutor = parseFloat(document.getElementById("tutor").value) || 0;
             const palestrantes = parseFloat(document.getElementById("palestrantes").value) || 0;
             const materialMultimidia = parseFloat(document.getElementById("materialMultimidia").value) || 0;
-            const qtdApoioEnsinoDoutor = parseInt(document.getElementById("qtdApoioEnsinoDoutor").value) || 0;
-            const qtdApoioEnsinoMestre = parseInt(document.getElementById("qtdApoioEnsinoMestre").value) || 0;
-            const qtdApoioEnsinoEspec = parseInt(document.getElementById("qtdApoioEnsinoEspec").value) || 0;
-            const qtdApoioEnsinoSup = parseInt(document.getElementById("qtdApoioEnsinoSup").value) || 0;
-            const qtdApoioEnsinoMedio = parseInt(document.getElementById("qtdApoioEnsinoMedio").value) || 0;
-
+            
+            // VALORES DOS INPUTS DE APOIO AO ENSINO (CONSOLIDADO)
+            const qtdApoioEnsinoTotal = parseInt(document.getElementById("qtdApoioEnsinoTotal").value) || 0;
+            // Usa o valor inserido ou o valor de Superior Comp. como default (para ser conservador)
+            const valApoioEnsinoUnico = parseFloat(document.getElementById("valApoioEnsinoUnico").value) || CUSTOS_APOIO_ENSINO_BASE.SUP; 
+            
+            // VALORES DA JUSTIFICATIVA CONDICIONAL
+            const qtdDoutorJust = parseInt(document.getElementById("qtdDoutorJust").value) || 0;
+            const qtdMestreJust = parseInt(document.getElementById("qtdMestreJust").value) || 0;
+            const qtdEspecJust = parseInt(document.getElementById("qtdEspecJust").value) || 0;
+            
             const duracaoMeses = dadosExtraidos.duracaoMeses;
             const vagasTotais = dadosExtraidos.vagas || 0;
             const chDoutor = dadosExtraidos.chDoutor || 0;
@@ -923,12 +1059,18 @@
             const custosContainer = document.getElementById("custosAdicionaisContainer");
             if (custosContainer) {
                 custosContainer.querySelectorAll('input[type="number"]').forEach(input => {
-                    const valor = parseFloat(input.value) || 0;
-                    listaCustosAdicionais.push({
-                        nome: document.querySelector(`label[for="${input.id}"]`).textContent.replace(' (R$):', ''),
-                        valor: valor
-                    });
-                    custosAdicionais += valor;
+                    // Ignora campos de quantidade de apoio
+                    if (!input.classList.contains('qtd-input') && input.id !== 'valApoioEnsinoUnico') {
+                        const valor = parseFloat(input.value) || 0;
+                        const labelElement = document.querySelector(`label[for="${input.id}"]`);
+                        const nome = labelElement ? labelElement.textContent.replace(' (R$):', '') : input.id;
+                        
+                        listaCustosAdicionais.push({
+                            nome: nome,
+                            valor: valor
+                        });
+                        custosAdicionais += valor;
+                    }
                 });
             }
 
@@ -946,13 +1088,8 @@
             const custoEquipeCoord = (coordValor + apoioValor) * duracaoMeses; 
             const custoBolsasServicos = (tutor + materialMultimidia + palestrantes) * duracaoMeses;
             
-            const custoApoioEnsino = (
-                (qtdApoioEnsinoDoutor * CUSTOS_APOIO_ENSINO_BASE.DOUTOR) +
-                (qtdApoioEnsinoMestre * CUSTOS_APOIO_ENSINO_BASE.MESTRE) +
-                (qtdApoioEnsinoEspec * CUSTOS_APOIO_ENSINO_BASE.ESPEC) +
-                (qtdApoioEnsinoSup * CUSTOS_APOIO_ENSINO_BASE.SUP) +
-                (qtdApoioEnsinoMedio * CUSTOS_APOIO_ENSINO_BASE.MEDIO)
-            ) * duracaoMeses;
+            // CÁLCULO CONSOLIDADO DE APOIO AO ENSINO
+            const custoApoioEnsino = (qtdApoioEnsinoTotal * valApoioEnsinoUnico) * duracaoMeses;
 
             const custoCertificados = vagasTotais * CUSTO_CERTIFICADO_BASE; 
             const custoOrientacao = vagasTotais * HORAS_ORIENTACAO_TCC * valOrientacaoHora; 
@@ -981,9 +1118,9 @@
             const mensalidadeExibida = formatarMoeda(mensalidadeNecessaria).replace('R$', '') + ` (${numParcelas}x Parcelas)`;
 
             const infoAlunos = `
-                <div class="orcamento-item"><span>👥 Total de Vagas Extraídas:</span><strong>${vagasTotais}</strong></div>
-                <div class="orcamento-item"><span>• Vagas Não Pagantes:</span><strong>${vagasServ + vagasMinorias} (${vagasServ} Serv. + ${vagasMinorias} Min.)</strong></div>
-                <div class="orcamento-item" style="font-weight: bold; border-bottom: 2px solid var(--border-color);"><span>Alunos Pagantes:</span><strong>${alunosPagantes}</strong></div>
+                <div class="orcamento-item"><span>👥 Total de Vagas:</span><strong>${vagasTotais}</strong></div>
+                <div class="orcamento-item"><span>• Número de vagas de não Pagantes:</span><strong>${vagasServ + vagasMinorias} (${vagasServ} Servidores + ${vagasMinorias} GM)</strong></div>
+                <div class="orcamento-item" style="font-weight: bold; border-bottom: 2px solid var(--border-color);"><span>Número de alunos pagantes:</span><strong>${alunosPagantes}</strong></div>
             `;
             
             let custosAdicionaisHTML = listaCustosAdicionais.filter(item => item.valor > 0).map(item => `
@@ -1032,16 +1169,47 @@
                 });
             });
 
-            // 4. Apoio ao Ensino (Quantidade de Bolsas)
-            if (qtdApoioEnsinoDoutor > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoDoutor}x Contrato`, funcao: 'Apoio Ensino - Doutor', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.DOUTOR.toFixed(2)}/mês`, total: (qtdApoioEnsinoDoutor * CUSTOS_APOIO_ENSINO_BASE.DOUTOR * duracaoMeses) });
-            if (qtdApoioEnsinoMestre > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoMestre}x Contrato`, funcao: 'Apoio Ensino - Mestre', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.MESTRE.toFixed(2)}/mês`, total: (qtdApoioEnsinoMestre * CUSTOS_APOIO_ENSINO_BASE.MESTRE * duracaoMeses) });
-            if (qtdApoioEnsinoEspec > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoEspec}x Contrato`, funcao: 'Apoio Ensino - Especialista', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.ESPEC.toFixed(2)}/mês`, total: (qtdApoioEnsinoEspec * CUSTOS_APOIO_ENSINO_BASE.ESPEC * duracaoMeses) });
-            if (qtdApoioEnsinoSup > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoSup}x Contrato`, funcao: 'Apoio Ensino - Superior', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.SUP.toFixed(2)}/mês`, total: (qtdApoioEnsinoSup * CUSTOS_APOIO_ENSINO_BASE.SUP * duracaoMeses) });
-            if (qtdApoioEnsinoMedio > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoMedio}x Contrato`, funcao: 'Apoio Ensino - Médio', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.MEDIO.toFixed(2)}/mês`, total: (qtdApoioEnsinoMedio * CUSTOS_APOIO_ENSINO_BASE.MEDIO * duracaoMeses) });
+            // 4. Apoio ao Ensino (Detalhado por Contrato)
+            const valApoio = parseFloat(document.getElementById('valApoioEnsinoUnico').value) || 0;
+            const usaJustificativa = valApoio > TETO_SUPERIOR_MENSAL;
+
+            if (qtdApoioEnsinoTotal > 0) {
+                 if (usaJustificativa) {
+                     // Adiciona itens separados (Doutor, Mestre, Especialista) com base na justificativa
+                     if (qtdDoutorJust > 0) equipeDetalhadaCompleta.push({ nome: `${qtdDoutorJust}x Doutor`, funcao: 'Apoio Ensino', base: `${formatarMoeda(valApoio)}/mês`, total: (qtdDoutorJust * valApoio * duracaoMeses) });
+                     if (qtdMestreJust > 0) equipeDetalhadaCompleta.push({ nome: `${qtdMestreJust}x Mestre`, funcao: 'Apoio Ensino', base: `${formatarMoeda(valApoio)}/mês`, total: (qtdMestreJust * valApoio * duracaoMeses) });
+                     if (qtdEspecJust > 0) equipeDetalhadaCompleta.push({ nome: `${qtdEspecJust}x Especialista`, funcao: 'Apoio Ensino', base: `${formatarMoeda(valApoio)}/mês`, total: (qtdEspecJust * valApoio * duracaoMeses) });
+                     
+                     // Adiciona o restante como "Outros" se a soma não bater (erro na entrada)
+                     const justificativaSoma = qtdDoutorJust + qtdMestreJust + qtdEspecJust;
+                     const qtdRestante = qtdApoioEnsinoTotal - justificativaSoma;
+
+                     if (Math.abs(qtdRestante) > 0) {
+                         const tipo = (qtdRestante > 0) ? 'Faltando (Erro de Input)' : 'Excesso (Erro de Input)';
+                         equipeDetalhadaCompleta.push({
+                             nome: `${Math.abs(qtdRestante)}x`,
+                             funcao: `Apoio Ensino - ${tipo}`,
+                             base: `${formatarMoeda(valApoio)}/mês`,
+                             total: (qtdRestante * valApoio * duracaoMeses)
+                         });
+                     }
+
+
+                 } else {
+                     // Formato consolidado se o valor for baixo
+                     equipeDetalhadaCompleta.push({ 
+                         nome: `${qtdApoioEnsinoTotal}x Total`, 
+                         funcao: 'Apoio Ensino', 
+                         base: `${formatarMoeda(valApoio)}/mês`, 
+                         total: custoApoioEnsino 
+                     });
+                 }
+            }
+
 
             // Geração da Tabela de Equipe Detalhada
             let equipeDetalhadaHTML = `
-                <h3 class="orcamento-section-title" style="margin-top: 40px;">5. Lista Detalhada da Equipe e Remuneração Total Estimada</h3>
+                <h3 class="orcamento-section-title" style="margin-top: 40px;">5. Lista da Equipe e Remuneração Total Estimada</h3>
                 <table class="equipe-table">
                     <thead>
                         <tr>
@@ -1054,13 +1222,13 @@
             `;
 
             equipeDetalhadaCompleta.filter(m => parseFloat(m.total) > 0 || m.funcao === 'Vice-coordenador').forEach(membro => {
-                // Formata a base de cálculo para exibição (sem repetição de R$ se já estiver no nome)
-                const baseDisplay = membro.base.startsWith('R$') ? membro.base : `(${membro.base})`;
+                // Formata a base de cálculo para exibição 
+                const baseDisplay = membro.base;
 
                 equipeDetalhadaHTML += `
                     <tr>
                         <td>${membro.nome}</td>
-                        <td>${membro.funcao} ${baseDisplay}</td>
+                        <td>${membro.funcao} (${membro.base})</td>
                         <td>${formatarMoeda(parseFloat(membro.total))}</td>
                     </tr>
                 `;
@@ -1078,38 +1246,38 @@
             const orcamentoHTML = `
                 <h3 class="orcamento-section-title">${duracaoTitulo}</h3>
                 
-                <div class="orcamento-section-title">1. Dados Base do Projeto</div>
+                <div class="orcamento-section-title">1. Dados básicos do projeto</div>
                 <div class="orcamento-item">
                     <span>📅 Duração Total do Projeto:</span>
                     <strong>${duracaoMeses} meses</strong>
                 </div>
                 <div class="orcamento-item">
-                    <span>🗓️ Parcelas de Pagamento (Duração - ${PARCELAS_ABATIDAS} meses):</span>
+                    <span>🗓️ Período máximo de parcelamento (Duração - ${PARCELAS_ABATIDAS} meses):</span>
                     <strong>${numParcelas} meses</strong>
                 </div>
                 ${infoAlunos}
 
-                <div class="orcamento-section-title">2. Custos com Pessoal (Total Projeto)</div>
+                <div class="orcamento-section-title">2. Custos com Pessoal</div>
                 <div style="font-weight: bold; margin-top: 5px;">2.1. Docência e Orientação (Total)</div>
                 ${chDoutor > 0 ? `<div class="orcamento-item"><span>• Docência Doutor (${chDoutor}h):</span><strong>${formatarMoeda(custoDocenciaDoutor)}</strong></div>` : ''}
                 ${chMestre > 0 ? `<div class="orcamento-item"><span>• Docência Mestre (${chMestre}h):</span><strong>${formatarMoeda(custoDocenciaMestre)}</strong></div>` : ''}
                 ${chEspec > 0 ? `<div class="orcamento-item"><span>• Docência Especialista (${chEspec}h):</span><strong>${formatarMoeda(custoDocenciaEspec)}</strong></div>` : ''}
-                <div class="orcamento-item"><span>• Orientação TCC (Base):</span><strong>${formatarMoeda(custoOrientacao)}</strong></div>
+                <div class="orcamento-item"><span>• Orientação TCC:</span><strong>${formatarMoeda(custoOrientacao)}</strong></div>
                 
-                <div style="font-weight: bold; margin-top: 10px;">2.2. Coordenação, Apoio e Bolsas (Total)</div>
-                <div class="orcamento-item"><span>Total Coordenação e Apoio (Inputs fixos):</span><strong>${formatarMoeda(custoEquipeCoord)}</strong></div>
-                <div class="orcamento-item"><span>Total Bolsas/Serviços (Inputs fixos):</span><strong>${formatarMoeda(custoBolsasServicos)}</strong></div>
-                <div class="orcamento-item"><span>Total Apoio ao Ensino (Inputs por Qtd):</span><strong>${formatarMoeda(custoApoioEnsino)}</strong></div>
+                <div style="font-weight: bold; margin-top: 10px;">2.2. Coordenação, Apoio e Outros (Total)</div>
+                <div class="orcamento-item"><span>Total Coordenação:</span><strong>${formatarMoeda(custoEquipeCoord)}</strong></div>
+                <div class="orcamento-item"><span>Total Outros:</span><strong>${formatarMoeda(custoBolsasServicos)}</strong></div>
+                <div class="orcamento-item"><span>Total Apoio ao Ensino:</span><strong>${formatarMoeda(custoApoioEnsino)}</strong></div>
 
 
-                <div class="orcamento-section-title">3. Outros Custos e Taxas</div>
-                <div class="orcamento-item"><span>• Custo Certificados (R$ ${CUSTO_CERTIFICADO_BASE.toFixed(2)} x ${vagasTotais} alunos):</span><strong>${formatarMoeda(custoCertificados)}</strong></div>
+                <div class="orcamento-section-title">3. Outros Custos</div>
+                <div class="orcamento-item"><span>• Custo de emissão dos Certificados (R$ ${CUSTO_CERTIFICADO_BASE.toFixed(2)} x ${vagasTotais} alunos):</span><strong>${formatarMoeda(custoCertificados)}</strong></div>
                 
                 ${custosAdicionaisHTML}
 
                 <div class="orcamento-item" style="font-weight: bold; padding-top: 15px; border-top: 2px solid var(--primary-color);"><span>Total Custo Operacional (sem taxas):</span><strong>${formatarMoeda(custoOperacional)}</strong></div>
                 
-                <div style="font-weight: bold; margin-top: 15px;">4. Resultado Financeiro</div>
+                <div style="font-weight: bold; margin-top: 15px;">4. Resultado</div>
                 <div class="orcamento-item"><span>• Ressarcimento UFG (${(TAXA_RESSARCIMENTO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(ressarcimento)}</strong></div>
                 <div class="orcamento-item"><span>• Despesa Administrativa e Operacional da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
 
@@ -1130,15 +1298,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Novo texto de exemplo focado (Banco de Dados e IA)
             const exemploTexto = `
-MINISTÉRIO DA EDUCAÇÃO
-UNIVERSIDADE FEDERAL DE GOIÁS
-PROJETO DE ENSINO
-Oferta de Turma(s) do
-Curso de Pós-Graduação Lato Sensu em Banco de Dados e IA
-(Conforme Resolução CEPEC Nº 1952/2025 e Instrução Normativa PRPG/UFG)
 
-1. DADOS GERAIS
-Tipo de Curso: Curso de Especialização
+Curso de Pós-Graduação Lato Sensu em Banco de Dados e IA
+
+
 Carga Horária Total: 367 h (no mínimo 360 h)
 Número de Vagas: 47
 Data de Início e Encerramento da(s) Turma(s) Turma 1: 12/12/2025 a 15/09/2027
@@ -1164,7 +1327,7 @@ SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
             
             showStep(1); 
             
-            const inputIdsToFormat = ['horaAulaDoutor', 'horaAulaMestre', 'horaAulaEspec', 'valOrientacaoHora', 'coord', 'apoio', 'tutor', 'materialMultimidia', 'palestrantes', 'qtdApoioEnsinoDoutor', 'qtdApoioEnsinoMestre', 'qtdApoioEnsinoEspec', 'qtdApoioEnsinoSup', 'qtdApoioEnsinoMedio', 'diarias', 'passagens', 'materialConsumo', 'equipamentos', 'outrosCusto1'];
+            const inputIdsToFormat = ['horaAulaDoutor', 'horaAulaMestre', 'horaAulaEspec', 'valOrientacaoHora', 'coord', 'apoio', 'tutor', 'materialMultimidia', 'palestrantes', 'valApoioEnsinoUnico', 'qtdDoutorJust', 'qtdMestreJust', 'qtdEspecJust', 'diarias', 'passagens', 'materialConsumo', 'equipamentos', 'outrosCusto1'];
             inputIdsToFormat.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
@@ -1172,9 +1335,12 @@ SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
                     let max = 0;
                     if (id === 'coord') max = 2023.77;
                     else if (id === 'apoio') max = 1488.00;
+                    // Checagem para o campo de VALOR de Apoio ao Ensino (Usa Teto Doutor)
+                    else if (id === 'valApoioEnsinoUnico') max = CUSTOS_APOIO_ENSINO_BASE.DOUTOR;
                     
                     checkTetoIndividual(id, max); 
-                    formatarInputMonetario(id);
+                    // Nota: campos de quantidade (qtdApoio) não precisam de formatação ou checagem max, apenas a monetária.
+                    if (!id.startsWith('qtd')) formatarInputMonetario(id);
                 }
             });
             
@@ -1184,6 +1350,9 @@ SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
                 blockToCollapse.classList.remove('collapsed');
                 document.getElementById('toggleText').textContent = '...recolher campo de edição';
             }
+            
+            // Inicializa a checagem condicional (para garantir o estado inicial)
+            checkApoioUnicoValue();
         });
     </script>
 </body>
