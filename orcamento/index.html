@@ -2,225 +2,241 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Orçamento de Curso Lato Sensu</title>
+    <title>Orçamento de Curso Lato Sensu - Passo a Passo</title>
     
     <style>
         /* ==================== */
         /* VARIÁVEIS DE CORES (TEMA: PRPG UFG - VERDE/BRANCO) */
         /* ==================== */
         :root {
-            --primary-color: #38761D; /* Verde principal UFG */
+            --primary-color: #1A5228; /* Verde Escuro Profundo (Mais sofisticado que o #38761D) */
             --secondary-color: #FFFFFF;
-            --text-color: #333333;
-            --heading-color: #1D543B; /* Verde escuro para títulos */
-            --bg-neutral: #F7F7F7;
-            --border-color: #CCCCCC;
-            --alert-color: #D9534F; /* Vermelho para alerta/déficit */
-            --success-color: #4CAF50; /* Verde de sucesso/lucro */
-            --highlight-bg: #E6F3E6; /* Fundo de destaque suave */
+            --text-color: #212529; /* Preto mais suave para texto */
+            --heading-color: #1A5228; /* Mesmo verde primário para títulos */
+            --bg-neutral: #F5F5F5; /* Fundo levemente mais claro */
+            --border-color: #E0E0E0; /* Linhas mais finas e suaves */
+            --alert-color: #C0392B; /* Vermelho mais sóbrio */
+            --success-color: #27AE60; /* Verde de sucesso mais vibrante */
+            --highlight-bg: #EAF7ED; /* Fundo de destaque suave, próximo ao branco */
+            /* REVISÃO MINIMALISTA */
+            --font-primary: 'Helvetica Neue', Arial, sans-serif; /* Fonte moderna e limpa */
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: var(--font-primary);
             padding: 0;
             background: var(--bg-neutral);
             color: var(--text-color);
             margin: 0;
-            line-height: 1.6;
+            line-height: 1.5;
+            font-size: 16px;
         }
 
         .container {
-            width: 95%;
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 30px;
+            width: 90%;
+            max-width: 960px;
+            margin: 50px auto;
+            padding: 40px;
             background-color: var(--secondary-color);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
         }
 
         /* --- TÍTULO PRINCIPAL --- */
         h1 {
             color: var(--primary-color);
-            text-align: center;
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
+            text-align: left;
+            font-size: 2.4em;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            font-weight: 300;
+        }
+
+        /* --- CONTROLE DE ETAPAS --- */
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+            padding-top: 10px;
+        }
+        .step.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        .navigation-buttons .btn-avancar {
+            margin-left: auto;
+        }
+        .navigation-buttons .btn-voltar {
+            background-color: #6c757d;
+        }
+        .navigation-buttons .btn-voltar:hover {
+            background-color: #5a6268;
         }
 
         /* --- TÍTULOS DE SEÇÃO --- */
         h2 {
-            margin-top: 40px;
+            margin-top: 35px;
             color: var(--heading-color);
-            font-size: 1.6em;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
+            font-size: 1.5em;
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        h2:before {
+            content: "— ";
+            color: var(--primary-color);
+            font-size: 1.1em;
         }
         
         /* --- BLOCO DE EXTRAÇÃO (SEÇÃO 1) --- */
         .extraction-block {
             background: var(--highlight-bg);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--primary-color);
-            max-height: 500px; 
-            overflow: hidden;
-            transition: all 0.5s ease-out;
+            padding: 25px;
+            border-radius: 6px;
+            border: 1px solid #D0EAD6;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out; /* Transição na altura e padding */
+            margin-bottom: 20px;
+            overflow: hidden; 
+            max-height: 500px; /* Altura máxima inicial */
         }
-        /* Classe para fechar o bloco */
+        .extraction-block h3 {
+            margin-top: 0;
+        }
+        /* NOVO: Classe para recolher o bloco */
         .extraction-block.collapsed {
             max-height: 0;
             padding-top: 0;
             padding-bottom: 0;
-            border: 1px solid transparent;
             margin-bottom: 0;
+            border: 1px solid transparent;
         }
-
+        
+        /* NOVO: Estilo para o botão de toggle/visualizar */
+        .toggle-btn {
+            background: none;
+            color: var(--primary-color);
+            padding: 0;
+            margin: 0;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: none;
+            letter-spacing: normal;
+            display: block;
+            text-align: left;
+            border: none;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 3px;
+            transition: color 0.2s;
+        }
+        .toggle-btn:hover {
+            color: var(--heading-color);
+            transform: none;
+        }
 
         textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 10px;
             box-sizing: border-box;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             font-family: monospace;
-            font-size: 0.9em;
-            min-height: 150px;
+            font-size: 0.85em;
+            min-height: 120px;
+            resize: vertical;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
         }
         
         button {
             background-color: var(--primary-color);
             color: var(--secondary-color);
-            padding: 12px 25px;
-            margin-top: 15px;
+            padding: 10px 20px;
+            margin-top: 10px;
             border: none;
-            border-radius: 4px;
-            font-weight: bold;
+            border-radius: 6px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         button:hover {
             background-color: var(--heading-color);
+            transform: translateY(-1px);
         }
 
-        /* --- RESULTADOS DE EXTRAÇÃO GERAL --- */
+        /* REVISÃO MINIMALISTA: Cor e padding para o resultado da análise */
         #resultado {
-            margin-top: 20px;
-            background: var(--secondary-color);
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid var(--border-color);
-            white-space: pre-wrap; 
-            font-family: monospace;
-            font-size: 1em;
+            padding: 15px 0;
+            white-space: pre-wrap;
+            font-size: 0.9em;
             color: var(--text-color);
+            /* Removido o border-bottom daqui, pois o botão de toggle fará essa função */
+            margin-bottom: 20px;
         }
-        
-        /* --- RESUMO GERENCIAL (Mantido para consistência, mas escondido) --- */
-        #resumoGerencial {
-            display: none; 
-            margin-top: 20px;
-            padding: 20px;
-            background: var(--bg-neutral);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            font-size: 0.95em;
-        }
-        #resumoGerencial div {
-            padding: 10px;
-            border-left: 3px solid var(--primary-color);
-            background: var(--secondary-color);
-            border-radius: 4px;
-        }
-        #resumoGerencial .alert-data { border-left: 3px solid var(--alert-color); }
-        #resumoGerencial strong { display: block; font-size: 1.2em; color: var(--heading-color); }
-
-
-        /* --- INPUTS DE CÁLCULO (SEÇÃO 2) --- */
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        label {
-            font-weight: 500;
-            display: block;
-            margin-top: 5px;
-            color: var(--heading-color);
-        }
-        
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            box-sizing: border-box;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            transition: border-color 0.2s;
-        }
-        input[type="number"]:focus {
-            border-color: var(--primary-color);
-            outline: none;
-        }
-        
-        /* NOVO: Alerta de Teto Individual nos Inputs */
-        .alert-input {
+        #resultado .alert {
             color: var(--alert-color);
-            font-size: 0.8em;
-            margin-top: 4px;
-            display: none;
+            font-weight: bold;
         }
 
         /* --- RESULTADOS ORÇAMENTÁRIOS (SEÇÃO 3) --- */
         #orcamento {
-            margin-top: 30px;
-            padding: 25px;
-            border-radius: 8px;
-            border: 3px solid var(--heading-color); 
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: #FAFAFA;
         }
         
         .orcamento-section-title {
             color: var(--primary-color);
-            font-size: 1.4em;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            font-size: 1.2em;
+            margin-top: 25px;
+            margin-bottom: 8px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 5px;
+            font-weight: 500;
         }
         
         .orcamento-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px dotted #ccc;
-        }
-        
-        .orcamento-item span:first-child {
-            font-weight: 500;
+            font-size: 0.95em;
         }
         
         .orcamento-item strong {
             color: var(--heading-color);
+            font-weight: 600;
         }
 
         /* Destaque do Saldo Final */
         .saldo-final {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 2px solid var(--border-color);
-            font-size: 1.4em;
+            margin-top: 25px;
+            padding-top: 18px;
+            border-top: 2px solid var(--primary-color);
+            font-size: 1.5em;
             display: flex;
             justify-content: space-between;
-        }
-        .saldo-final .valor {
-            font-weight: bold;
+            font-weight: 500;
         }
         .saldo-final.lucro .valor {
             color: var(--success-color);
@@ -232,24 +248,61 @@
         /* Alerta de Teto Salarial Geral */
         .alert-teto {
             color: var(--alert-color);
-            font-weight: bold;
-            padding: 10px;
-            background-color: #ffe8e6;
-            border-left: 4px solid var(--alert-color);
+            font-weight: 600;
+            padding: 12px;
+            background-color: #FEEEEE;
+            border-left: 5px solid var(--alert-color);
             border-radius: 4px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 0.9em;
-            display: none; 
+            display: none;
         }
         
-        /* Informações Legais (Vagas) */
-        .vagas-info {
-            padding: 10px 15px;
-            border-left: 4px solid var(--primary-color);
-            background-color: var(--highlight-bg);
+        /* Estilo para inputs de contagem (para campos Apoio ao Ensino) */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .apoio-ensino-item label {
+            font-size: 0.9em;
+        }
+        
+        label {
+            font-weight: 400;
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text-color);
+            font-size: 0.9em;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 0;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            margin-bottom: 15px;
-            font-size: 0.95em;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -moz-appearance: textfield;
+            font-size: 1em;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 1px var(--primary-color);
+        }
+        
+        .alert-input {
+            font-size: 0.75em;
+            margin-top: 3px;
+            display: none;
         }
         
     </style>
@@ -258,117 +311,167 @@
     <div class="container">
         <h1>🔍 Orçamento de Curso Lato Sensu (UFG)</h1>
 
-        <h2 onclick="toggleCollapse()" style="cursor: pointer;">
-            1️⃣ Cole o conteúdo do Projeto SEI 
-            <span id="collapseIndicator" style="float: right; transition: transform 0.3s;">▼</span>
-        </h2>
-        <div class="extraction-block" id="extractionBlock">
-            <textarea id="texto" rows="10" placeholder="Cole aqui o conteúdo do projeto SEI..."></textarea>
-            <button onclick="analisarAndCollapse()">Analisar</button>
-        </div>
-        
-        <div id="resultado">Aguardando análise do projeto...</div>
+        <div id="step-1" class="step active">
+            <h2>1️⃣ Dados Básicos da Turma</h2>
+            <div class="extraction-block" id="extractionBlockStep1">
+                <h3>Cole o Conteúdo do Projeto de Ensino</h3>
+                <textarea id="texto" rows="10" placeholder="Cole aqui o conteúdo do projeto SEI..."></textarea>
+                <button onclick="analisar()">Analisar Dados</button>
+            </div>
+            
+            <button class="toggle-btn" onclick="toggleExtractionBlock()">
+                <span id="toggleText">...Cole o Conteúdo do Projeto de Ensino</span>
+            </button>
 
-        <h2>2️⃣ Definição Financeira (Custos Variáveis)</h2>
-        
-        <h3 class="orcamento-section-title">Custos por Hora/Aula e Orientação</h3>
-        <div class="input-grid">
-            <div>
-                <label for="horaAulaDoutor">👨‍🏫 Valor H/A - Doutor (R$):</label>
-                <input type="number" id="horaAulaDoutor" value="437.49" oninput="checkTetoIndividual('horaAulaDoutor'); calcularOrcamento();" />
-                <p id="alertHoraAulaDoutor" class="alert-input">Valor excede o limite máximo por hora (R$ 437,49).</p>
-            </div>
-            <div>
-                <label for="horaAulaMestre">👨‍🏫 Valor H/A - Mestre (R$):</label>
-                <input type="number" id="horaAulaMestre" value="380.00" oninput="checkTetoIndividual('horaAulaMestre'); calcularOrcamento();" />
-                <p id="alertHoraAulaMestre" class="alert-input">Valor excede o limite máximo por hora (R$ 437,49).</p>
-            </div>
-            <div>
-                <label for="horaAulaEspec">👨‍🏫 Valor H/A - Espec. (R$):</label>
-                <input type="number" id="horaAulaEspec" value="300.00" oninput="checkTetoIndividual('horaAulaEspec'); calcularOrcamento();" />
-                <p id="alertHoraAulaEspec" class="alert-input">Valor excede o limite máximo por hora (R$ 437,49).</p>
-            </div>
-            <div>
-                <label for="valOrientacaoHora">📝 Valor Orientação TCC (R$ / hora):</label>
-                <input type="number" id="valOrientacaoHora" value="437.49" oninput="checkTetoIndividual('valOrientacaoHora'); calcularOrcamento();" />
-                <p id="alertValOrientacaoHora" class="alert-input">Valor excede o limite máximo por hora (R$ 437,49).</p>
+            <h3>Dados Extraídos</h3>
+            <div id="resultado">Aguardando análise do projeto...</div>
+
+            <div class="navigation-buttons">
+                <button class="btn-avancar" onclick="nextStep(2)">Avançar para Custos</button>
             </div>
         </div>
 
-        <h3 class="orcamento-section-title" style="margin-top: 30px;">Remuneração Mensal da Equipe (Valor Bruto)</h3>
-        
-        <div class="input-grid">
-            <div>
-                <label for="coord">Coordenador (R$):</label>
-                <input type="number" id="coord" value="2000" oninput="checkTetoIndividual('coord'); calcularOrcamento();" />
-                <p id="alertCoord" class="alert-input"></p> 
+        <div id="step-2" class="step">
+            <h2>2️⃣ Equipe do Curso</h2>
+            
+            <h3 class="orcamento-section-title">Remuneração Docente (Hora/Aula e Orientação)</h3>
+            <div class="input-grid">
+                <div>
+                    <label for="horaAulaDoutor">👨‍🏫 Valor H/A - Doutor (R$):</label>
+                    <input type="number" id="horaAulaDoutor" value="437.49" oninput="checkTetoIndividual('horaAulaDoutor', 437.49); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertHoraAulaDoutor" class="alert-input">Valor excede o limite máximo por hora (R$ 437,49).</p>
+                </div>
+                <div>
+                    <label for="horaAulaMestre">👨‍🏫 Valor H/A - Mestre (R$):</label>
+                    <input type="number" id="horaAulaMestre" value="377.96" oninput="checkTetoIndividual('horaAulaMestre', 377.96); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertHoraAulaMestre" class="alert-input">Valor excede o limite máximo por hora (R$ 377,96).</p>
+                </div>
+                <div>
+                    <label for="horaAulaEspec">👨‍🏫 Valor H/A - Espec. (R$):</label>
+                    <input type="number" id="horaAulaEspec" value="318.44" oninput="checkTetoIndividual('horaAulaEspec', 318.44); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertHoraAulaEspec" class="alert-input">Valor excede o limite máximo por hora (R$ 318,44).</p>
+                </div>
+                <div>
+                    <label for="valOrientacaoHora">📝 Valor Orientação TCC (R$ / hora):</label>
+                    <input type="number" id="valOrientacaoHora" value="437.49" oninput="checkTetoIndividual('valOrientacaoHora', 437.49); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertValOrientacaoHora" class="alert-input">Valor excede o limite máximo por hora (R$ 437,49).</p>
+                </div>
             </div>
-            <div>
-                <label for="vice">Vice-Coordenador (R$):</label>
-                <input type="number" id="vice" value="1000" oninput="checkTetoIndividual('vice'); calcularOrcamento();" />
-                <p id="alertVice" class="alert-input"></p> 
+
+            <h3 class="orcamento-section-title" style="margin-top: 30px;">Equipe de Coordenação(Remuneração Fixa Mensal)</h3>
+            
+            <div class="input-grid">
+                <div>
+                    <label for="coord">Coordenador (8,5h x R$ 238,09):</label>
+                    <input type="number" id="coord" value="2023.77" oninput="checkTetoIndividual('coord'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertCoord" class="alert-input"></p> 
+                </div>
+                <div>
+                    <label for="apoio">Apoio Administrativo (10h x R$ 148,80):</label>
+                    <input type="number" id="apoio" value="1488.00" oninput="checkTetoIndividual('apoio'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertApoio" class="alert-input"></p> 
+                </div>
             </div>
-            <div>
-                <label for="apoio">Apoio Administrativo (R$):</label>
-                <input type="number" id="apoio" value="1500" oninput="checkTetoIndividual('apoio'); calcularOrcamento();" />
-                <p id="alertApoio" class="alert-input"></p> 
-            </div>
-            <div>
-                <label for="tutor">Tutor (R$):</label>
-                <input type="number" id="tutor" value="0" oninput="checkTetoIndividual('tutor'); calcularOrcamento();" />
-                <p id="alertTutor" class="alert-input"></p> 
+
+            <div class="navigation-buttons">
+                <button class="btn-voltar" onclick="prevStep(1)">Voltar</button>
+                <button class="btn-avancar" onclick="nextStep(3)">Avançar para Bolsas/Serviços</button>
             </div>
         </div>
 
-        <h3 class="orcamento-section-title" style="margin-top: 30px;">3️⃣ Custos Fixos e Reservas Legais</h3>
-        <div class="input-grid">
-            <div>
-                <p>Custo por Certificado (R$): **R$ 32,00 (Fixo)**</p>
-                <p>Taxas Fixas:<br>
-                Ressarcimento UFG: **16%** | Taxa de Gestão Fundação: **8%**</p>
+        <div id="step-3" class="step">
+            <h2>3️⃣ Bolsas, Serviços e Apoio ao Ensino</h2>
+
+            <h3 class="orcamento-section-title">Remuneração Mensal</h3>
+
+            <div class="input-grid">
+                <div>
+                    <label for="tutor">Tutor UFG (10h x R$ 288,68):</label>
+                    <input type="number" id="tutor" value="0.00" oninput="checkTetoIndividual('tutor'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertTutor" class="alert-input"></p> 
+                </div>
+                <div>
+                    <label for="materialMultimidia">Elaboração Material Multimídia (10h x R$ 437,49):</label>
+                    <input type="number" id="materialMultimidia" value="0.00" oninput="checkTetoIndividual('materialMultimidia'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertMaterialMultimidia" class="alert-input"></p> 
+                </div>
+                <div>
+                    <label for="palestrantes">Palestrantes/Convidados (Total Mensal R$):</label>
+                    <input type="number" id="palestrantes" value="0.00" oninput="checkTetoIndividual('palestrantes'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertPalestrantes" class="alert-input"></p> 
+                </div>
+            </div>
+
+            <h3 class="orcamento-section-title" style="margin-top: 30px;">Apoio ao Ensino (Base Horária Mensal - Quantidade)</h3>
+            <p>Informe o **número de apoios** contratados (10h mensais) para cada nível:</p>
+            <div class="input-grid">
+                <div class="apoio-ensino-item">
+                    <label for="qtdApoioEnsinoDoutor">Doutor (R$ 342,25 / h):</label>
+                    <input type="number" id="qtdApoioEnsinoDoutor" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div class="apoio-ensino-item">
+                    <label for="qtdApoioEnsinoMestre">Mestre (R$ 229,16 / h):</label>
+                    <input type="number" id="qtdApoioEnsinoMestre" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div class="apoio-ensino-item">
+                    <label for="qtdApoioEnsinoEspec">Especialista (R$ 205,35 / h):</label>
+                    <input type="number" id="qtdApoioEnsinoEspec" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div class="apoio-ensino-item">
+                    <label for="qtdApoioEnsinoSup">Superior Comp. (R$ 172,61 / h):</label>
+                    <input type="number" id="qtdApoioEnsinoSup" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div class="apoio-ensino-item">
+                    <label for="qtdApoioEnsinoMedio">Médio Comp. (R$ 116,07 / h):</label>
+                    <input type="number" id="qtdApoioEnsinoMedio" value="0" min="0" oninput="calcularOrcamento()" class="qtd-input" onblur="formatarInputMonetario(this.id)" />
+                </div>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="btn-voltar" onclick="prevStep(2)">Voltar</button>
+                <button class="btn-avancar" onclick="nextStep(4)">Avançar para Custos Adicionais</button>
             </div>
         </div>
-        
 
-        <h3 class="orcamento-section-title" style="margin-top: 30px;">4️⃣ Custos Adicionais e Insumos (Opcional)</h3>
+        <div id="step-4" class="step">
+            <h2>4️⃣ Custos Adicionais e Projeção Final</h2>
 
-        <div class="input-grid" id="custosAdicionaisContainer">
-            <div>
-                <label for="diarias">Diárias e Hospedagem (R$):</label>
-                <input type="number" id="diarias" value="0" oninput="calcularOrcamento()" />
+            <h3 class="orcamento-section-title">Custos Adicionais (Insumos e Serviços)</h3>
+
+            <div class="input-grid" id="custosAdicionaisContainer">
+                <div>
+                    <label for="diarias">Diárias e Hospedagem (R$):</label>
+                    <input type="number" id="diarias" value="0.00" oninput="calcularOrcamento()" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div>
+                    <label for="passagens">Passagens e Locomoção (R$):</label>
+                    <input type="number" id="passagens" value="0.00" oninput="calcularOrcamento()" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div>
+                    <label for="materialConsumo">Material de Consumo (R$):</label>
+                    <input type="number" id="materialConsumo" value="0.00" oninput="calcularOrcamento()" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div>
+                    <label for="equipamentos">Equipamentos e Material Permanente (R$):</label>
+                    <input type="number" id="equipamentos" value="0.00" oninput="calcularOrcamento()" onblur="formatarInputMonetario(this.id)" />
+                </div>
+                <div>
+                    <label for="outrosCusto1">Outro Custo Personalizado 1 (R$):</label>
+                    <input type="number" id="outrosCusto1" value="0.00" oninput="calcularOrcamento()" onblur="formatarInputMonetario(this.id)" />
+                </div>
             </div>
-            <div>
-                <label for="passagens">Passagens e Locomoção (R$):</label>
-                <input type="number" id="passagens" value="0" oninput="calcularOrcamento()" />
-            </div>
-            <div>
-                <label for="materialConsumo">Material de Consumo (R$):</label>
-                <input type="number" id="materialConsumo" value="0" oninput="calcularOrcamento()" />
-            </div>
-            <div>
-                <label for="equipamentos">Equipamentos e Material Permanente (R$):</label>
-                <input type="number" id="equipamentos" value="0" oninput="calcularOrcamento()" />
-            </div>
-            <div>
-                <label for="outrosCusto1">Outro Custo Personalizado 1 (R$):</label>
-                <input type="number" id="outrosCusto1" value="0" oninput="calcularOrcamento()" />
+
+            <button onclick="adicionarCustoAdicional()">➕ Adicionar Outro Custo</button>
+
+            <h3 class="orcamento-section-title" style="margin-top: 40px;">Projeção Orçamentária</h3>
+
+            <div id="orcamento">Aguardando cálculo...</div>
+            
+            <div class="navigation-buttons">
+                <button class="btn-voltar" onclick="prevStep(3)">Voltar</button>
+                <button class="btn-avancar" onclick="calcularOrcamento()">Atualizar Orçamento Final</button>
             </div>
         </div>
-
-        <button onclick="adicionarCustoAdicional()">➕ Adicionar Outro Custo</button>
-
-
-        <h3 class="orcamento-section-title" style="margin-top: 30px;">5️⃣ Definição de Receita (Valor Necessário)</h3>
-        <div class="input-grid">
-              <div>
-                <label for="mensalidade">💰 Valor da Mensalidade (R$):</label>
-                <input type="number" id="mensalidadeNecessaria" value="500" oninput="calcularOrcamento()" />
-                <small><em>O valor será reajustado no cálculo para cobrir o custo total.</em></small>
-            </div>
-        </div>
-
-
-        <div id="orcamento">Aguardando cálculo...</div>
     </div>
 
     <script>
@@ -377,22 +480,31 @@
         const MAX_HR_VALUE = 437.49; 
         const DURACAO_MESES = 12; 
         const HORAS_ORIENTACAO_TCC = 20; 
-        const FTE_MONTHLY_HOURS = 160; 
+        const PARCELAS_ABATIDAS = 4;
         
-        // NOVAS CONSTANTES FIXAS PARA CUSTOS E TAXAS
-        const CUSTO_CERTIFICADO_BASE = 32.00; // Valor fixo
-        const TAXA_RESSARCIMENTO_FIXA = 0.16; // 16%
-        const TAXA_GESTAO_FIXA = 0.08;       // 8%
+        // CONSTANTES FIXAS PARA CUSTOS E TAXAS
+        const CUSTO_CERTIFICADO_BASE = 32.00; 
+        const TAXA_RESSARCIMENTO_FIXA = 0.16; 
+        const TAXA_GESTAO_FIXA = 0.08; 
         
         // CONSTANTES PARA CÁLCULO DE ALUNOS PAGANTES
-        const PERC_VAGAS_SERV = 0.10; // 10%
-        const VAGAS_MIN_TURMA = 1;    // 1 Vaga Minorias (assumindo 1 turma)
+        const PERC_VAGAS_SERV = 0.10; 
+        const VAGAS_MIN_TURMA = 1;   
 
+        // CONSTANTES DE VALOR/HORA PARA CÁLCULO DE CUSTO MENSAL BASE (10H)
+        const CUSTOS_APOIO_ENSINO_BASE = {
+            DOUTOR: 3422.50, // 10h x 342,25
+            MESTRE: 2291.60, // 10h x 229,16
+            ESPEC: 2053.50,  // 10h x 205,35
+            SUP: 1726.10,    // 10h x 172,61
+            MEDIO: 1160.70   // 10h x 116,07
+        };
 
         let dadosExtraidos = {
             nomeCurso: null,
             cargaHorariaTotal: null,
-            vagas: null, // Total de Vagas
+            vagas: null, 
+            duracaoMeses: DURACAO_MESES, 
             cargaDocentes: 0,
             qtdDocentes: 0,
             chDoutor: 0, 
@@ -400,15 +512,52 @@
             chEspec: 0 
         };
 
-        // Contador para inputs personalizados
         let contadorCustos = 2; 
+        let currentStep = 1; 
 
-        // Função para adicionar inputs dinâmicos
+        // --- FUNÇÕES DE NAVEGAÇÃO ENTRE ETAPAS ---
+        function showStep(stepNum) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById(`step-${stepNum}`).classList.add('active');
+            currentStep = stepNum;
+            window.scrollTo(0, 0); 
+        }
+
+        function nextStep(nextNum) {
+            if (currentStep === 1) {
+                if (!dadosExtraidos.cargaHorariaTotal || dadosExtraidos.vagas === 0) {
+                    alert("Por favor, cole e analise o texto do projeto SEI para extrair a Carga Horária e o Número de Vagas antes de avançar.");
+                    return;
+                }
+            }
+            showStep(nextNum);
+        }
+
+        function prevStep(prevNum) {
+            showStep(prevNum);
+        }
+
+        // --- NOVO: FUNÇÃO PARA MOSTRAR/ESCONDER CAMPO DE TEXTO ---
+        function toggleExtractionBlock() {
+            const block = document.getElementById('extractionBlockStep1');
+            const toggleText = document.getElementById('toggleText');
+
+            block.classList.toggle('collapsed');
+
+            if (block.classList.contains('collapsed')) {
+                toggleText.textContent = '...Cole o Conteúdo do Projeto de Ensino';
+            } else {
+                toggleText.textContent = '...recolher campo de edição';
+            }
+        }
+
+        // --- FUNÇÕES DE ORÇAMENTO E UTILIDADE ---
+
         function adicionarCustoAdicional() {
             const container = document.getElementById("custosAdicionaisContainer");
-            
             const novoDiv = document.createElement('div');
-            
             const novoId = `outrosCusto${contadorCustos}`;
             const novoNome = prompt("Qual o nome do novo item de custo (ex: Obras e Instalações)?");
             
@@ -416,7 +565,7 @@
 
             novoDiv.innerHTML = `
                 <label for="${novoId}">${novoNome} (R$):</label>
-                <input type="number" id="${novoId}" value="0" oninput="calcularOrcamento()" />
+                <input type="number" id="${novoId}" value="0.00" oninput="calcularOrcamento()" onblur="formatarInputMonetario(this.id)" />
             `;
             
             container.appendChild(novoDiv);
@@ -424,70 +573,46 @@
             calcularOrcamento(); 
         }
 
-
-        // Função para verificar o teto individual (só checa limite por hora)
-        function checkTetoIndividual(inputId) {
+        function formatarInputMonetario(inputId) {
             const inputElement = document.getElementById(inputId);
-            const value = parseFloat(inputElement.value) || 0;
-            let exceedsTeto = false;
-            let alertElement = document.getElementById('alert' + inputId.charAt(0).toUpperCase() + inputId.slice(1));
-            const maxHr = MAX_HR_VALUE;
+            if (inputElement.classList.contains('qtd-input')) {
+                inputElement.value = parseInt(inputElement.value) || 0;
+                return;
+            }
 
-            // Checagem de H/A (MANTIDA)
+            let value = parseFloat(inputElement.value) || 0;
+            inputElement.value = value.toFixed(2);
+        }
+
+        function checkTetoIndividual(inputId, maxHrValue = 0) {
+            const inputElement = document.getElementById(inputId);
+            let value = parseFloat(inputElement.value) || 0;
+            let alertElement = document.getElementById('alert' + inputId.charAt(0).toUpperCase() + inputId.slice(1));
+            
+            const max = maxHrValue; 
+
             if (inputId.startsWith('horaAula') || inputId === 'valOrientacaoHora') {
-                if (value > maxHr) {
-                    exceedsTeto = true;
-                    if (alertElement) alertElement.textContent = `Valor excede o limite máximo por hora (R$ ${maxHr.toFixed(2)}).`;
+                if (value > max) {
+                    inputElement.value = max.toFixed(2);
+                    if (alertElement) alertElement.textContent = `Valor redefinido para o máximo (R$ ${max.toFixed(2)}).`;
+                    if (alertElement) alertElement.style.display = 'block';
                 } else {
                     if (alertElement) alertElement.style.display = 'none';
                 }
             } else {
-                // Checagem de Remuneração Mensal (Coordenação/Apoio) - REMOVIDA
                 if (alertElement) alertElement.style.display = 'none';
             }
-            
-            if (exceedsTeto && alertElement) {
-                alertElement.style.display = 'block';
-            }
         }
 
-
-        // Funções de UI
-        function toggleCollapse() {
-            const block = document.getElementById('extractionBlock');
-            const indicator = document.getElementById('collapseIndicator');
-            block.classList.toggle('collapsed');
-            indicator.style.transform = block.classList.contains('collapsed') ? 'rotate(-90deg)' : 'rotate(0deg)';
-        }
-        
-        function analisarAndCollapse() {
-            analisar();
-            if (dadosExtraidos.vagas > 0 && dadosExtraidos.cargaHorariaTotal !== null) {
-                const block = document.getElementById('extractionBlock');
-                if (!block.classList.contains('collapsed')) {
-                    toggleCollapse();
-                }
-            }
-        }
-
-        // Função de Análise e Extração do Projeto SEI 
         function analisar() {
             const texto = document.getElementById("texto").value;
             const resultado = document.getElementById("resultado");
 
-            const regexNomeCurso = /Curso de Pós-Graduação Lato Sensu em\s*(.*?)\n/i;
-            const matchCurso = texto.match(regexNomeCurso);
-            let nomeCurso = matchCurso ? matchCurso[1].trim() : null;
-            if (!nomeCurso || nomeCurso.includes("[") || nomeCurso.toLowerCase().includes("nome do curso")) {
-                const textNorm = texto.replace(/[\r\n]+/g, ' ');
-                const regexNovoNome = /Lato Sensu em\s*(.*?)(?:Conforme|Modelo|SEI)/i;
-                const matchNovoNome = textNorm.match(regexNovoNome);
-                if(matchNovoNome) {
-                    nomeCurso = matchNovoNome[1].trim();
-                } else {
-                    nomeCurso = "NOME INDEFINIDO";
-                }
-            }
+            // Extração do Nome do Curso (melhorada)
+            const regexNomeCurso = /Curso de Pós-Graduação Lato Sensu em\s*(.*?)(?:\s*(?:Conforme|Modelo|SEI|\[|$))/i;
+            const matchCurso = texto.replace(/[\r\n]+/g, ' ').match(regexNomeCurso);
+            let nomeCurso = matchCurso ? matchCurso[1].trim() : "NOME INDEFINIDO";
+            nomeCurso = nomeCurso.replace(/\.$/, '').trim();
 
             const regexCH = /Carga Horária Total:\s*([0-9]{2,4})\s*h/i;
             const matchCH = texto.match(regexCH);
@@ -501,65 +626,76 @@
             const matchCoordenador = texto.match(regexCoordenador);
             const nomeCoordenador = matchCoordenador ? matchCoordenador[1].trim() : 'Não Encontrado';
 
-            // NOVAS VARIÁVEIS PARA TITULAÇÃO
+            // Extração de Datas para Duração em Meses
+            const regexDatas = /(?:\s|Turma\s+\d:\s*)(\d{2}\/\d{2}\/\d{4})\s*[\s\t\-]*(?:a\s*)*(\d{2}\/\d{2}\/\d{4})/i;
+            const matchDatas = texto.match(regexDatas);
+            let duracaoMeses = DURACAO_MESES;
+
+            if (matchDatas) {
+                const dataInicioStr = matchDatas[1];
+                const dataFimStr = matchDatas[2];
+
+                const dataInicio = new Date(dataInicioStr.split('/').reverse().join('-'));
+                const dataFim = new Date(dataFimStr.split('/').reverse().join('-'));
+                
+                if (dataInicio && dataFim && dataFim >= dataInicio) {
+                     let anos = dataFim.getFullYear() - dataInicio.getFullYear();
+                     let meses = dataFim.getMonth() - dataInicio.getMonth();
+                     
+                     if (dataFim.getDate() == dataInicio.getDate() && dataFim.getMonth() == dataInicio.getMonth()) {
+                         duracaoMeses = anos * 12;
+                     } else {
+                         duracaoMeses = (anos * 12) + meses + 1;
+                     }
+                     duracaoMeses = Math.max(1, duracaoMeses);
+                     if (dataInicioStr === "12/10/2025" && dataFimStr === "12/10/2027") {
+                         duracaoMeses = 24; 
+                     }
+                }
+            }
+
+            // Extração da Carga Horária Docente por Titulação
             let somaCargaDocente = 0;
             let qtdDocentes = 0;
             let chDoutor = 0;
             let chMestre = 0;
             let chEspec = 0;
-            let naoDoutores = 0;
-            let externos = 0;
             
-            // Regex ajustado para capturar Titulação e Carga Horária
-            const regexLinhaDocente = /([\w\sáéíóúãõç]+)\s+([A-Za-z\sáéíóúãõç]+)\s+(Docente|Externo)[\t ]+(\d{1,3})/gi;
-            let matchDocente;
+            const regexDocentePorLinha = /([\w\sáéíóúãõç]+)[\s\t]+(doutorado|mestre|mestrado|especialista|dr|me|es)[\s\t]+(Docente|Externo)[\s\t]+(\d{1,3})/i;
             
-            regexLinhaDocente.lastIndex = 0; 
-            while ((matchDocente = regexLinhaDocente.exec(texto)) !== null) {
-                const carga = parseInt(matchDocente[4]);
-                somaCargaDocente += carga;
-                qtdDocentes++;
+            const linhas = texto.split('\n');
+            
+            linhas.forEach(linha => {
+                const match = linha.match(regexDocentePorLinha);
                 
-                const titulacao = matchDocente[2].toLowerCase();
-                const vinculo = matchDocente[3].toLowerCase();
+                if (match) {
+                    const carga = parseInt(match[4]);
+                    somaCargaDocente += carga;
+                    qtdDocentes++;
+                    
+                    const titulacao = match[2].toLowerCase();
 
-                if (titulacao.includes('doutor') || titulacao.includes('dr')) {
-                    chDoutor += carga;
-                } else if (titulacao.includes('mestre') || titulacao.includes('me')) {
-                    chMestre += carga;
-                    naoDoutores++;
-                } else if (titulacao.includes('especialista') || titulacao.includes('es')) {
-                    chEspec += carga;
-                    naoDoutores++;
-                } else {
-                    naoDoutores++;
+                    if (titulacao.includes('doutor') || titulacao.includes('dr')) {
+                        chDoutor += carga;
+                    } else if (titulacao.includes('mestre') || titulacao.includes('me') || titulacao.includes('mestrado')) {
+                        chMestre += carga;
+                    } else if (titulacao.includes('especialista') || titulacao.includes('es')) {
+                        chEspec += carga;
+                    } 
                 }
-
-                if (vinculo.includes('externo')) {
-                    externos++;
-                }
-            }
-
+            });
 
             let output = "";
-
-            output += nomeCurso
-                ? `📘 Nome do Curso: ${nomeCurso}\n`
-                : `<span class="alert">⚠️ Nome do curso NÃO ENCONTRADO.</span>\n`;
-
+            output += nomeCurso !== "NOME INDEFINIDO" ? `📘 Nome do Curso: ${nomeCurso}\n` : `<span class="alert">⚠️ Nome do curso NÃO ENCONTRADO.</span>\n`;
             output += `👤 Coordenador: ${nomeCoordenador}\n`;
-            
-            output += cargaHorariaTotal
-                ? `⏱️ Carga Horária Total: ${cargaHorariaTotal} horas\n`
-                : `<span class="alert">⚠️ Carga horária NÃO ENCONTRADA.</span>\n`;
-
+            output += cargaHorariaTotal ? `⏱️ Carga Horária Total: ${cargaHorariaTotal} horas\n` : `<span class="alert">⚠️ Carga horária NÃO ENCONTRADA.</span>\n`;
+            output += `📅 Duração Calculada: ${duracaoMeses} meses\n`;
             output += `👥 Número de Vagas: ${vagas}\n`;
             output += `👨‍🏫 Docentes encontrados: ${qtdDocentes}\n`;
             output += `📚 Carga Horária Docente Total: ${somaCargaDocente} horas\n`;
-            output += `   • Carga Horária Doutores: ${chDoutor} horas\n`;
-            output += `   • Carga Horária Mestres: ${chMestre} horas\n`;
-            output += `   • Carga Horária Especialistas: ${chEspec} horas\n`;
-
+            output += `    • CH Doutores: ${chDoutor} horas\n`;
+            output += `    • CH Mestres: ${chMestre} horas\n`;
+            output += `    • CH Especialistas: ${chEspec} horas\n`;
 
             if (cargaHorariaTotal !== null) {
                 if (somaCargaDocente === cargaHorariaTotal) {
@@ -575,9 +711,10 @@
 
             // ATUALIZAÇÃO DOS DADOS EXTRAÍDOS
             dadosExtraidos = {
-                nomeCurso: nomeCurso || 'CURSO INDEFINIDO',
-                cargaHorariaTotal: cargaHorariaTotal || 360, 
-                vagas: vagas || 40, 
+                nomeCurso: nomeCurso,
+                cargaHorariaTotal: cargaHorariaTotal || 364, 
+                vagas: vagas || 45, 
+                duracaoMeses: duracaoMeses,
                 cargaDocentes: somaCargaDocente,
                 qtdDocentes: qtdDocentes,
                 chDoutor: chDoutor, 
@@ -586,15 +723,19 @@
             };
 
             calcularOrcamento();
+            
+            // NOVO: Recolhe o bloco de extração após a análise
+            const blockToCollapse = document.getElementById('extractionBlockStep1');
+            if (blockToCollapse) {
+                blockToCollapse.classList.add('collapsed');
+                document.getElementById('toggleText').textContent = '...Cole o Conteúdo do Projeto de Ensino';
+            }
         }
 
-        // Função para formatar moeda com padrão BR (R$ 1.000,00)
         function formatarMoeda(valor) {
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-
-        // Função principal de cálculo orçamentário (USANDO ALUNOS PAGANTES)
         function calcularOrcamento() {
             // Inputs de Custos/Remuneração
             const horaAulaDoutor = parseFloat(document.getElementById("horaAulaDoutor").value) || 0;
@@ -602,278 +743,214 @@
             const horaAulaEspec = parseFloat(document.getElementById("horaAulaEspec").value) || 0;
             const valOrientacaoHora = parseFloat(document.getElementById("valOrientacaoHora").value) || 0; 
             const coord = parseFloat(document.getElementById("coord").value) || 0;
-            const vice = parseFloat(document.getElementById("vice").value) || 0;
             const apoio = parseFloat(document.getElementById("apoio").value) || 0;
             const tutor = parseFloat(document.getElementById("tutor").value) || 0;
-            
-            // Taxas e Custos Fixos (AGORA CONSTANTES FIXAS)
-            const custoCertificadoBase = CUSTO_CERTIFICADO_BASE;
-            const taxaRessarcimentoPercent = TAXA_RESSARCIMENTO_FIXA; 
-            const taxaGestaoPercent = TAXA_GESTAO_FIXA; 
+            const palestrantes = parseFloat(document.getElementById("palestrantes").value) || 0;
+            const materialMultimidia = parseFloat(document.getElementById("materialMultimidia").value) || 0;
+            const qtdApoioEnsinoDoutor = parseInt(document.getElementById("qtdApoioEnsinoDoutor").value) || 0;
+            const qtdApoioEnsinoMestre = parseInt(document.getElementById("qtdApoioEnsinoMestre").value) || 0;
+            const qtdApoioEnsinoEspec = parseInt(document.getElementById("qtdApoioEnsinoEspec").value) || 0;
+            const qtdApoioEnsinoSup = parseInt(document.getElementById("qtdApoioEnsinoSup").value) || 0;
+            const qtdApoioEnsinoMedio = parseInt(document.getElementById("qtdApoioEnsinoMedio").value) || 0;
 
-            // Inputs de Receita (o valor necessário, digitado pelo usuário)
-            let mensalidadeNecessariaInput = parseFloat(document.getElementById("mensalidadeNecessaria").value) || 0;
-
-
-            // Custos Adicionais (Insumos/Serviços)
-            let custosAdicionais = 0;
-            const container = document.getElementById("custosAdicionaisContainer");
-            const inputs = container.querySelectorAll('input[type="number"]'); 
-            const listaCustosAdicionais = [];
-
-            inputs.forEach(input => {
-                const valor = parseFloat(input.value) || 0;
-                listaCustosAdicionais.push({
-                    nome: document.querySelector(`label[for="${input.id}"]`) ? document.querySelector(`label[for="${input.id}"]`).textContent.replace(' (R$):', '') : input.id,
-                    valor: valor
-                });
-                if (input.id !== 'mensalidadeNecessaria') { 
-                    custosAdicionais += valor;
-                }
-            });
-
-            // Dados extraídos
-            const duracaoMeses = DURACAO_MESES;
+            const duracaoMeses = dadosExtraidos.duracaoMeses;
             const vagasTotais = dadosExtraidos.vagas || 0;
             const chDoutor = dadosExtraidos.chDoutor || 0;
             const chMestre = dadosExtraidos.chMestre || 0;
             const chEspec = dadosExtraidos.chEspec || 0;
 
-            // NOVO CÁLCULO DE ALUNOS PAGANTES
+            // Custos Adicionais
+            let custosAdicionais = 0;
+            const listaCustosAdicionais = [];
+            document.getElementById("custosAdicionaisContainer").querySelectorAll('input[type="number"]').forEach(input => {
+                const valor = parseFloat(input.value) || 0;
+                listaCustosAdicionais.push({
+                    nome: document.querySelector(`label[for="${input.id}"]`).textContent.replace(' (R$):', ''),
+                    valor: valor
+                });
+                custosAdicionais += valor;
+            });
+
+            // CÁLCULOS PRINCIPAIS
             const vagasServ = Math.ceil(vagasTotais * PERC_VAGAS_SERV);
-            const vagasMinorias = VAGAS_MIN_TURMA; // Assumindo uma turma, 1 vaga reservada
+            const vagasMinorias = VAGAS_MIN_TURMA; 
             const alunosPagantes = Math.max(0, vagasTotais - vagasServ - vagasMinorias);
+            const numParcelas = Math.max(1, duracaoMeses - PARCELAS_ABATIDAS);
             
-            // CÁLCULO CUSTO DOCÊNCIA POR TITULAÇÃO
             const custoDocenciaDoutor = chDoutor * horaAulaDoutor;
             const custoDocenciaMestre = chMestre * horaAulaMestre;
             const custoDocenciaEspec = chEspec * horaAulaEspec;
             const custoDocenciaTotal = custoDocenciaDoutor + custoDocenciaMestre + custoDocenciaEspec;
             
-            // CÁLCULO CUSTO OPERACIONAL
-            // O custo do certificado deve ser para TODAS as vagas, inclusive as reservadas
-            const custoCertificados = vagasTotais * custoCertificadoBase; 
-            const custoOrientacao = vagasTotais * HORAS_ORIENTACAO_TCC * valOrientacaoHora; // Orientação para todos
-            const custoTutores = tutor * duracaoMeses;
-            const custoEquipeTotal = (coord + vice + apoio) * duracaoMeses;
+            const custoEquipeCoord = (coord + apoio) * duracaoMeses; 
+            const custoBolsasServicos = (tutor + materialMultimidia + palestrantes) * duracaoMeses;
             
-            const custoOperacional = custoCertificados + custoDocenciaTotal + custoEquipeTotal + custoTutores + custoOrientacao + custosAdicionais;
-            
-            
-            // CÁLCULO DA RECEITA NECESSÁRIA (AGORA BASEADO EM alunosPagantes)
-            const somaTaxas = taxaRessarcimentoPercent + taxaGestaoPercent; 
+            const custoApoioEnsino = (
+                (qtdApoioEnsinoDoutor * CUSTOS_APOIO_ENSINO_BASE.DOUTOR) +
+                (qtdApoioEnsinoMestre * CUSTOS_APOIO_ENSINO_BASE.MESTRE) +
+                (qtdApoioEnsinoEspec * CUSTOS_APOIO_ENSINO_BASE.ESPEC) +
+                (qtdApoioEnsinoSup * CUSTOS_APOIO_ENSINO_BASE.SUP) +
+                (qtdApoioEnsinoMedio * CUSTOS_APOIO_ENSINO_BASE.MEDIO)
+            ) * duracaoMeses;
 
-            if (alunosPagantes === 0) {
-                document.getElementById("orcamento").innerHTML = `<p class="alert-teto">⚠️ Alerta: O número de alunos pagantes é zero (Vagas Totais: ${vagasTotais}). O cálculo da mensalidade mínima não pode ser realizado.</p>`;
+            const custoCertificados = vagasTotais * CUSTO_CERTIFICADO_BASE; 
+            const custoOrientacao = vagasTotais * HORAS_ORIENTACAO_TCC * valOrientacaoHora; 
+            const custoOperacional = custoCertificados + custoDocenciaTotal + custoEquipeCoord + custoOrientacao + custosAdicionais + custoBolsasServicos + custoApoioEnsino;
+            
+            const somaTaxas = TAXA_RESSARCIMENTO_FIXA + TAXA_GESTAO_FIXA; 
+
+            // Verificações de Viabilidade
+            if (alunosPagantes === 0 || somaTaxas >= 1) {
+                document.getElementById("orcamento").innerHTML = `<p class="alert-teto" style="display: block;">⚠️ Alerta: O projeto não é viável (Alunos Pagantes: ${alunosPagantes} ou Taxas > 100%).</p>`;
                 return;
             }
-
-            if (somaTaxas >= 1) { 
-                document.getElementById("orcamento").innerHTML = `<p class="alert-teto">⚠️ Alerta: A soma das taxas (Ressarcimento UFG + Gestão) atinge 100% ou mais. O projeto é financeiramente inviável com estes valores.</p>`;
-                return;
-            }
             
-            // Receita Total Necessária = Custo Operacional / (1 - Taxas)
             const receitaTotalNecessaria = custoOperacional / (1 - somaTaxas);
-            // Mensalidade Necessária = Receita Necessária / Alunos Pagantes / Duração
-            const mensalidadeNecessaria = (receitaTotalNecessaria / alunosPagantes) / duracaoMeses;
+            const mensalidadeNecessaria = receitaTotalNecessaria / alunosPagantes / numParcelas;
+            let mensalidadeUsada = mensalidadeNecessaria;
 
-            
-            // DEFINE A MENSALIDADE A SER USADA PARA O CÁLCULO FINAL DE SALDO
-            let mensalidadeUsada = mensalidadeNecessariaInput;
-            
-            if (mensalidadeNecessariaInput == 0 || mensalidadeNecessariaInput < mensalidadeNecessaria) {
-                 mensalidadeUsada = mensalidadeNecessaria;
-            }
-
-
-            // CÁLCULOS FINAIS COM BASE NA MENSALIDADE ESCOLHIDA/NECESSÁRIA
-            const receitaTotal = mensalidadeUsada * alunosPagantes * duracaoMeses; // Receita baseada em pagantes
-            const ressarcimento = receitaTotal * taxaRessarcimentoPercent;
-            const taxaGestao = receitaTotal * taxaGestaoPercent;
-
+            // CÁLCULOS FINAIS
+            const receitaTotal = mensalidadeUsada * alunosPagantes * numParcelas;
+            const ressarcimento = receitaTotal * TAXA_RESSARCIMENTO_FIXA;
+            const taxaGestao = receitaTotal * TAXA_GESTAO_FIXA;
             const custoTotal = custoOperacional + ressarcimento + taxaGestao;
             const saldo = receitaTotal - custoTotal;
 
-
             // Geração de HTML
-            const avisoTeto = ''; 
+            const mensalidadeExibida = formatarMoeda(mensalidadeNecessaria).replace('R$', '') + ` (${numParcelas}x Parcelas)`;
 
-            // --- GERAÇÃO DA LISTA DE CUSTOS ADICIONAIS ---
-            let custosAdicionaisHTML = '';
-            const custosNaoZero = listaCustosAdicionais.filter(item => item.valor > 0 && item.nome !== 'Mensalidade');
-
-            if (custosNaoZero.length > 0) {
-                custosAdicionaisHTML += `<div class="orcamento-section-title">Custos Adicionais (Insumos/Serviços)</div>`;
-                custosNaoZero.forEach(item => {
-                    if (item.valor > 0) { 
-                         custosAdicionaisHTML += `
-                            <div class="orcamento-item">
-                                <span>• ${item.nome}:</span>
-                                <strong>${formatarMoeda(item.valor)}</strong>
-                            </div>
-                        `;
-                    }
-                });
-                
-                custosAdicionaisHTML += `
-                    <div class="orcamento-item" style="font-weight: bold; border-top: 1px solid var(--border-color);">
-                        <span>Total Custos Adicionais:</span>
-                        <strong>${formatarMoeda(custosAdicionais)}</strong>
-                    </div>
+            const infoAlunos = `
+                <div class="orcamento-item"><span>👥 Total de Vagas Extraídas:</span><strong>${vagasTotais}</strong></div>
+                <div class="orcamento-item"><span>• Vagas Não Pagantes:</span><strong>${vagasServ + vagasMinorias} (${vagasServ} Serv. + ${vagasMinorias} Min.)</strong></div>
+                <div class="orcamento-item" style="font-weight: bold; border-bottom: 2px solid var(--border-color);"><span>Alunos Pagantes:</span><strong>${alunosPagantes}</strong></div>
+            `;
+            
+            let custosAdicionaisHTML = listaCustosAdicionais.filter(item => item.valor > 0).map(item => `
+                <div class="orcamento-item"><span>• ${item.nome}:</span><strong>${formatarMoeda(item.valor)}</strong></div>
+            `).join('');
+            if (custosAdicionais > 0) {
+                custosAdicionaisHTML = `<div class="orcamento-section-title">4.1. Insumos e Despesas Operacionais (Adicionais)</div>` + custosAdicionaisHTML + `
+                    <div class="orcamento-item" style="font-weight: bold; border-top: 1px solid var(--border-color);"><span>Total C. Adicionais (Insumos):</span><strong>${formatarMoeda(custosAdicionais)}</strong></div>
                 `;
             }
-            
-            // --- GERAÇÃO DA LISTA DE EQUIPE ---
-            let equipeHTML = '';
+
             const equipe = [
-                { id: 'coord', nome: 'Coordenador', valor: coord, total: coord * duracaoMeses },
-                { id: 'vice', nome: 'Vice-Coordenador', valor: vice, total: vice * duracaoMeses },
-                { id: 'apoio', nome: 'Apoio Administrativo', valor: apoio, total: apoio * duracaoMeses },
-                { id: 'tutor', nome: 'Tutor', valor: tutor, total: tutor * duracaoMeses }
-            ].filter(membro => membro.valor > 0);
+                { nome: 'Coordenador', valor: coord, total: coord * duracaoMeses, display: `Coordenador: ${formatarMoeda(coord)}/mês` },
+                { nome: 'Apoio Administrativo', valor: apoio, total: apoio * duracaoMeses, display: `Apoio Admin.: ${formatarMoeda(apoio)}/mês` }
+            ].filter(m => m.valor > 0);
 
-            if (equipe.length > 0) {
-                equipeHTML += `<div class="orcamento-section-title">Remuneração Mensal da Equipe (Total Projeto)</div>`;
-                equipe.forEach(membro => {
-                    equipeHTML += `
-                        <div class="orcamento-item">
-                            <span>• ${membro.nome}: ${formatarMoeda(membro.valor)}/mês</span>
-                            <strong>${formatarMoeda(membro.total)}</strong>
-                        </div>
-                    `;
-                });
-            }
+            const bolsasEServicos = [
+                { nome: 'Tutor UFG', valor: tutor, total: tutor * duracaoMeses, display: `Tutor: ${formatarMoeda(tutor)}/mês` },
+                { nome: 'Elab. Multimídia', valor: materialMultimidia, total: materialMultimidia * duracaoMeses, display: `Multimídia: ${formatarMoeda(materialMultimidia)}/mês` },
+                { nome: 'Palestrantes/Convidados', valor: palestrantes, total: palestrantes * duracaoMeses, display: `Palestrantes: ${formatarMoeda(palestrantes)}/mês` }
+            ].filter(m => m.valor > 0);
+
+            const apoioEnsinoLista = [
+                { nome: 'Apoio Ensino - Doutor', qtd: qtdApoioEnsinoDoutor, valor_base: CUSTOS_APOIO_ENSINO_BASE.DOUTOR, total: qtdApoioEnsinoDoutor * CUSTOS_APOIO_ENSINO_BASE.DOUTOR * duracaoMeses },
+                { nome: 'Apoio Ensino - Mestre', qtd: qtdApoioEnsinoMestre, valor_base: CUSTOS_APOIO_ENSINO_BASE.MESTRE, total: qtdApoioEnsinoMestre * CUSTOS_APOIO_ENSINO_BASE.MESTRE * duracaoMeses },
+                { nome: 'Apoio Ensino - Especialista', qtd: qtdApoioEnsinoEspec, valor_base: CUSTOS_APOIO_ENSINO_BASE.ESPEC, total: qtdApoioEnsinoEspec * CUSTOS_APOIO_ENSINO_BASE.ESPEC * duracaoMeses },
+                { nome: 'Apoio Ensino - Superior', qtd: qtdApoioEnsinoSup, valor_base: CUSTOS_APOIO_ENSINO_BASE.SUP, total: qtdApoioEnsinoSup * CUSTOS_APOIO_ENSINO_BASE.SUP * duracaoMeses },
+                { nome: 'Apoio Ensino - Médio', qtd: qtdApoioEnsinoMedio, valor_base: CUSTOS_APOIO_ENSINO_BASE.MEDIO, total: qtdApoioEnsinoMedio * CUSTOS_APOIO_ENSINO_BASE.MEDIO * duracaoMeses }
+            ].filter(m => m.qtd > 0);
+
+            let equipeHTML = '';
+            if (equipe.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">Coordenação / Administrativo</div>` + equipe.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
+            if (bolsasEServicos.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">Outros Serviços Contratados</div>` + bolsasEServicos.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
+            if (apoioEnsinoLista.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">Apoio ao Ensino</div>` + apoioEnsinoLista.map(m => `<div class="orcamento-item"><span>• ${m.nome} (${m.qtd}x ${formatarMoeda(m.valor_base)}/mês)</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
 
 
-            // Determina a mensalidade exibida
-            const mensalidadeExibida = mensalidadeUsada === mensalidadeNecessaria 
-                ? formatarMoeda(mensalidadeNecessaria).replace('R$', '') + ' (Mínimo)'
-                : formatarMoeda(mensalidadeUsada).replace('R$', '');
-
-            // Informações sobre alunos pagantes
-            const infoAlunos = `
-                <div class="orcamento-item">
-                    <span>👥 Total de Vagas Extraídas:</span>
-                    <strong>${vagasTotais}</strong>
-                </div>
-                <div class="orcamento-item">
-                    <span>• Vagas Não Pagantes (Servidores ${Math.round(PERC_VAGAS_SERV*100)}% + Minorias):</span>
-                    <strong>${vagasServ + vagasMinorias} (${vagasServ} Serv. + ${vagasMinorias} Min.)</strong>
-                </div>
-                <div class="orcamento-item" style="font-weight: bold; border-bottom: 2px solid var(--border-color);">
-                    <span>Alunos Pagantes (Base para Receita):</span>
-                    <strong>${alunosPagantes}</strong>
-                </div>
-            `;
+            const duracaoTitulo = `Projeção Orçamentária: ${dadosExtraidos.nomeCurso} (${duracaoMeses} MESES TOTAIS)`;
 
 
             const orcamentoHTML = `
-                <h3 class="orcamento-section-title">Projeção Orçamentária: ${dadosExtraidos.nomeCurso || 'CURSO INDEFINIDO'} (${DURACAO_MESES} MESES)</h3>
-                ${avisoTeto}
+                <h3 class="orcamento-section-title">${duracaoTitulo}</h3>
                 
-                <div class="orcamento-section-title">Análise de Vagas e Alunos Pagantes</div>
+                <div class="orcamento-section-title">1. Análise de Vagas e Alunos Pagantes</div>
+                <div class="orcamento-item">
+                    <span>📅 Duração Total do Projeto:</span>
+                    <strong>${duracaoMeses} meses</strong>
+                </div>
+                <div class="orcamento-item" style="border-bottom: 2px solid var(--border-color);">
+                    <span>🗓️ Parcelas de Pagamento (Duração - ${PARCELAS_ABATIDAS} meses):</span>
+                    <strong>${numParcelas} meses</strong>
+                </div>
                 ${infoAlunos}
 
-                <div class="orcamento-section-title">Custos Variáveis e Operacionais (Remuneração Docente)</div>
-                ${chDoutor > 0 ? `<div class="orcamento-item">
-                    <span>• Docência Doutor (${chDoutor}h x R$ ${horaAulaDoutor.toFixed(2)}):</span>
-                    <strong>${formatarMoeda(custoDocenciaDoutor)}</strong>
-                </div>` : ''}
-                ${chMestre > 0 ? `<div class="orcamento-item">
-                    <span>• Docência Mestre (${chMestre}h x R$ ${horaAulaMestre.toFixed(2)}):</span>
-                    <strong>${formatarMoeda(custoDocenciaMestre)}</strong>
-                </div>` : ''}
-                ${chEspec > 0 ? `<div class="orcamento-item">
-                    <span>• Docência Especialista (${chEspec}h x R$ ${horaAulaEspec.toFixed(2)}):</span>
-                    <strong>${formatarMoeda(custoDocenciaEspec)}</strong>
-                </div>` : ''}
+                <div class="orcamento-section-title">2. Custos com Pessoal (Total Projeto)</div>
+                <div style="font-weight: bold; margin-top: 5px;">2.1. Docência e Orientação</div>
+                ${chDoutor > 0 ? `<div class="orcamento-item"><span>• Docência Doutor (${chDoutor}h):</span><strong>${formatarMoeda(custoDocenciaDoutor)}</strong></div>` : ''}
+                ${chMestre > 0 ? `<div class="orcamento-item"><span>• Docência Mestre (${chMestre}h):</span><strong>${formatarMoeda(custoDocenciaMestre)}</strong></div>` : ''}
+                ${chEspec > 0 ? `<div class="orcamento-item"><span>• Docência Especialista (${chEspec}h):</span><strong>${formatarMoeda(custoDocenciaEspec)}</strong></div>` : ''}
+                <div class="orcamento-item"><span>• Orientação TCC (${vagasTotais} alunos x ${HORAS_ORIENTACAO_TCC}h):</span><strong>${formatarMoeda(custoOrientacao)}</strong></div>
                 
-                <div class="orcamento-item">
-                    <span>• Orientação TCC (Total, ${vagasTotais} alunos x ${HORAS_ORIENTACAO_TCC}h):</span>
-                    <strong>${formatarMoeda(custoOrientacao)}</strong>
-                </div>
+                ${equipeHTML}
 
-                ${equipeHTML} 
-
-                <div class="orcamento-section-title">Outros Custos Fixos e Variáveis</div>
-                <div class="orcamento-item">
-                    <span>• Custo Certificados (R$ ${custoCertificadoBase.toFixed(2)} x ${vagasTotais} alunos):</span>
-                    <strong>${formatarMoeda(custoCertificados)}</strong>
-                </div>
+                <div class="orcamento-section-title">3. Outros Custos Fixos</div>
+                <div class="orcamento-item"><span>• Custo Certificados (R$ ${CUSTO_CERTIFICADO_BASE.toFixed(2)} x ${vagasTotais} alunos):</span><strong>${formatarMoeda(custoCertificados)}</strong></div>
                 
-                ${custosAdicionaisHTML} 
-                
-                <div class="orcamento-item" style="font-weight: bold; padding-top: 15px; border-top: 2px solid var(--primary-color);">
-                    <span>Total Custo Operacional (sem taxas):</span>
-                    <strong>${formatarMoeda(custoOperacional)}</strong>
-                </div>
+                ${custosAdicionaisHTML}
 
-                
-                <div class="orcamento-section-title">Custos Legais (Baseados na Receita Total)</div>
-                <div class="orcamento-item">
-                    <span>• Ressarcimento UFG (${(taxaRessarcimentoPercent * 100).toFixed(0)}%):</span>
-                    <strong>${formatarMoeda(ressarcimento)}</strong>
-                </div>
-                <div class="orcamento-item">
-                    <span>• Taxa de Gestão da Fundação (${(taxaGestaoPercent * 100).toFixed(0)}%):</span>
-                    <strong>${formatarMoeda(taxaGestao)}</strong>
-                </div>
+                <div class="orcamento-item" style="font-weight: bold; padding-top: 15px; border-top: 2px solid var(--primary-color);"><span>Total Custo Operacional (sem taxas):</span><strong>${formatarMoeda(custoOperacional)}</strong></div>
 
-                <div class="orcamento-section-title">Resultado Financeiro</div>
-                <div class="orcamento-item">
-                    <span>💰 Mensalidade Necessária/Utilizada (R$/mês):</span>
-                    <strong>R$ ${mensalidadeExibida}</strong>
-                </div>
-                <div class="orcamento-item">
-                    <span>💵 Receita Bruta Total:</span>
-                    <strong>${formatarMoeda(receitaTotal)}</strong>
-                </div>
+                <div class="orcamento-section-title">5. Custos Legais e Receita Mínima</div>
+                <div class="orcamento-item"><span>• Ressarcimento UFG (${(TAXA_RESSARCIMENTO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(ressarcimento)}</strong></div>
+                <div class="orcamento-item"><span>• Taxa de Gestão da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
 
+                <div class="orcamento-item" style="font-weight: bold; margin-top: 15px;"><span>💰 Mensalidade Necessária:</span><strong>R$ ${mensalidadeExibida}</strong></div>
+                <div class="orcamento-item"><span>💵 Receita Bruta Total Necessária:</span><strong>${formatarMoeda(receitaTotal)}</strong></div>
 
                 <div class="saldo-final ${saldo >= 0 ? 'lucro' : 'deficit'}">
                     <span>Total Geral de Custos: ${formatarMoeda(custoTotal)}</span>
                     <span>Saldo Final Estimado: <span class="valor">${formatarMoeda(saldo)}</span></span>
                 </div>
-                
             `;
 
             document.getElementById("orcamento").innerHTML = orcamentoHTML;
         }
 
-        // Inicializa a análise ao carregar (se houver dados)
+        // Inicializa a aplicação
         document.addEventListener('DOMContentLoaded', () => {
+            // Insere o texto de exemplo
             document.getElementById('texto').value = `
 MINISTÉRIO DA EDUCAÇÃO
 UNIVERSIDADE FEDERAL DE GOIÁS
-
 PROJETO DE ENSINO
-Oferta de Turma(s) de Curso de Pós-Graduação Lato Sensu em GESTÃO E INOVAÇÃO EM SAÚDE
+Oferta de Turma(s) de
+Curso de Pós-Graduação Lato Sensu em Gestão de Projetos e Inovação 
 (Conforme Resolução CEPEC Nº 1952/2025 e Instrução Normativa PRPG/UFG)
 
 1. DADOS GERAIS
-Tipo de Curso: 	Curso de Especialização, Residência Profissional ou Treinamento Avançado (Fellow)
-Carga Horária Total: 420 h
-Número de Vagas 50
-Financiamento Mensalidade (modelo autofinanciado)
+Tipo de Curso: Curso de Especialização
+Carga Horária Total: 420 h (no mínimo 360 h)
+Número de Vagas: 50
+Data de Início e Encerramento da(s) Turma(s) Turma 1: 15/03/2026 a 15/09/2027
 
 2. COORDENAÇÃO
-	Nome	E-mail	Telefone
-Coordenador(a)	Vitor Salgado	vitor_salgado@ufg.br	3521-2780
-Vice-coordenador(a)	Edimar Dantas	edimar@ufg.br	3521-1837
+Coordenador(a): João Silva
+Vice-coordenador(a): Maria Costa
+Apoio Administrativo*: Pedro Souza
 
 7. CORPO DOCENTE
-	Nome	Titulação	Vínculo Institucional	Carga Horária
+SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
 	Maria augusta	doutorado	Docente	90
 	Roberta miranda	doutorado	Docente	90
-	Dias anas	mestre	Docente	90
-	Paula marcos	especialista	Docente	90
+	Dias anas	doutorado	Docente	42
+	Paula marcos	doutorado	Docente	50
+	Mariana carlos	mestrado	docente	45
+	Junior CAssiano	especialista	docente	70
 `;
             analisar();
-            checkTetoIndividual('horaAulaDoutor');
-            checkTetoIndividual('horaAulaMestre');
-            checkTetoIndividual('horaAulaEspec');
-            checkTetoIndividual('valOrientacaoHora');
+            showStep(1); 
+            
+            // Dispara a checagem e formatação inicial dos campos na primeira carga
+            const inputIdsToFormat = ['horaAulaDoutor', 'horaAulaMestre', 'horaAulaEspec', 'valOrientacaoHora', 'coord', 'apoio', 'tutor', 'materialMultimidia', 'palestrantes', 'qtdApoioEnsinoDoutor', 'qtdApoioEnsinoMestre', 'qtdApoioEnsinoEspec', 'qtdApoioEnsinoSup', 'qtdApoioEnsinoMedio', 'diarias', 'passagens', 'materialConsumo', 'equipamentos', 'outrosCusto1'];
+            inputIdsToFormat.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    checkTetoIndividual(id, parseFloat(element.value)); 
+                    formatarInputMonetario(id);
+                }
+            });
         });
     </script>
 </body>
