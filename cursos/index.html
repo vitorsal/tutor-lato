@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos de Especialização - UFG (Estilo PRPG - Final)</title>
+    
+    <style>
+        /* -------------------------------------- */
+        /* CORES E FONTES (Estilo PRPG) */
+        /* -------------------------------------- */
+        :root {
+            --cor-principal: #4A8C4B; /* Verde Institucional */
+            --cor-destaque: #3A703B; /* Verde Escuro */
+            --cor-fundo: #f7f7f7;
+            --cor-texto: #333333;
+            --cor-texto-claro: #ffffff;
+        }
+
+        body {
+            background-color: var(--cor-fundo);
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: var(--cor-texto);
+        }
+
+        .lista-cursos {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            color: var(--cor-principal);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        /* -------------------------------------- */
+        /* NOVO DESTAQUE: CALL TO ACTION BOX */
+        /* -------------------------------------- */
+        .call-to-action-box {
+            background-color: var(--cor-principal); /* Fundo verde forte */
+            color: var(--cor-texto-claro); /* Texto branco */
+            padding: 20px 30px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .call-to-action-box strong {
+            font-size: 1.3em;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .call-to-action-box a {
+            color: #FFFF00; /* Amarelo/Dourado para máximo destaque no link */
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .call-to-action-box a:hover {
+            color: var(--cor-texto-claro);
+            text-decoration: underline;
+        }
+
+        .introducao-abaixo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 10px 0;
+        }
+
+        /* -------------------------------------- */
+        /* ESTILOS DAS ABAS (TABS) */
+        /* -------------------------------------- */
+        .tab-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            border-bottom: 2px solid #DDDDDD;
+        }
+
+        .tab-list button {
+            background-color: transparent;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #757575;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            margin-bottom: -2px; 
+            text-align: center;
+            flex: 1 1 auto; 
+            min-width: 150px; 
+        }
+
+        .tab-list button:hover {
+            color: var(--cor-principal);
+        }
+
+        .tab-list button.active {
+            color: var(--cor-texto);
+            font-weight: bold;
+            border-bottom: 4px solid var(--cor-destaque);
+        }
+        
+        /* -------------------------------------- */
+        /* ESTILOS DO CONTEÚDO (PAINEL) */
+        /* -------------------------------------- */
+        .tab-content {
+            padding: 20px 0;
+            background-color: #ffffff;
+            border-radius: 0 0 8px 8px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-pane {
+            display: none; 
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-pane.active {
+            display: block; 
+        }
+        
+        .area-titulo-destaque {
+            color: var(--cor-principal);
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin: 0 20px 25px 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* -------------------------------------- */
+        /* ESTILOS DOS CARDS INTERNOS (CURSOS) */
+        /* -------------------------------------- */
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+            padding: 10px 20px;
+        }
+
+        .curso-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid var(--cor-principal);
+            border-radius: 6px;
+            padding: 15px;
+            width: calc(33.333% - 20px); 
+            min-width: 280px;
+            box-sizing: border-box;
+            transition: box-shadow 0.2s;
+        }
+
+        .curso-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nome-curso {
+            color: var(--cor-texto);
+            font-size: 1.1em;
+            margin: 0 0 5px 0;
+            font-weight: 600;
+        }
+
+        .unidade-curso {
+            color: #757575;
+            font-size: 0.9em;
+            font-style: italic;
+            margin: 0 0 10px 0;
+        }
+        
+        .btn-link {
+            color: var(--cor-principal);
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+            color: var(--cor-destaque);
+        }
+
+        /* -------------------------------------- */
+        /* RESPONSIVIDADE (Mantida) */
+        /* -------------------------------------- */
+        @media (max-width: 992px) {
+            .curso-card {
+                width: calc(50% - 10px);
+            }
+        }
+        @media (max-width: 600px) {
+            .tab-list {
+                flex-direction: column;
+            }
+            .tab-list button {
+                width: 100%;
+                text-align: left;
+                border-bottom: 1px solid #eee;
+            }
+            .tab-list button.active {
+                border-left: 3px solid var(--cor-principal);
+                border-bottom: 1px solid #eee;
+                border-bottom-color: #eee;
+            }
+            .curso-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lista-cursos">
+        
+        <h1>Cursos de Especialização (Lato Sensu)</h1>
+
+        <div class="call-to-action-box">
+            <strong>INSCRIÇÕES E EDITAIS</strong>
+            <p>Mais informações sobre como ingressar e os processos seletivos estão disponíveis na **<a href="https://escoladepos.ufg.br/" target="_blank">Escola de Pós</a>**.</p>
+        </div>
+        
+        <div class="introducao-abaixo">
+            <p>Selecione uma das seis **Grandes Áreas do Conhecimento (CNPq)** para visualizar os cursos disponíveis:</p>
+        </div>
+        
+        <div class="tab-list">
+            <button class="tab-button active" onclick="openTab(event, 'ExatasTerra', 'Ciências Exatas e da Terra')">Ciências Exatas e da Terra</button>
+            <button class="tab-button" onclick="openTab(event, 'Engenharias', 'Engenharias')">Engenharias</button>
+            <button class="tab-button" onclick="openTab(event, 'Saude', 'Ciências da Saúde')">Ciências da Saúde</button>
+            <button class="tab-button" onclick="openTab(event, 'SociaisAplicadas', 'Ciências Sociais Aplicadas')">Ciências Sociais Aplicadas</button>
+            <button class="tab-button" onclick="openTab(event, 'Humanas', 'Ciências Humanas')">Ciências Humanas</button>
+            <button class="tab-button" onclick="openTab(event, 'LetrasArtes', 'Linguística, Letras e Artes')">Linguística, Letras e Artes</button>
+        </div>
+
+        <div class="tab-content">
+            
+            <h2 id="areaTitulo" class="area-titulo-destaque">Ciências Exatas e da Terra</h2>
+            
+            <div id="ExatasTerra" class="tab-pane active">
+                <div class="cards-container">
+                    <div class="curso-card"><p class="nome-curso">Banco de Dados com Big Data</p><p class="unidade-curso">Instituto de Informática</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Combate a Incêndios Florestais</p><p class="unidade-curso">Instituto de Estudos Sócio Ambientais</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Controle de Qualidade e Desenvolvimento Analítico Industrial Farmacêutico</p><p class="unidade-curso">Faculdade de Farmácia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Gestão e Qualidade Ambiental</p><p class="unidade-curso">Instituto de Química</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Propriedade Industrial</p><p class="unidade-curso">Instituto de Química</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Saúde Digital</p><p class="unidade-curso">Instituto de Informática</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Segurança em Redes e Sistemas</p><p class="unidade-curso">Instituto de Informática</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Tecnologias Analíticas e Processos Aplicados à Indústria</p><p class="unidade-curso">Instituto de Química</p><a href="#" class="btn-link">Detalhes</a></div>
+                </div>
+            </div>
+            
+            <div id="Engenharias" class="tab-pane">
+                <div class="cards-container">
+                    <div class="curso-card"><p class="nome-curso">Construção Civil</p><p class="unidade-curso">Escola de Engenharia Civil e Ambiental</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Desenvolvimento Web e Mobile - Full Stack</p><p class="unidade-curso">Instituto de Informática</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Engenharia de Segurança do Trabalho</p><p class="unidade-curso">Escola de Engenharia Civil e Ambiental</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Engenharia Econômica e Financeira nos Negócios</p><p class="unidade-curso">Escola de Engenharia Elétrica, Mecânica e de Computação</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Perícia, Auditoria e Licenciamento Ambiental (EPALIC)</p><p class="unidade-curso">Escola de Engenharia Civil e Ambiental</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Projeto de Estruturas de Concreto</p><p class="unidade-curso">Escola de Engenharia Civil e Ambiental</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Tecnologias para Gestão de Negócios</p><p class="unidade-curso">Escola de Engenharia Elétrica, Mecânica de Computação</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Tratamento e Disposição Final de Resíduos Sólidos e Líquidos</p><p class="unidade-curso">Escola de Engenharia Civil e Ambiental</p><a href="#" class="btn-link">Detalhes</a></div>
+                </div>
+            </div>
+
+            <div id="Saude" class="tab-pane">
+                <div class="cards-container">
+                    <div class="curso-card"><p class="nome-curso">Acupuntura</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Atendimento Pré-Hospitalar em Aeronaves</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Citologia Clínica</p><p class="unidade-curso">Faculdade de Farmácia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Data Science e Estatística Aplicada</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Dentística</p><p class="unidade-curso">Faculdade de Odontologia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Docência e Gestão Educacional em Saúde</p><p class="unidade-curso">Faculdade de Farmácia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Economia da Saúde</p><p class="unidade-curso">Instituto de Patologia Tropical e Saúde Pública</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Educação Física Escolar</p><p class="unidade-curso">Faculdade de Educação Física e Dança</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Enfermagem Dermatológica com Ênfase na Assistência a Pessoas com Feridas</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Enfermagem em Captação, Doação e Transplante de Órgãos e Tecidos</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Enfermagem em Centro Cirúrgico</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Farmácia Clínica Hospitalar e Comunitária</p><p class="unidade-curso">Faculdade de Farmácia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Farmácia Clínica na Atenção à Saúde</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Farmácia Oncológica</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Fisiologia Humana Aplicada às Ciências da Saúde</p><p class="unidade-curso">Instituto de Ciências Biológicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Fisioterapia Traumato-ortopédica e Esportiva</p><p class="unidade-curso">Instituto de Patologia Tropical e Saúde Pública</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Implantodontia</p><p class="unidade-curso">Faculdade de Odontologia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Neuropsiquiatria</p><p class="unidade-curso">Faculdade de Medicina</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Nutrição Clínica</p><p class="unidade-curso">Faculdade de Nutrição</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Nutrição Esportiva e Fisiologia do Exercício</p><p class="unidade-curso">Faculdade de Nutrição</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Odontopediatria</p><p class="unidade-curso">Faculdade de Odontologia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Odontologia para Pacientes com Necessidades Especiais</p><p class="unidade-curso">Faculdade de Odontologia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Prótese Dentária</p><p class="unidade-curso">Faculdade de Odontologia</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Treinamento de Força</p><p class="unidade-curso">Faculdade de Educação Física e Dança</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Vigilância Epidemiológica</p><p class="unidade-curso">Faculdade de Enfermagem</p><a href="#" class="btn-link">Detalhes</a></div>
+                </div>
+            </div>
+
+            <div id="SociaisAplicadas" class="tab-pane">
+                <div class="cards-container">
+                    <div class="curso-card"><p class="nome-curso">Atendimento de Crianças e Adolescentes Vítimas ou Testemunhas de Violência</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Diplomacia e Relações Internacionais</p><p class="unidade-curso">Faculdade de Ciências Sociais</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Agrário</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Constitucional e Teoria da Constituição</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Constitucional, Políticas Públicas e Acesso à Justiça</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito do Consumidor</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Eleitoral e Processo Eleitoral</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito e Processo do Trabalho para Advogados</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Penal e Direito Processual Penal</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Processual Civil</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Público</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Direito Tributário</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Enfrentamento à Violência Doméstica e Familiar Contra a Mulher</p><p class="unidade-curso">Faculdade de Direito</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Gestão da Saúde Pública</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Gestão e Políticas Públicas</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">MBA em Controladoria e Finanças</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">MBA em Finanças e Gestão Estratégica de Negócios</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">MBA em Finanças: Investimentos e riscos</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">MBA em Gestão de Marketing e Análise de Consumo</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">MBA em Marketing Estratégico</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">MBA em Planejamento Tributário</p><p class="unidade-curso">Faculdade de Administração, Ciências Contábeis e Ciências Econômicas</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Políticas Públicas</p><p class="unidade-curso">Faculdade de Ciências Sociais</p><a href="#" class="btn-link">Detalhes</a></div>
+                </div>
+            </div>
+
+            <div id="Humanas" class="tab-pane">
+                <div class="cards-container">
+                    <div class="curso-card"><p class="nome-curso">Docência para a Educação Profissional e Tecnológica</p><p class="unidade-curso">Instituto Verbena/UFG</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Gestão de Instituições Públicas de Ensino Profissional e Tecnológico</p><p class="unidade-curso">Instituto Verbena/UFG</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">História, Cultura Africana e Afro-Brasileira e Educação das Relações Étnico Raciais</p><p class="unidade-curso">Faculdade de Educação</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Letramento Informacional: Educação para Informação</p><p class="unidade-curso">Faculdade de Informação e Comunicação</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Plano Diretor Municipal: Instrumentos e Estratégias em Planejamento Urbano</p><p class="unidade-curso">Instituto de Estudos Socioambientais</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Políticas Educacionais, Gestão Escolar e Trabalho Docente</p><p class="unidade-curso">Faculdade de Educação</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Políticas e Práticas Educacionais Inclusivas</p><p class="unidade-curso">Unidade Acadêmica Especial de Ciências Humanas - UAECH</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Práticas Pedagógicas na Educação Básica</p><p class="unidade-curso">Unidade Acadêmica Especial de Ciências Humanas - UAECH</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Psicologia dos Processos Educativos</p><p class="unidade-curso">Faculdade de Educação</p><a href="#" class="btn-link">Detalhes</a></div>
+                </div>
+            </div>
+            
+            <div id="LetrasArtes" class="tab-pane">
+                <div class="cards-container">
+                    <div class="curso-card"><p class="nome-curso">Cidades Inteligentes e Economia Circular</p><p class="unidade-curso">Faculdade de Artes Visuais</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Design Estratégico</p><p class="unidade-curso">Faculdade de Artes Visuais</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Ensino de Artes Visuais: Abordagens Metodológicas e Processos de Criação</p><p class="unidade-curso">Faculdade de Artes Visuais</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Ensino de Línguas Estrangeiras</p><p class="unidade-curso">Faculdade de Letras</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Ensino de Línguas Adicionais, de Acolhimento e de Herança (EELAAH)</p><p class="unidade-curso">Faculdade de Letras</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Estudos Literários e Ensino de Literatura</p><p class="unidade-curso">Faculdade de Letras</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Linguística de Línguas de Sinais</p><p class="unidade-curso">Faculdade de Letras</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Linguística Aplicada: Ensino-Aprendizagem de Línguas Estrangeiras</p><p class="unidade-curso">Centro de Ensino e Pesquisa Aplicada à Educação</p><a href="#" class="btn-link">Detalhes</a></div>
+                    <div class="curso-card"><p class="nome-curso">Poéticas Visuais Contemporâneas e Práticas de Mediação na Educação Básica</p><p class="unidade-curso">Faculdade de Artes Visuais</p><a href="#" class="btn-link">Detalhes</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName, tabTitle) {
+            let i, tabcontent, tablinks;
+
+            // Esconde todos os painéis de conteúdo
+            tabcontent = document.getElementsByClassName("tab-pane");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            // Remove a classe "active" de todos os botões
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            // Mostra o painel atual e marca o botão como ativo
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+
+            // Atualiza o título de destaque dentro do conteúdo
+            document.getElementById("areaTitulo").innerText = tabTitle;
+        }
+
+        // Chama a função para configurar o título inicial ao carregar a página
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Configura o título da primeira aba ("Ciências Exatas e da Terra") ao carregar
+            document.getElementById("areaTitulo").innerText = 'Ciências Exatas e da Terra';
+        });
+    </script>
+</body>
+</html>
