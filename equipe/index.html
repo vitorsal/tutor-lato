@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe e Contatos - PRPG UFG (Design Otimizado)</title>
+    
+    <style>
+        /* ==================== */
+        /* VARIÁVEIS DE CORES E FONTES (TEMA PRPG) */
+        /* ==================== */
+        :root {
+            --primary-color: #38761D; /* Verde principal UFG */
+            --secondary-color: #FFFFFF;
+            --text-color: #333333;
+            --heading-color: #1D543B; /* Verde escuro para títulos */
+            --bg-neutral: #F7F7F7;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --border-color: #E0E0E0;
+            --highlight-color: #D9534F; /* Vermelho/Laranja para destaque de diretores */
+            --transition-speed: 0.3s;
+        }
+
+        /* ESTILOS GERAIS */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-neutral);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--heading-color);
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        /* ==================== */
+        /* AGRUPAMENTO POR SETOR */
+        /* ==================== */
+        .setor-group {
+            margin-bottom: 50px;
+            padding: 20px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .setor-group h2 {
+            color: var(--primary-color);
+            font-size: 1.6em;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        
+        .setor-group .telefone {
+            font-size: 0.9em;
+            color: var(--detail-highlight-color);
+            font-weight: normal;
+        }
+        
+        .contatos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* ==================== */
+        /* ESTILO DO CARD INDIVIDUAL E ANIMAÇÕES */
+        /* ==================== */
+        .contato-card {
+            background-color: var(--secondary-color); /* Branco liso */
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--primary-color); 
+            border-radius: 8px;
+            padding: 20px;
+            transition: box-shadow var(--transition-speed), transform var(--transition-speed);
+        }
+        
+        /* EFEITO DE ELEVAÇÃO AO PASSAR O MOUSE */
+        .contato-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+        }
+
+        /* --- ESTILOS DA IMAGEM --- */
+        .avatar {
+            width: 80px; 
+            height: 80px; 
+            margin-bottom: 10px;
+            margin-right: 15px;
+            float: left; 
+            border: 3px solid var(--primary-color);
+            border-radius: 50%; 
+            overflow: hidden;
+            transition: border-color var(--transition-speed);
+        }
+        
+        /* Animação na borda da foto ao passar o mouse */
+        .contato-card:hover .avatar {
+            border-color: var(--heading-color); 
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 50% 15%; 
+        }
+        
+        /* Limpa o float após o avatar */
+        .contato-card::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .nome {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--heading-color);
+            margin-bottom: 5px;
+            margin-top: 5px; 
+        }
+
+        /* Estilo de Selo/Badge para o cargo */
+        .cargo {
+            font-size: 0.85em;
+            color: var(--text-color);
+            background-color: var(--accent-bg); /* Fundo sutil */
+            padding: 3px 6px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: inline-block; /* Transforma em selo */
+            font-weight: 500;
+        }
+        
+        .contato-info {
+            font-size: 0.95em;
+            margin-top: 10px;
+        }
+        
+        .contato-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+        .contato-info a:hover {
+            color: var(--heading-color);
+            text-decoration: underline;
+        }
+
+        /* Destaque para o Pró-Reitor */
+        .card-pro-reitor {
+            border-left: 5px solid var(--highlight-color);
+            background-color: #fff9f6; /* Fundo mais claro */
+        }
+        
+        .whatsapp-icon {
+            color: #25D366; 
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-left: 5px;
+        }
+
+        /* --- RESPONSIVIDADE (MANTIDO) --- */
+        @media (max-width: 768px) {
+            .avatar {
+                float: none;
+                margin: 0 auto 10px auto;
+                display: block;
+            }
+            .contato-card::after {
+                content: none; 
+            }
+            .nome, .cargo, .contato-info {
+                text-align: center;
+            }
+            .contato-info {
+                margin-top: 5px; 
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Equipe e Contatos - PRPG UFG</h1>
+
+        <div class="setor-group">
+            <h2>Direção Superior</h2>
+            <div class="contatos-grid">
+                
+                <div class="contato-card card-pro-reitor">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Felipe.jpg" alt="Foto de Perfil do Prof. Dr. Felipe Terra Martins">
+                    </div>
+                    <span class="cargo">Pró-Reitor</span>
+                    <div class="nome">Prof. Dr. Felipe Terra Martins</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:felipe@ufg.br">felipe@ufg.br</a><br>
+                        Telefone: 3521-2038
+                    </div>
+                </div>
+
+                <div class="contato-card card-pro-reitor">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Wilson.jpg" alt="Foto de Perfil do Prof. Dr. Wilson José Flores Junior">
+                    </div>
+                    <span class="cargo">Pró-Reitor Adjunto e Dir. Geral de Pós-Graduação Stricto Sensu</span>
+                    <div class="nome">Prof. Dr. Wilson José Flores Junior</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:wfloresjr@ufg.br">wfloresjr@ufg.br</a><br>
+                        Telefone: 3521-2657
+                    </div>
+                </div>
+
+                <div class="contato-card card-pro-reitor">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Larissa.jpg" alt="Foto de Perfil da Dra. Larissa Matuda Macedo">
+                    </div>
+                    <span class="cargo">Diretora de Pós-Graduação Lato sensu</span>
+                    <div class="nome">Dra. Larissa Matuda Macedo</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:direcao.lato.prpg@ufg.br">direcao.lato.prpg@ufg.br</a><br>
+                        Telefone: 3521-2349
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="setor-group">
+            <h2>Assessoria de Comunicação Institucional</h2>
+            <div class="contatos-grid">
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2023-09-01_at_11.02.13.jpeg" alt="Foto de Perfil da Profa. Dra. Adriane Geralda Alves do Nascimento Cézar">
+                    </div>
+                    <span class="cargo">Professora Assessora</span>
+                    <div class="nome">Profa. Dra. Adriane Geralda Alves do Nascimento Cézar</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunicacao.prpg@ufg.br">comunicacao.prpg@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Ana_Clara.jpg" alt="Foto de Perfil da Ana Clara Marques de Lacerda">
+                    </div>
+                    <span class="cargo">Assessoria</span>
+                    <div class="nome">Ana Clara Marques de Lacerda</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunicacao.prpg@ufg.br">comunicacao.prpg@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/foto_thamyres.jpg" alt="Foto de Perfil da Thamyres de Assis Ribeiro">
+                    </div>
+                    <span class="cargo">Assessoria</span>
+                    <div class="nome">Thamyres de Assis Ribeiro</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunicacao.prpg@ufg.br">comunicacao.prpg@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/foto_ygor.JPG" alt="Foto de Perfil do Ygor Nonato dos Santos">
+                    </div>
+                    <span class="cargo">Assessoria</span>
+                    <div class="nome">Ygor Nonato dos Santos</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunicacao.prpg@ufg.br">comunicacao.prpg@ufg.br</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="setor-group">
+            <h2>Coordenações Gerais e Executivas</h2>
+            <div class="contatos-grid">
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Denilson_.jpg" alt="Foto de Perfil do Prof. Dr. Denilson Teixeira">
+                    </div>
+                    <span class="cargo">Coordenador Executivo do Programa UFG Doutoral</span>
+                    <div class="nome">Prof. Dr. Denilson Teixeira</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:ufgdoutoral.prpg@ufg.br">ufgdoutoral.prpg@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Claudio.jpg" alt="Foto de Perfil do Cláudio Diniz Cardoso">
+                    </div>
+                    <span class="cargo">Coordenador Geral de Secretarias</span>
+                    <div class="nome">Cláudio Diniz Cardoso</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:prpg@ufg.br">prpg@ufg.br</a><br>
+                        Telefone: 3521-2038
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Themerson.jpg" alt="Foto de Perfil do Themerson Blenner Cavalcante Souza">
+                    </div>
+                    <span class="cargo">Coordenador de Apoio à Gestão da Pós-Graduação</span>
+                    <div class="nome">Themerson Blenner Cavalcante Souza</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:prpg@ufg.br">prpg@ufg.br</a><br>
+                        Telefone: 3521-2657
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="setor-group">
+            <h2>Coordenação de Assuntos Acadêmicos (CAA) <span class="telefone">(62) 3521-1314</span></h2>
+            <div class="contatos-grid">
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2023-11-07_at_08.16.25.jpeg" alt="Foto de Perfil do Thiago Sales Vieira">
+                    </div>
+                    <span class="cargo">Coordenador de Assuntos Acadêmicos</span>
+                    <div class="nome">Thiago Sales Vieira</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:caa.prpg@ufg.br">caa.prpg@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Julia.jpg" alt="Foto de Perfil da Júlia Parente Cardoso">
+                    </div>
+                    <span class="cargo">Servidor(a)</span>
+                    <div class="nome">Júlia Parente Cardoso (em afastamento)</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:caa.prpg@ufg.br">caa.prpg@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Kayc.jpg" alt="Foto de Perfil do Kayc Pereira Silva">
+                    </div>
+                    <span class="cargo">Servidor(a)</span>
+                    <div class="nome">Kayc Pereira Silva</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:caa.prpg@ufg.br">caa.prpg@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Breno.jpg" alt="Foto de Perfil do Breno Nahuel Freneau">
+                    </div>
+                    <span class="cargo">Servidor(a)</span>
+                    <div class="nome">Breno Nahuel Freneau</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:caa.prpg@ufg.br">caa.prpg@ufg.br</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="setor-group">
+            <h2>Coordenação Administrativa <span class="telefone">(62) 3521-1837 <span class="whatsapp-icon">📱</span></span> e Setor de Bolsas <span class="telefone">(62) 3521-1051</span></h2>
+            <div class="contatos-grid">
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Edimar.jpg" alt="Foto de Perfil do Edimar Vieira Dantas">
+                    </div>
+                    <span class="cargo">Coordenador Administrativo</span>
+                    <div class="nome">Edimar Vieira Dantas</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:coad.prpg@ufg.br">coad.prpg@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Itamar.jpg" alt="Foto de Perfil do Itamar Paulino de Moraes">
+                    </div>
+                    <span class="cargo">Setor de Bolsas</span>
+                    <div class="nome">Itamar Paulino de Moraes</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:itamar@ufg.br">itamar@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/IMG_5337.JPG" alt="Foto de Perfil do Vitor Pereira Salgado">
+                    </div>
+                    <span class="cargo">Contratos, Convênios, Estágios</span>
+                    <div class="nome">Vitor Pereira Salgado</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:convenios.prpg@ufg.br">convenios.prpg@ufg.br</a><br>
+                        Telefone: 3521-2780
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/IMG_2822.PNG" alt="Foto de Perfil do Joaquim Neto Pereira de Sousa">
+                    </div>
+                    <span class="cargo">Secretário Executivo</span>
+                    <div class="nome">Joaquim Neto Pereira de Sousa</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:coad.prpg@ufg.br">coad.prpg@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Jo%C3%A3o_Pedro.jpeg" alt="Foto de Perfil do João Pedro Da Silva Reis">
+                    </div>
+                    <span class="cargo">Equipe Administrativa</span>
+                    <div class="nome">João Pedro Da Silva Reis</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:coad.prpg@ufg.br">coad.prpg@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2023-09-01_at_11.02.22.jpeg" alt="Foto de Perfil da Maria Eduarda Máximo Silva">
+                    </div>
+                    <span class="cargo">Equipe Administrativa</span>
+                    <div class="nome">Maria Eduarda Máximo Silva</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:coad.prpg@ufg.br">coad.prpg@ufg.br</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="setor-group">
+            <h2>Setor de Pós-Graduação Lato Sensu (Residências) <span class="telefone">(62) 3644-8187</span></h2>
+            <div class="contatos-grid">
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Rejane.jpg" alt="Foto de Perfil da Rejane Cavarzan Barros">
+                    </div>
+                    <span class="cargo">Servidora</span>
+                    <div class="nome">Rejane Cavarzan Barros</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:rejaneb@ufg.br">rejaneb@ufg.br</a> / <a href="mailto:coremu.prpg@ufg.br">coremu.prpg@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Marcus.jpeg" alt="Foto de Perfil do Marcus Vinícius Pantaleão Gomes">
+                    </div>
+                    <span class="cargo">Servidor</span>
+                    <div class="nome">Marcus Vinícius Pantaleão Gomes</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:coreme.prpg@ufg.br">coreme.prpg@ufg.br</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="setor-group">
+            <h2>Escola de Pós - Diretoria e Coordenações <span class="telefone">(62) 3521-1076</span></h2>
+            <div class="contatos-grid">
+                
+                <div class="contato-card card-pro-reitor">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2025-02-24_at_13.47.07_(2).jpeg" alt="Foto de Perfil do Prof. Dr. Cleidinaldo de Jesus Barbosa">
+                    </div>
+                    <span class="cargo">Diretor</span>
+                    <div class="nome">Prof. Dr. Cleidinaldo de Jesus Barbosa</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:direcao.escoladepos@ufg.br">direcao.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card card-pro-reitor">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2025-02-24_at_13.47.08.jpeg" alt="Foto de Perfil do Prof. Dr. Daniel Alves Rosa">
+                    </div>
+                    <span class="cargo">Diretor</span>
+                    <div class="nome">Prof. Dr. Daniel Alves Rosa</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:direcao.escoladepos@ufg.br">direcao.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/IMG_5723.JPG" alt="Foto de Perfil da Dra. Maria Emília Carvalho de Araujo Vieira">
+                    </div>
+                    <span class="cargo">Coordenação Pedagógica</span>
+                    <div class="nome">Dra. Maria Emília Carvalho de Araujo Vieira</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:pedagogica.escoladepos@ufg.br">pedagogica.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/IMG_5726.JPG" alt="Foto de Perfil da Ruth L. Gomes de Carvalho Batista">
+                    </div>
+                    <span class="cargo">Coordenação Pedagógica</span>
+                    <div class="nome">Ruth L. Gomes de Carvalho Batista</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:pedagogica.escoladepos@ufg.br">pedagogica.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Themerson.jpg" alt="Foto de Perfil do Themerson Blenner Cavalcante Souza">
+                    </div>
+                    <span class="cargo">Coordenação Pedagógica</span>
+                    <div class="nome">Themerson Blenner Cavalcante Souza</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:pedagogica.escoladepos@ufg.br">pedagogica.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/Edimar.jpg" alt="Foto de Perfil do Edimar Vieira Dantas">
+                    </div>
+                    <span class="cargo">Coordenação Administrativa</span>
+                    <div class="nome">Edimar Vieira Dantas</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:administrativo.escoladepos@ufg.br">administrativo.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/IMG_2822.PNG" alt="Foto de Perfil do Joaquim Neto Pereira de Sousa">
+                    </div>
+                    <span class="cargo">Coordenação Administrativa</span>
+                    <div class="nome">Joaquim Neto Pereira de Sousa</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:administrativo.escoladepos@ufg.br">administrativo.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/IMG_5337.JPG" alt="Foto de Perfil do Vitor Pereira Salgado">
+                    </div>
+                    <span class="cargo">Coordenação Administrativa</span>
+                    <div class="nome">Vitor Pereira Salgado</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:administrativo.escoladepos@ufg.br">administrativo.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2025-02-24_at_13.47.07.jpeg" alt="Foto de Perfil da Beatriz Carvalho Barreto">
+                    </div>
+                    <span class="cargo">Coordenação de Comunicação</span>
+                    <div class="nome">Beatriz Carvalho Barreto</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunica.escoladepos@ufg.br">comunica.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2025-02-24_at_13.47.07_(1).jpeg" alt="Foto de Perfil do José Wilson Costa Campos Júnior">
+                    </div>
+                    <span class="cargo">Coordenação de Comunicação</span>
+                    <div class="nome">José Wilson Costa Campos Júnior</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunica.escoladepos@ufg.br">comunica.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/WhatsApp_Image_2025-02-24_at_13.47.06.jpeg" alt="Foto de Perfil da Ana Luísa Fortaleza Macedo">
+                    </div>
+                    <span class="cargo">Coordenação de Comunicação</span>
+                    <div class="nome">Ana Luísa Fortaleza Macedo</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunica.escoladepos@ufg.br">comunica.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+                
+                <div class="contato-card">
+                    <div class="avatar">
+                        <img src="https://files.cercomp.ufg.br/weby/up/85/o/rafa.png" alt="Foto de Perfil da Rafaela Sanchez">
+                    </div>
+                    <span class="cargo">Coordenação de Comunicação</span>
+                    <div class="nome">Rafaela Sanchez</div>
+                    <div class="contato-info">
+                        E-mail: <a href="mailto:comunica.escoladepos@ufg.br">comunica.escoladepos@ufg.br</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
