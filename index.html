@@ -9,14 +9,15 @@
         /* VARIÁVEIS DE CORES (TEMA: PRPG UFG - VERDE/BRANCO) */
         /* ==================== */
         :root {
-            --primary-color: #38761D; 
+            --primary-color: #38761D; /* Verde principal */
             --secondary-color: #FFFFFF;
-            --accent-bg: #E6F3E6; 
-            --text-color: #333333; 
-            --button-text-color: #FFFFFF; 
-            --hover-bg: #4CAF50; 
+            --accent-bg: #E6F3E6; /* Fundo de destaque */
+            --text-color: #333333;
+            --button-text-color: #FFFFFF;
+            --hover-bg: #4CAF50;
             --border-color: #CCCCCC;
             --detail-highlight-color: #555555;
+            --modal-button-color: #D9534F; /* Vermelho do botão "Modelos" */
         }
 
         /* ESTILOS GERAIS */
@@ -55,27 +56,30 @@
         }
 
         /* ==================== */
-        /* ESTILO INTRODUÇÃO E BOTÃO DE MODAL (Novo) */
+        /* ESTILO INTRODUÇÃO E BOTÃO DE MODAL (AJUSTADO) */
         /* ==================== */
         .intro-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center; /* Alinha verticalmente */
-            margin-bottom: 20px;
-            flex-wrap: wrap; /* Permite quebrar em telas pequenas */
+            justify-content: space-between; /* Botão na direita, Título na esquerda */
+            align-items: center; 
+            margin-bottom: 5px; /* Margem reduzida para aproximar o texto de contato */
+            flex-wrap: wrap; 
         }
 
         .intro-text {
             flex-grow: 1;
             margin-bottom: 0;
+            padding-right: 20px;
         }
         
         .intro-text h2 {
             margin-top: 0;
+            margin-bottom: 0; /* Remove margem do h2 para que o texto de contato comece em uma linha limpa */
         }
 
+        /* Estilo do Botão do Modal */
         #linksModalTrigger {
-            background-color: #D9534F; /* Cor de destaque (Vermelho) */
+            background-color: var(--modal-button-color);
             color: var(--button-text-color);
             padding: 12px 18px;
             border: none;
@@ -98,18 +102,30 @@
             margin-left: 8px;
         }
 
-        /* Quebra o botão para a próxima linha em telas pequenas */
+        /* NOVO: Texto de Contato (abaixo da linha principal) */
+        .contato-bottom-text {
+            text-align: left; /* Alinhamento à esquerda em desktop */
+            margin-top: 5px; 
+            margin-bottom: 20px; 
+            font-size: 0.95em;
+        }
+
+        /* Responsividade para o Botão e Contato */
         @media (max-width: 768px) {
             .intro-row {
-                flex-direction: column;
+                flex-direction: column; 
                 align-items: stretch;
             }
             .intro-text {
-                margin-bottom: 15px;
+                margin-bottom: 15px; 
+                padding-right: 0;
             }
             #linksModalTrigger {
                 width: 100%;
                 justify-content: center;
+            }
+            .contato-bottom-text {
+                 text-align: center; /* Centraliza o texto de contato em celular */
             }
         }
         /* FIM ESTILO NOVO */
@@ -126,7 +142,7 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.8);
-            display: none; /* Inicia oculto */
+            display: none; 
             justify-content: center;
             align-items: center;
             opacity: 0;
@@ -140,7 +156,6 @@
 
         .modal-content {
             background-color: var(--secondary-color);
-            margin: 15% auto; /* Centraliza verticalmente e horizontalmente */
             padding: 30px;
             border: 1px solid var(--primary-color);
             width: 90%;
@@ -174,7 +189,7 @@
             cursor: pointer;
         }
         
-        /* Layout dos Links no Modal */
+        /* Layout dos Links no Modal (o Grid) */
         .modal-links-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -204,7 +219,7 @@
 
 
         /* ==================== */
-        /* ESTILO DA BARRA DE BUSCA */
+        /* ESTILO DA BUSCA E ACORDEÃO (Demais estilos mantidos) */
         /* ==================== */
         .search-box {
             margin-bottom: 25px;
@@ -214,11 +229,6 @@
             border: 1px solid var(--primary-color);
         }
 
-        /* [Estilos de Acordeão e Busca mantidos, mas omitidos aqui para brevidade] */
-
-        /* ==================== */
-        /* ESTILO DE DESTAQUE DA BUSCA */
-        /* ==================== */
         .highlight {
             background-color: yellow; 
             font-weight: bold;
@@ -236,16 +246,10 @@
             transition: border-color 0.3s;
         }
         
-        /* Oculta itens que não correspondem à pesquisa */
         .tutorial-item.hidden {
             display: none !important;
         }
         
-        /* ==================== */
-        /* ESTILO DOS TUTORIAIS (ACORDION) */
-        /* ==================== */
-        /* O restante do CSS do Acordeão foi omitido para focar na correção do modal */
-
         .tutorial-header {
             background-color: var(--primary-color);
             color: var(--button-text-color);
@@ -310,13 +314,17 @@
         <div class="intro-row">
             <div class="intro-text">
                 <h2>Clique em cada item para saber mais.</h2>
-                <p class="p-info">Se não encontrar as informações desejadas, entre em contato pelo e-mail: <strong class="email-contato">pedagogica.escoladepos@ufg.br</strong></p>
             </div>
             
             <button id="linksModalTrigger">
                 📄<span>MODELOS E LEGISLAÇÃO</span>
             </button>
         </div>
+
+        <p class="p-info contato-bottom-text">
+            Se não encontrar as informações desejadas, entre em contato pelo e-mail: 
+            <strong class="email-contato">pedagogica.escoladepos@ufg.br</strong>
+        </p>
 
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Buscar por palavra-chave ou item..." aria-label="Buscar tutoriais">
