@@ -11,15 +11,15 @@
         :root {
             --primary-color: #38761D; /* Verde principal */
             --secondary-color: #FFFFFF;
-            --accent-bg: #E6F3E6; /* Fundo de destaque do conteúdo */
+            --accent-bg: #E6F3E6; /* Fundo de destaque */
             --text-color: #333333;
             --button-text-color: #FFFFFF;
             --hover-bg: #4CAF50;
             --border-color: #CCCCCC;
             --detail-highlight-color: #555555;
-            --modal-button-color: #D9534F; /* Vermelho/Laranja do botão "Modelos" e ATENÇÃO */
-            --alert-bg: #ffe4e1; /* Cor de fundo suave para alertas */
-            --subtitulo-cor: #1D543B; /* Verde mais escuro para subtítulos */
+            --modal-button-color: #D9534F; /* Vermelho do botão "Modelos" */
+            --subtitulo-cor: #1D543B; 
+            --alert-bg: #ffe4e1;
         }
 
         /* ESTILOS GERAIS */
@@ -139,80 +139,122 @@
         /* FIM ESTILO INTRODUÇÃO */
 
         /* ==================== */
-        /* ESTILO DO CONTEÚDO E LEGIBILIDADE (Otimização) */
-        /* ==================== */
-        .content-inner h3 {
-            color: var(--subtitulo-cor);
-            font-size: 1.2em;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-            margin-top: 25px;
-        }
-
-        /* Estilo para blocos importantes e ATENÇÃO */
-        .content-inner strong.atencao-block {
-            display: block;
-            background-color: var(--alert-bg);
-            border-left: 4px solid var(--modal-button-color);
-            padding: 10px;
-            margin: 15px 0;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-        
-        /* Estilo para links dentro do conteúdo */
-        .content-inner a {
-            color: var(--primary-color);
-            font-weight: bold;
-            text-decoration: none;
-        }
-        .content-inner a:hover {
-            text-decoration: underline;
-        }
-
-        /* Estilo para listas não ordenadas complexas (substitui o travessão manual) */
-        .content-inner .simple-list-style li {
-            list-style-type: '★'; /* Usando um marcador visual */
-            padding-left: 10px;
-            margin-bottom: 5px;
-        }
-        /* Para listas dentro de listas, volta ao padrão */
-        .content-inner .simple-list-style li ul li {
-            list-style-type: disc;
-        }
-
-        /* Estilo para o 'Voltar para o início' */
-        .voltar-topo {
-            display: block;
-            text-align: right;
-            margin-top: 15px;
-            padding-top: 5px;
-            border-top: 1px dashed #ccc;
-            font-size: 0.9em;
-        }
-        
-        /* ==================== */
-        /* ESTILO DO MODAL (MANTIDO) */
+        /* ESTILO DO MODAL (CORREÇÕES PARA MOBILE) */
         /* ==================== */
         .modal {
-            position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.8);
-            display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease-in-out;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            /* CORREÇÃO CHAVE 1: Permite rolagem no nível do overlay */
+            overflow-y: auto; 
         }
-        .modal.is-visible { display: flex; opacity: 1; }
-        .modal-content { background-color: var(--secondary-color); padding: 30px; border: 1px solid var(--primary-color); width: 90%; max-width: 1100px; border-radius: 10px; position: relative; }
-        .modal-content h2 { color: var(--primary-color); text-align: center; border-bottom: 2px solid var(--accent-bg); margin-bottom: 20px; }
-        .modal-close { color: var(--detail-highlight-color); float: right; font-size: 30px; font-weight: bold; position: absolute; top: 10px; right: 25px; background: none; border: none; cursor: pointer; line-height: 1; padding: 0; transition: color 0.2s; }
-        .modal-close:hover, .modal-close:focus { color: var(--primary-color); }
-        .modal-links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; padding-top: 10px; }
-        .modal-links-grid h3 { color: var(--text-color); border-bottom: 1px dashed var(--border-color); padding-bottom: 5px; font-size: 1.1em; margin-top: 0; }
-        .modal-links-grid a { display: block; margin-bottom: 8px; color: var(--primary-color); text-decoration: none; font-weight: bold; }
-        .modal-links-grid a:hover { text-decoration: underline; }
-        .tutorial-link-interno { font-weight: 500 !important; }
+
+        .modal.is-visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--secondary-color);
+            padding: 30px;
+            border: 1px solid var(--primary-color);
+            width: 90%;
+            max-width: 1100px; 
+            border-radius: 10px;
+            position: relative;
+            /* CORREÇÃO CHAVE 2: Limita a altura e permite rolagem interna */
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                /* Aumenta a área de rolagem em telas pequenas, usando 90% da altura da viewport */
+                margin: 5vh auto; 
+            }
+        }
+        
+        .modal-content h2 {
+            color: var(--primary-color);
+            text-align: center;
+            border-bottom: 2px solid var(--accent-bg);
+            margin-bottom: 20px;
+            padding-top: 5px; 
+        }
+
+        .modal-close {
+            color: var(--detail-highlight-color);
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 15px; /* Ajuste a margem da direita */
+            background: none;
+            border: none;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            transition: color 0.2s;
+            z-index: 1001; /* Garante que o X fique acima de tudo */
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: var(--primary-color);
+        }
+        
+        /* Layout dos Links no Modal (o Grid) */
+        .modal-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 25px;
+            padding-top: 10px;
+        }
+        
+        /* Estilos de Link dentro do Modal */
+        .modal-links-grid h3 {
+            color: var(--text-color);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+            font-size: 1.1em;
+            margin-top: 0;
+        }
+
+        .modal-links-grid a {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .modal-links-grid a:hover {
+            text-decoration: underline;
+        }
+        .tutorial-link-interno {
+            font-weight: 500 !important;
+        }
+        /* FIM ESTILO MODAL */
+
 
         /* ==================== */
-        /* ESTILO DA BUSCA E ACORDEÃO (MANTIDO) */
+        /* ESTILO DOS TUTORIAIS (MANTIDO) */
         /* ==================== */
-        .search-box { margin-bottom: 25px; padding: 10px; background-color: var(--accent-bg); border-radius: 8px; border: 1px solid var(--primary-color); }
+        .search-box {
+            margin-bottom: 25px;
+            padding: 10px;
+            background-color: var(--accent-bg);
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+        }
         .highlight { background-color: yellow; font-weight: bold; padding: 1px 3px; border-radius: 3px; }
         #searchInput { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
         .tutorial-item.hidden { display: none !important; }
@@ -221,6 +263,13 @@
         .tutorial-header.active::after { transform: rotate(90deg); }
         .content { padding: 0 25px; background-color: var(--accent-bg); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--primary-color); border-right: 1px solid var(--primary-color); border-bottom: 1px solid var(--primary-color); border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
         .content-inner { padding: 20px 0; }
+        .content-inner h3 { color: var(--subtitulo-cor); font-size: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 25px; }
+        .content-inner strong.atencao-block { display: block; background-color: var(--alert-bg); border-left: 4px solid var(--modal-button-color); padding: 10px; margin: 15px 0; font-weight: bold; color: var(--text-color); }
+        .content-inner a { color: var(--primary-color); font-weight: bold; text-decoration: none; }
+        .content-inner a:hover { text-decoration: underline; }
+        .content-inner .simple-list-style li { list-style-type: '★'; padding-left: 10px; margin-bottom: 5px; }
+        .content-inner .simple-list-style li ul li { list-style-type: disc; }
+        .voltar-topo { display: block; text-align: right; margin-top: 15px; padding-top: 5px; border-top: 1px dashed #ccc; font-size: 0.9em; }
     </style>
 </head>
 <body>
@@ -371,7 +420,7 @@
         </button>
         <div class="content">
             <div class="content-inner">
-                <p>A substituição deve ser solicitada pelo processo SEI de Oferta da Turma, com a adição dos documentos listados abaixo, e encaminhado à **Escola de Pós UFG**.</p>
+                <p>A substituição deve ser solicitada pelo processo SEI de Oferta da Turma, com a adição dos documentos listados abaixo, e encaminhado à Escola de Pós UFG.</p>
                 <ol>
                     <li>Solicitação por meio de um despacho inserido no processo SEI de Oferta da Turma, assinado pelo(a) Coordenador(a) ou Vice-Coordenador(a);</li>
                     <li>Formulário SEI de substituição/inclusão/exclusão de docentes, que deve conter as informações completas sobre a alteração e a distribuição de carga horária das disciplinas;</li>
@@ -395,7 +444,7 @@
                     </li>
                 </ol>
                 <p>Obs.: É importante lembrar que, caso seja necessário encaminhar os dados dos professores via SEI no processo de criação da turma, o documento (despacho) deve ser classificado como **restrito**, uma vez que contém informações pessoais.</p>
-                <p>O processo deve ser encaminhado à **Escola de Pós UFG** para análise, aprovação e alteração no SIGAA.</p>
+                <p>O processo deve ser encaminhado à Escola de Pós UFG para análise, aprovação e alteração no SIGAA.</p>
                 <a href="#topo" class="voltar-topo">Voltar para o início da página.</a>
             </div>
         </div>
