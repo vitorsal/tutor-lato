@@ -46,15 +46,16 @@
         h1 {
             color: var(--primary-color);
             text-align: left;
-            font-size: 2.4em;
-            margin-bottom: 15px;
+            /* REDUÇÃO DO TAMANHO DA FONTE */
+            font-size: 1.8em; 
+            margin-bottom: 12px; /* Redução da margem inferior */
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-            font-weight: 300;
+            padding-bottom: 12px;
+            font-weight: 400; /* Levemente mais leve */
         }
         /* Ajuste do tamanho e cor do ícone */
         h1 .icon {
-            font-size: 1.2em; /* Ícone um pouco maior */
+            font-size: 1.1em; /* Ajuste no ícone para acompanhar */
             color: var(--primary-color);
             margin-right: 8px;
         }
@@ -98,11 +99,24 @@
             padding-bottom: 0;
             margin-bottom: 15px;
             font-weight: 500;
+            display: flex; /* Permite alinhar o pseudo-elemento com o texto */
+            align-items: center;
         }
+        /* NOVO ESTILO: Tira o emoji e insere um número estilizado */
         h2:before {
-            content: "— ";
-            color: var(--primary-color);
-            font-size: 1.1em;
+            content: attr(data-step);
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--primary-color); /* Fundo Verde */
+            color: var(--secondary-color); /* Texto Branco */
+            font-size: 0.8em;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0; /* Evita que o número seja esmagado */
         }
         
         /* --- BLOCO DE EXTRAÇÃO (SEÇÃO 1) --- */
@@ -336,6 +350,24 @@
             margin-top: 3px;
             display: none;
         }
+
+        /* NOVO: Estilo para Rodapé de Contato */
+        .footer-contact {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+        .footer-contact a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .footer-contact a:hover {
+            text-decoration: underline;
+        }
         
     </style>
 </head>
@@ -344,9 +376,9 @@
         <h1><span class="icon">🧮</span> Orçamento de Curso Lato Sensu (UFG)</h1>
 
         <div id="step-1" class="step active">
-            <h2>1️⃣ Dados Básicos da Turma</h2>
+            <h2 data-step="1">Dados Básicos da Turma</h2>
             <div class="extraction-block" id="extractionBlockStep1">
-                <h3>**1. COLE O PROJETO DE ENSINO COMPLETO**</h3>
+                <h3>1. COLE O PROJETO DE ENSINO COMPLETO</h3>
                 <textarea id="texto" rows="10" placeholder="Cole aqui o conteúdo do projeto SEI..."></textarea>
                 <button onclick="analisar()">Analisar Dados</button>
             </div>
@@ -366,7 +398,7 @@
         </div>
 
         <div id="step-2" class="step">
-            <h2>2️⃣ Equipe do Curso</h2>
+            <h2 data-step="2">Equipe do Curso</h2>
             
             <h3 class="orcamento-section-title">Remuneração Docente (Hora/Aula e Orientação)</h3>
             <div class="input-grid">
@@ -414,7 +446,7 @@
         </div>
 
         <div id="step-3" class="step">
-            <h2>3️⃣ Bolsas, Serviços e Apoio ao Ensino</h2>
+            <h2 data-step="3">Bolsas, Serviços e Apoio ao Ensino</h2>
 
             <h3 class="orcamento-section-title">Remuneração Mensal</h3>
 
@@ -468,7 +500,7 @@
         </div>
 
         <div id="step-4" class="step">
-            <h2>4️⃣ Custos Adicionais (Insumos e Serviços)</h2>
+            <h2 data-step="4">Custos Adicionais (Insumos e Serviços)</h2>
 
             <h3 class="orcamento-section-title">Despesas Variáveis (Total Projeto)</h3>
 
@@ -504,7 +536,7 @@
         </div>
 
         <div id="step-5" class="step">
-            <h2>5️⃣ Projeção</h2>
+            <h2 data-step="5">Projeção</h2>
             
             <div id="orcamento">Aguardando cálculo...</div>
             
@@ -515,12 +547,17 @@
         </div>
     </div>
 
+    <div class="footer-contact">
+        Em caso de dúvidas, entre em contato com o administrativo:
+        <a href="mailto:administrativo.escoladepos@ufg.br">administrativo.escoladepos@ufg.br</a> | Telefone: (62) 3521-2780
+    </div>
+
     <script>
         // CONSTANTES GLOBAIS
         const TETO_GERAL_BRUTO = 29760.95; 
         const MAX_HR_VALUE = 437.49; 
         const DURACAO_MESES = 12; 
-        const HORAS_ORIENTACAO_TCC = 5; // MODIFICADO: 5 horas por aluno
+        const HORAS_ORIENTACAO_TCC = 5; 
         const PARCELAS_ABATIDAS = 4;
         
         // CONSTANTES FIXAS PARA CUSTOS E TAXAS
@@ -645,12 +682,12 @@
                  if (value > max) {
                     inputElement.value = max.toFixed(2);
                     if (alertElement) {
-                        // Ajusta a mensagem de alerta se for valor mensal ou hora
-                        if (inputId.includes('Aula') || inputId === 'valOrientacaoHora') {
-                            alertElement.textContent = `Valor redefinido para o máximo por hora (R$ ${max.toFixed(2)}).`;
-                        } else {
-                             alertElement.textContent = `Valor redefinido para o máximo mensal (R$ ${max.toFixed(2)}).`;
-                        }
+                        // Verifica se é limite por hora (H/A) ou limite mensal (Coord/Apoio)
+                        const isHourly = inputId.includes('Aula') || inputId === 'valOrientacaoHora';
+                        const unit = isHourly ? 'hora' : 'mensal';
+                        const maxDisplay = max.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                        alertElement.textContent = `Valor redefinido para o máximo ${unit} (R$ ${maxDisplay}).`;
                         alertElement.style.display = 'block';
                     }
                 } else {
@@ -661,6 +698,7 @@
                 if (alertElement) alertElement.style.display = 'none';
             }
         }
+
 
         function analisar() {
             const texto = document.getElementById("texto").value;
@@ -794,7 +832,16 @@
             output += `📅 Duração Calculada: ${duracaoMeses} meses\n`;
             output += `👥 Número de Vagas: ${vagas}\n`;
             output += `👨‍🏫 Docentes encontrados: ${qtdDocentes}\n`;
-            output += `  • Nomes: ${listaDocentesNomes.join(', ')}\n`;
+            
+            // Tabela de Docentes no resumo
+            let docenteTableHTML = `<table id="docente-resumo-table"><thead><tr><th>Docente</th><th>Titulação</th><th>Carga Horária</th></tr></thead><tbody>`;
+            dadosExtraidos.listaDocentesDetalhados = listaDocentesDetalhados; // Atualiza a lista aqui para uso imediato
+            listaDocentesDetalhados.forEach(doc => {
+                docenteTableHTML += `<tr><td>${doc.nome}</td><td>${doc.titulacao}</td><td>${doc.ch}h</td></tr>`;
+            });
+            docenteTableHTML += `</tbody></table>`;
+            output += docenteTableHTML;
+
             output += `📚 Carga Horária Docente Total: ${somaCargaDocente} horas\n`;
             output += `    • CH Doutores: ${chDoutor} horas\n`;
             output += `    • CH Mestres: ${chMestre} horas\n`;
@@ -966,8 +1013,6 @@
             if (palestrantes > 0) equipeDetalhadaCompleta.push({ nome: 'N/A (Palestrantes)', funcao: 'Palestrantes/Convidados', base: `${formatarMoeda(palestrantes)}/mês`, total: (palestrantes * duracaoMeses) });
 
             // 3. Docentes e Orientação (Remuneração por CH)
-            const numDocentes = dadosExtraidos.listaDocentesDetalhados.length || 1;
-            // Cálculo do custo de orientação TCC, distribuído igualmente entre todos os docentes (simplificação)
             const custoOrientacaoPorDocente = custoOrientacao / (dadosExtraidos.listaDocentesDetalhados.length || 1);
 
             dadosExtraidos.listaDocentesDetalhados.forEach(doc => {
@@ -1009,10 +1054,13 @@
             `;
 
             equipeDetalhadaCompleta.filter(m => parseFloat(m.total) > 0 || m.funcao === 'Vice-coordenador').forEach(membro => {
+                // Formata a base de cálculo para exibição (sem repetição de R$ se já estiver no nome)
+                const baseDisplay = membro.base.startsWith('R$') ? membro.base : `(${membro.base})`;
+
                 equipeDetalhadaHTML += `
                     <tr>
                         <td>${membro.nome}</td>
-                        <td>${membro.funcao} (${membro.base})</td>
+                        <td>${membro.funcao} ${baseDisplay}</td>
                         <td>${formatarMoeda(parseFloat(membro.total))}</td>
                     </tr>
                 `;
@@ -1082,9 +1130,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Novo texto de exemplo focado (Banco de Dados e IA)
             const exemploTexto = `
-
+MINISTÉRIO DA EDUCAÇÃO
+UNIVERSIDADE FEDERAL DE GOIÁS
+PROJETO DE ENSINO
+Oferta de Turma(s) do
 Curso de Pós-Graduação Lato Sensu em Banco de Dados e IA
+(Conforme Resolução CEPEC Nº 1952/2025 e Instrução Normativa PRPG/UFG)
 
+1. DADOS GERAIS
+Tipo de Curso: Curso de Especialização
 Carga Horária Total: 367 h (no mínimo 360 h)
 Número de Vagas: 47
 Data de Início e Encerramento da(s) Turma(s) Turma 1: 12/12/2025 a 15/09/2027
