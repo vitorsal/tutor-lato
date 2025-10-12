@@ -154,7 +154,6 @@
             align-items: center;
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
-            /* CORREÇÃO CHAVE 1: Permite rolagem no nível do overlay */
             overflow-y: auto; 
         }
 
@@ -171,14 +170,12 @@
             max-width: 1100px; 
             border-radius: 10px;
             position: relative;
-            /* CORREÇÃO CHAVE 2: Limita a altura e permite rolagem interna */
             max-height: 90vh; 
             overflow-y: auto; 
         }
         
         @media (max-width: 768px) {
             .modal-content {
-                /* Aumenta a área de rolagem em telas pequenas, usando 90% da altura da viewport */
                 margin: 5vh auto; 
             }
         }
@@ -197,14 +194,14 @@
             font-weight: bold;
             position: absolute;
             top: 10px;
-            right: 15px; /* Ajuste a margem da direita */
+            right: 15px; 
             background: none;
             border: none;
             cursor: pointer;
             line-height: 1;
             padding: 0;
             transition: color 0.2s;
-            z-index: 1001; /* Garante que o X fique acima de tudo */
+            z-index: 1001; 
         }
 
         .modal-close:hover,
@@ -683,24 +680,6 @@
             <div class="modal-links-grid">
                 
                 <div>
-                    <h3>Links Rápidos (Tutoriais da Página)</h3>
-                    <a class="tutorial-link-interno" href="#tutorial-1" onclick="fecharModal()">1. Criação de Curso</a>
-                    <a class="tutorial-link-interno" href="#tutorial-2" onclick="fecharModal()">2. Oferta de Turma</a>
-                    <a class="tutorial-link-interno" href="#tutorial-3" onclick="fecharModal()">3. Edital de Seleção</a>
-                    <a class="tutorial-link-interno" href="#tutorial-4" onclick="fecharModal()">4. Gestão Financeira</a>
-                    <a class="tutorial-link-interno" href="#tutorial-5" onclick="fecharModal()">5. Gestão no SIGAA</a>
-                    <a class="tutorial-link-interno" href="#tutorial-6" onclick="fecharModal()">6. Secretário e Apoio Adm.</a>
-                    <a class="tutorial-link-interno" href="#tutorial-7" onclick="fecharModal()">7. Substituição de Professor(a)</a>
-                    <a class="tutorial-link-interno" href="#tutorial-8" onclick="fecharModal()">8. Mudança na Coordenação</a>
-                    <a class="tutorial-link-interno" href="#tutorial-9" onclick="fecharModal()">9. Prorrogação de Turma</a>
-                    <a class="tutorial-link-interno" href="#tutorial-10" onclick="fecharModal()">10. Emissão de Certificado</a>
-                    <a class="tutorial-link-interno" href="#tutorial-11" onclick="fecharModal()">11. Relatório Final</a>
-                    <a class="tutorial-link-interno" href="#tutorial-12" onclick="fecharModal()">12. Parceria/Contrato</a>
-                    <a class="tutorial-link-interno" href="#tutorial-15" onclick="fecharModal()">15. Declaração de Matrícula</a>
-                    <a class="tutorial-link-interno" href="#tutorial-17" onclick="fecharModal()">17. Estágio Não Obrigatório</a>
-                </div>
-                
-                <div>
                     <h3>Modelos e Formulários (Anexos)</h3>
                     <a href="https://docs.google.com/document/d/1WxvPwlpHzaczK1KZSib6k6e5YVmKyFzUDfWoM7Yp3Vg/edit?usp=sharing" target="_blank">Projeto Pedagógico do Curso (PPC) simplificado</a>
                     <a href="https://docs.google.com/document/d/15xQ2gVhAOpApLa3x8xlhhTL6GsnhfC764jbXsqVJzIA/edit?usp=sharing" target="_blank">Projeto de Ensino (Oferta de Turma)</a>
@@ -726,6 +705,24 @@
                     <hr style="border-top: 1px solid #eee; margin: 10px 0;">
                     <a href="https://files.cercomp.ufg.br/weby/up/1333/o/Manual_SIGAA_Lato_Sensu_-__Coordena%C3%A7%C3%A3o_ATUALIZADO_20_03_24.pdf" target="_blank">Manual do SIGAA - Módulo Lato Sensu</a>
                     <a href="https://www.proad.ufg.br/p/17180-especializacao" target="_blank">Orientações Financeiras e Contábeis (PROAD)</a>
+                </div>
+
+                <div>
+                    <h3>Links Rápidos (Tutoriais da Página)</h3>
+                    <a class="tutorial-link-interno" href="#tutorial-1" onclick="fecharModal()">1. Criação de Curso</a>
+                    <a class="tutorial-link-interno" href="#tutorial-2" onclick="fecharModal()">2. Oferta de Turma</a>
+                    <a class="tutorial-link-interno" href="#tutorial-3" onclick="fecharModal()">3. Edital de Seleção</a>
+                    <a class="tutorial-link-interno" href="#tutorial-4" onclick="fecharModal()">4. Gestão Financeira</a>
+                    <a class="tutorial-link-interno" href="#tutorial-5" onclick="fecharModal()">5. Gestão no SIGAA</a>
+                    <a class="tutorial-link-interno" href="#tutorial-6" onclick="fecharModal()">6. Secretário e Apoio Adm.</a>
+                    <a class="tutorial-link-interno" href="#tutorial-7" onclick="fecharModal()">7. Substituição de Professor(a)</a>
+                    <a class="tutorial-link-interno" href="#tutorial-8" onclick="fecharModal()">8. Mudança na Coordenação</a>
+                    <a class="tutorial-link-interno" href="#tutorial-9" onclick="fecharModal()">9. Prorrogação de Turma</a>
+                    <a class="tutorial-link-interno" href="#tutorial-10" onclick="fecharModal()">10. Emissão de Certificado</a>
+                    <a class="tutorial-link-interno" href="#tutorial-11" onclick="fecharModal()">11. Relatório Final</a>
+                    <a class="tutorial-link-interno" href="#tutorial-12" onclick="fecharModal()">12. Parceria/Contrato</a>
+                    <a class="tutorial-link-interno" href="#tutorial-15" onclick="fecharModal()">15. Declaração de Matrícula</a>
+                    <a class="tutorial-link-interno" href="#tutorial-17" onclick="fecharModal()">17. Estágio Não Obrigatório</a>
                 </div>
 
             </div>
