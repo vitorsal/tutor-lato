@@ -256,7 +256,7 @@
             margin-top: 25px;
             padding-top: 18px;
             border-top: 2px solid var(--primary-color);
-            font-size: 1.5em;
+            font-size: 1.2em;
             display: flex;
             justify-content: space-between;
             font-weight: 500;
@@ -414,6 +414,7 @@
         .footer-contact a:hover {
             text-decoration: underline;
         }
+
         
     </style>
 </head>
@@ -601,13 +602,13 @@
             
             <div class="navigation-buttons">
                 <button class="btn-voltar" onclick="prevStep(4)">Voltar</button>
-                <button class="btn-avancar" onclick="calcularOrcamento()">Atualizar e Finalizar</button>
+                <button class="btn-avancar" onclick="imprimirOrcamento()">Finalizar e Gerar PDF</button>
             </div>
         </div>
     </div>
 
     <div class="footer-contact">
-        Em caso de dúvidas, entre em contato com o administrativo:
+        Em caso de dúvidas, entre em contato com:
         <a href="mailto:administrativo.escoladepos@ufg.br">administrativo.escoladepos@ufg.br</a> | Telefone: (62) 3521-2780
     </div>
 
@@ -1112,8 +1113,9 @@
             const ressarcimento = receitaTotal * TAXA_RESSARCIMENTO_FIXA;
             const taxaGestao = receitaTotal * TAXA_GESTAO_FIXA;
             const custoTotal = custoOperacional + ressarcimento + taxaGestao;
+	    const valorCursoPorAluno = custoTotal / alunosPagantes;
             const saldo = receitaTotal - custoTotal;
-
+	    
             // Geração de HTML
             const mensalidadeExibida = formatarMoeda(mensalidadeNecessaria).replace('R$', '') + ` (${numParcelas}x Parcelas)`;
 
@@ -1270,24 +1272,26 @@
                 <div class="orcamento-item"><span>Total Apoio ao Ensino:</span><strong>${formatarMoeda(custoApoioEnsino)}</strong></div>
 
 
-                <div class="orcamento-section-title">3. Outros Custos</div>
-                <div class="orcamento-item"><span>• Custo de emissão dos Certificados (R$ ${CUSTO_CERTIFICADO_BASE.toFixed(2)} x ${vagasTotais} alunos):</span><strong>${formatarMoeda(custoCertificados)}</strong></div>
-                
-                ${custosAdicionaisHTML}
+                <div class="orcamento-section-title">3. Outros Custos Operacionais</div>
+                <div class="orcamento-item"><span>• Custo de emissão dos Certificados (R$ ${CUSTO_CERTIFICADO_BASE.toFixed(2)} x ${vagasTotais} alunos):</span><strong>${formatarMoeda(custoCertificados)}</strong></div>
+                
+                ${custosAdicionaisHTML}
 
-                <div class="orcamento-item" style="font-weight: bold; padding-top: 15px; border-top: 2px solid var(--primary-color);"><span>Total Custo Operacional (sem taxas):</span><strong>${formatarMoeda(custoOperacional)}</strong></div>
-                
-                <div style="font-weight: bold; margin-top: 15px;">4. Resultado</div>
-                <div class="orcamento-item"><span>• Ressarcimento UFG (${(TAXA_RESSARCIMENTO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(ressarcimento)}</strong></div>
-                <div class="orcamento-item"><span>• Despesa Administrativa e Operacional da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
+                                <div class="orcamento-item"><span>• Ressarcimento UFG (${(TAXA_RESSARCIMENTO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(ressarcimento)}</strong></div>
+                <div class="orcamento-item"><span>• Despesa Administrativa e Operacional da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
 
-                <div class="orcamento-item" style="font-weight: bold; margin-top: 15px;"><span>💰 Mensalidade Necessária:</span><strong>R$ ${mensalidadeExibida}</strong></div>
-                <div class="orcamento-item"><span>💵 Receita Bruta Total Necessária:</span><strong>${formatarMoeda(receitaTotal)}</strong></div>
+                <div class="orcamento-item" style="font-weight: bold; padding-top: 15px; border-top: 2px solid var(--primary-color);"><span>Total Geral de Custos (Operacional + Taxas):</span><strong>${formatarMoeda(custoTotal)}</strong></div>
+                
+                
+                <div style="font-weight: bold; margin-top: 15px;">4. Resultado e Mensalidade</div>
+                <div class="orcamento-item"><span>💰 Mensalidade Necessária:</span><strong>R$ ${mensalidadeExibida}</strong></div>
+                <div class="orcamento-item"><span>💵 Receita Bruta Total Necessária:</span><strong>${formatarMoeda(receitaTotal)}</strong></div>
+                                <div class="orcamento-item"><span>📈 Valor do Curso por Aluno:</span><strong>R$ ${valorCursoPorAluno.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (Total Geral / Alunos Pagantes)</strong></div>
 
-                <div class="saldo-final ${saldo >= 0 ? 'lucro' : 'deficit'}">
-                    <span>Total Geral de Custos: ${formatarMoeda(custoTotal)}</span>
-                    <span>Saldo Final Estimado: <span class="valor">${formatarMoeda(saldo)}</span></span>
-                </div>
+                <div class="saldo-final ${saldo >= 0 ? 'lucro' : 'deficit'}">
+                    <span>Resultado Final (Receita - Custos):</span>
+                    <span>Saldo Final Estimado: <span class="valor">${formatarMoeda(saldo)}</span></span>
+                </div>
                 
                 ${equipeDetalhadaHTML} `;
 
