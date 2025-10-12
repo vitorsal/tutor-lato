@@ -105,15 +105,15 @@
             padding: 25px;
             border-radius: 6px;
             border: 1px solid #D0EAD6;
-            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out; /* Transição na altura e padding */
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
             margin-bottom: 20px;
             overflow: hidden; 
-            max-height: 500px; /* Altura máxima inicial */
+            max-height: 500px; 
         }
         .extraction-block h3 {
             margin-top: 0;
         }
-        /* NOVO: Classe para recolher o bloco */
+        /* Classe para recolher o bloco */
         .extraction-block.collapsed {
             max-height: 0;
             padding-top: 0;
@@ -122,7 +122,7 @@
             border: 1px solid transparent;
         }
         
-        /* NOVO: Estilo para o botão de toggle/visualizar */
+        /* Estilo para o botão de toggle/visualizar */
         .toggle-btn {
             background: none;
             color: var(--primary-color);
@@ -182,13 +182,16 @@
             transform: translateY(-1px);
         }
 
-        /* REVISÃO MINIMALISTA: Cor e padding para o resultado da análise */
+        /* REVISÃO MINIMALISTA: Oculta dados extraídos e botões de navegação inicial */
+        .hidden-before-analysis {
+            display: none;
+        }
+
         #resultado {
             padding: 15px 0;
             white-space: pre-wrap;
             font-size: 0.9em;
             color: var(--text-color);
-            /* Removido o border-bottom daqui, pois o botão de toggle fará essa função */
             margin-bottom: 20px;
         }
         #resultado .alert {
@@ -314,19 +317,21 @@
         <div id="step-1" class="step active">
             <h2>1️⃣ Dados Básicos da Turma</h2>
             <div class="extraction-block" id="extractionBlockStep1">
-                <h3>Cole o Conteúdo do Projeto de Ensino</h3>
+                <h3>**1. COLE O PROJETO DE ENSINO COMPLETO**</h3>
                 <textarea id="texto" rows="10" placeholder="Cole aqui o conteúdo do projeto SEI..."></textarea>
                 <button onclick="analisar()">Analisar Dados</button>
             </div>
             
-            <button class="toggle-btn" onclick="toggleExtractionBlock()">
-                <span id="toggleText">...Cole o Conteúdo do Projeto de Ensino</span>
-            </button>
+            <div class="hidden-before-analysis" id="toggleButtonContainer">
+                <button class="toggle-btn" onclick="toggleExtractionBlock()">
+                    <span id="toggleText">...revelar campo para edição/novo projeto</span>
+                </button>
+            </div>
 
-            <h3>Dados Extraídos</h3>
-            <div id="resultado">Aguardando análise do projeto...</div>
+            <h3 class="hidden-before-analysis" id="dadosExtraidosTitle">Dados Extraídos</h3>
+            <div id="resultado" class="hidden-before-analysis">Aguardando análise do projeto...</div>
 
-            <div class="navigation-buttons">
+            <div class="navigation-buttons hidden-before-analysis" id="navigationButtonContainer">
                 <button class="btn-avancar" onclick="nextStep(2)">Avançar para Custos</button>
             </div>
         </div>
@@ -434,9 +439,9 @@
         </div>
 
         <div id="step-4" class="step">
-            <h2>4️⃣ Custos Adicionais e Projeção Final</h2>
+            <h2>4️⃣ Custos Adicionais (Insumos e Serviços)</h2>
 
-            <h3 class="orcamento-section-title">Custos Adicionais (Insumos e Serviços)</h3>
+            <h3 class="orcamento-section-title">Despesas Variáveis (Total Projeto)</h3>
 
             <div class="input-grid" id="custosAdicionaisContainer">
                 <div>
@@ -462,14 +467,23 @@
             </div>
 
             <button onclick="adicionarCustoAdicional()">➕ Adicionar Outro Custo</button>
+            
+            <div class="navigation-buttons">
+                <button class="btn-voltar" onclick="prevStep(3)">Voltar</button>
+                <button class="btn-avancar" onclick="nextStep(5)">Avançar para Projeção Final</button>
+            </div>
+        </div>
 
-            <h3 class="orcamento-section-title" style="margin-top: 40px;">Projeção Orçamentária</h3>
+        <div id="step-5" class="step">
+            <h2>5️⃣ Projeção Orçamentária Final</h2>
+            
+            <h3 class="orcamento-section-title">Resultado Financeiro Completo</h3>
 
             <div id="orcamento">Aguardando cálculo...</div>
             
             <div class="navigation-buttons">
-                <button class="btn-voltar" onclick="prevStep(3)">Voltar</button>
-                <button class="btn-avancar" onclick="calcularOrcamento()">Atualizar Orçamento Final</button>
+                <button class="btn-voltar" onclick="prevStep(4)">Voltar</button>
+                <button class="btn-avancar" onclick="calcularOrcamento()">Atualizar e Finalizar</button>
             </div>
         </div>
     </div>
@@ -527,10 +541,15 @@
 
         function nextStep(nextNum) {
             if (currentStep === 1) {
+                // Checa se os dados foram analisados com sucesso antes de avançar
                 if (!dadosExtraidos.cargaHorariaTotal || dadosExtraidos.vagas === 0) {
                     alert("Por favor, cole e analise o texto do projeto SEI para extrair a Carga Horária e o Número de Vagas antes de avançar.");
                     return;
                 }
+            }
+            // Força o recálculo do orçamento na transição para a tela final (Etapa 5)
+            if (nextNum === 5) {
+                calcularOrcamento();
             }
             showStep(nextNum);
         }
@@ -539,7 +558,7 @@
             showStep(prevNum);
         }
 
-        // --- NOVO: FUNÇÃO PARA MOSTRAR/ESCONDER CAMPO DE TEXTO ---
+        // --- FUNÇÃO PARA MOSTRAR/ESCONDER CAMPO DE TEXTO ---
         function toggleExtractionBlock() {
             const block = document.getElementById('extractionBlockStep1');
             const toggleText = document.getElementById('toggleText');
@@ -547,7 +566,7 @@
             block.classList.toggle('collapsed');
 
             if (block.classList.contains('collapsed')) {
-                toggleText.textContent = '...Cole o Conteúdo do Projeto de Ensino';
+                toggleText.textContent = '...revelar campo para edição/novo projeto';
             } else {
                 toggleText.textContent = '...recolher campo de edição';
             }
@@ -607,13 +626,25 @@
         function analisar() {
             const texto = document.getElementById("texto").value;
             const resultado = document.getElementById("resultado");
+            
+            // Se o campo estiver vazio, não faz nada e alerta
+            if (!texto.trim()) {
+                resultado.innerHTML = '<span class="alert">⚠️ Cole o conteúdo do projeto SEI para iniciar a análise.</span>';
+                // Oculta os dados antigos e botões
+                document.getElementById('toggleButtonContainer').classList.add('hidden-before-analysis');
+                document.getElementById('dadosExtraidosTitle').classList.add('hidden-before-analysis');
+                resultado.classList.add('hidden-before-analysis');
+                document.getElementById('navigationButtonContainer').classList.add('hidden-before-analysis');
+                return;
+            }
 
-            // Extração do Nome do Curso (melhorada)
+            // --- Lógica de Extração ---
             const regexNomeCurso = /Curso de Pós-Graduação Lato Sensu em\s*(.*?)(?:\s*(?:Conforme|Modelo|SEI|\[|$))/i;
             const matchCurso = texto.replace(/[\r\n]+/g, ' ').match(regexNomeCurso);
             let nomeCurso = matchCurso ? matchCurso[1].trim() : "NOME INDEFINIDO";
-            nomeCurso = nomeCurso.replace(/\.$/, '').trim();
-
+            // Limpa o nome do curso removendo caracteres de parênteses abertos no final
+            let nomeCursoLimpo = nomeCurso.replace(/\s*\(.*$/, '').trim(); 
+            
             const regexCH = /Carga Horária Total:\s*([0-9]{2,4})\s*h/i;
             const matchCH = texto.match(regexCH);
             const cargaHorariaTotal = matchCH ? parseInt(matchCH[1]) : null;
@@ -685,8 +716,9 @@
                 }
             });
 
+            // --- Montagem da Saída ---
             let output = "";
-            output += nomeCurso !== "NOME INDEFINIDO" ? `📘 Nome do Curso: ${nomeCurso}\n` : `<span class="alert">⚠️ Nome do curso NÃO ENCONTRADO.</span>\n`;
+            output += nomeCursoLimpo !== "NOME INDEFINIDO" ? `📘 Nome do Curso: ${nomeCursoLimpo}\n` : `<span class="alert">⚠️ Nome do curso NÃO ENCONTRADO.</span>\n`;
             output += `👤 Coordenador: ${nomeCoordenador}\n`;
             output += cargaHorariaTotal ? `⏱️ Carga Horária Total: ${cargaHorariaTotal} horas\n` : `<span class="alert">⚠️ Carga horária NÃO ENCONTRADA.</span>\n`;
             output += `📅 Duração Calculada: ${duracaoMeses} meses\n`;
@@ -709,9 +741,9 @@
 
             resultado.innerHTML = output; 
 
-            // ATUALIZAÇÃO DOS DADOS EXTRAÍDOS
+            // ATUALIZAÇÃO DOS DADOS EXTRAÍDOS (Usamos o nome limpo aqui)
             dadosExtraidos = {
-                nomeCurso: nomeCurso,
+                nomeCurso: nomeCursoLimpo,
                 cargaHorariaTotal: cargaHorariaTotal || 364, 
                 vagas: vagas || 45, 
                 duracaoMeses: duracaoMeses,
@@ -724,11 +756,17 @@
 
             calcularOrcamento();
             
-            // NOVO: Recolhe o bloco de extração após a análise
+            // REVELA O BLOCO DE RESULTADO E OS BOTÕES DE NAVEGAÇÃO
+            document.getElementById('toggleButtonContainer').classList.remove('hidden-before-analysis');
+            document.getElementById('dadosExtraidosTitle').classList.remove('hidden-before-analysis');
+            resultado.classList.remove('hidden-before-analysis');
+            document.getElementById('navigationButtonContainer').classList.remove('hidden-before-analysis');
+
+            // Recolhe o bloco de extração após a análise
             const blockToCollapse = document.getElementById('extractionBlockStep1');
             if (blockToCollapse) {
                 blockToCollapse.classList.add('collapsed');
-                document.getElementById('toggleText').textContent = '...Cole o Conteúdo do Projeto de Ensino';
+                document.getElementById('toggleText').textContent = '...revelar campo para edição/novo projeto';
             }
         }
 
@@ -762,14 +800,18 @@
             // Custos Adicionais
             let custosAdicionais = 0;
             const listaCustosAdicionais = [];
-            document.getElementById("custosAdicionaisContainer").querySelectorAll('input[type="number"]').forEach(input => {
-                const valor = parseFloat(input.value) || 0;
-                listaCustosAdicionais.push({
-                    nome: document.querySelector(`label[for="${input.id}"]`).textContent.replace(' (R$):', ''),
-                    valor: valor
+            // Nota: O input container agora está na Etapa 4 (step-4)
+            const custosContainer = document.getElementById("custosAdicionaisContainer");
+            if (custosContainer) {
+                custosContainer.querySelectorAll('input[type="number"]').forEach(input => {
+                    const valor = parseFloat(input.value) || 0;
+                    listaCustosAdicionais.push({
+                        nome: document.querySelector(`label[for="${input.id}"]`).textContent.replace(' (R$):', ''),
+                        valor: valor
+                    });
+                    custosAdicionais += valor;
                 });
-                custosAdicionais += valor;
-            });
+            }
 
             // CÁLCULOS PRINCIPAIS
             const vagasServ = Math.ceil(vagasTotais * PERC_VAGAS_SERV);
@@ -829,7 +871,7 @@
                 <div class="orcamento-item"><span>• ${item.nome}:</span><strong>${formatarMoeda(item.valor)}</strong></div>
             `).join('');
             if (custosAdicionais > 0) {
-                custosAdicionaisHTML = `<div class="orcamento-section-title">4.1. Insumos e Despesas Operacionais (Adicionais)</div>` + custosAdicionaisHTML + `
+                custosAdicionaisHTML = `<div style="font-weight: bold; margin-top: 15px;">3.1. Insumos e Despesas Operacionais (Adicionais)</div>` + custosAdicionaisHTML + `
                     <div class="orcamento-item" style="font-weight: bold; border-top: 1px solid var(--border-color);"><span>Total C. Adicionais (Insumos):</span><strong>${formatarMoeda(custosAdicionais)}</strong></div>
                 `;
             }
@@ -854,30 +896,31 @@
             ].filter(m => m.qtd > 0);
 
             let equipeHTML = '';
-            if (equipe.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">Coordenação / Administrativo</div>` + equipe.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
-            if (bolsasEServicos.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">Outros Serviços Contratados</div>` + bolsasEServicos.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
-            if (apoioEnsinoLista.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">Apoio ao Ensino</div>` + apoioEnsinoLista.map(m => `<div class="orcamento-item"><span>• ${m.nome} (${m.qtd}x ${formatarMoeda(m.valor_base)}/mês)</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
+            if (equipe.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.2. Coordenação / Administrativo (Total)</div>` + equipe.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
+            if (bolsasEServicos.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.3. Outros Serviços Contratados (Total)</div>` + bolsasEServicos.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
+            if (apoioEnsinoLista.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.4. Apoio ao Ensino (Total)</div>` + apoioEnsinoLista.map(m => `<div class="orcamento-item"><span>• ${m.nome} (${m.qtd}x ${formatarMoeda(m.valor_base)}/mês)</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
 
-
-            const duracaoTitulo = `Projeção Orçamentária: ${dadosExtraidos.nomeCurso} (${duracaoMeses} MESES TOTAIS)`;
+            // TÍTULO FINAL: Limpo sem a duração
+            const nomeDoCursoParaTitulo = dadosExtraidos.nomeCurso.toLowerCase().includes('indefinido') ? dadosExtraidos.nomeCurso : `Curso de Especialização em ${dadosExtraidos.nomeCurso}`;
+            const duracaoTitulo = `Projeção Orçamentária: ${nomeDoCursoParaTitulo}`;
 
 
             const orcamentoHTML = `
                 <h3 class="orcamento-section-title">${duracaoTitulo}</h3>
                 
-                <div class="orcamento-section-title">1. Análise de Vagas e Alunos Pagantes</div>
+                <div class="orcamento-section-title">1. Dados Base do Projeto</div>
                 <div class="orcamento-item">
                     <span>📅 Duração Total do Projeto:</span>
                     <strong>${duracaoMeses} meses</strong>
                 </div>
-                <div class="orcamento-item" style="border-bottom: 2px solid var(--border-color);">
+                <div class="orcamento-item">
                     <span>🗓️ Parcelas de Pagamento (Duração - ${PARCELAS_ABATIDAS} meses):</span>
                     <strong>${numParcelas} meses</strong>
                 </div>
                 ${infoAlunos}
 
                 <div class="orcamento-section-title">2. Custos com Pessoal (Total Projeto)</div>
-                <div style="font-weight: bold; margin-top: 5px;">2.1. Docência e Orientação</div>
+                <div style="font-weight: bold; margin-top: 5px;">2.1. Docência e Orientação (Total)</div>
                 ${chDoutor > 0 ? `<div class="orcamento-item"><span>• Docência Doutor (${chDoutor}h):</span><strong>${formatarMoeda(custoDocenciaDoutor)}</strong></div>` : ''}
                 ${chMestre > 0 ? `<div class="orcamento-item"><span>• Docência Mestre (${chMestre}h):</span><strong>${formatarMoeda(custoDocenciaMestre)}</strong></div>` : ''}
                 ${chEspec > 0 ? `<div class="orcamento-item"><span>• Docência Especialista (${chEspec}h):</span><strong>${formatarMoeda(custoDocenciaEspec)}</strong></div>` : ''}
@@ -885,14 +928,14 @@
                 
                 ${equipeHTML}
 
-                <div class="orcamento-section-title">3. Outros Custos Fixos</div>
+                <div class="orcamento-section-title">3. Outros Custos e Taxas</div>
                 <div class="orcamento-item"><span>• Custo Certificados (R$ ${CUSTO_CERTIFICADO_BASE.toFixed(2)} x ${vagasTotais} alunos):</span><strong>${formatarMoeda(custoCertificados)}</strong></div>
                 
                 ${custosAdicionaisHTML}
 
                 <div class="orcamento-item" style="font-weight: bold; padding-top: 15px; border-top: 2px solid var(--primary-color);"><span>Total Custo Operacional (sem taxas):</span><strong>${formatarMoeda(custoOperacional)}</strong></div>
-
-                <div class="orcamento-section-title">5. Custos Legais e Receita Mínima</div>
+                
+                <div style="font-weight: bold; margin-top: 15px;">5.1. Taxas e Remuneração Necessária</div>
                 <div class="orcamento-item"><span>• Ressarcimento UFG (${(TAXA_RESSARCIMENTO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(ressarcimento)}</strong></div>
                 <div class="orcamento-item"><span>• Taxa de Gestão da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
 
@@ -910,8 +953,7 @@
 
         // Inicializa a aplicação
         document.addEventListener('DOMContentLoaded', () => {
-            // Insere o texto de exemplo
-            document.getElementById('texto').value = `
+            const exemploTexto = `
 MINISTÉRIO DA EDUCAÇÃO
 UNIVERSIDADE FEDERAL DE GOIÁS
 PROJETO DE ENSINO
@@ -939,10 +981,13 @@ SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
 	Mariana carlos	mestrado	docente	45
 	Junior CAssiano	especialista	docente	70
 `;
-            analisar();
+
+            const textarea = document.getElementById('texto');
+            textarea.value = exemploTexto.trim();
+            textarea.placeholder = "Cole aqui o conteúdo completo do seu projeto de ensino (documento SEI).";
+            
             showStep(1); 
             
-            // Dispara a checagem e formatação inicial dos campos na primeira carga
             const inputIdsToFormat = ['horaAulaDoutor', 'horaAulaMestre', 'horaAulaEspec', 'valOrientacaoHora', 'coord', 'apoio', 'tutor', 'materialMultimidia', 'palestrantes', 'qtdApoioEnsinoDoutor', 'qtdApoioEnsinoMestre', 'qtdApoioEnsinoEspec', 'qtdApoioEnsinoSup', 'qtdApoioEnsinoMedio', 'diarias', 'passagens', 'materialConsumo', 'equipamentos', 'outrosCusto1'];
             inputIdsToFormat.forEach(id => {
                 const element = document.getElementById(id);
@@ -951,6 +996,13 @@ SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
                     formatarInputMonetario(id);
                 }
             });
+            
+            // O bloco deve estar aberto no carregamento
+            const blockToCollapse = document.getElementById('extractionBlockStep1');
+            if (blockToCollapse) {
+                blockToCollapse.classList.remove('collapsed');
+                document.getElementById('toggleText').textContent = '...recolher campo de edição';
+            }
         });
     </script>
 </body>
