@@ -254,6 +254,29 @@
             color: var(--alert-color);
         }
 
+        /* Estilo para Tabela de Equipe (NOVO) */
+        .equipe-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .equipe-table th, .equipe-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+        .equipe-table th {
+            background-color: var(--highlight-bg);
+            color: var(--heading-color);
+            font-weight: 600;
+        }
+        .equipe-table td:last-child {
+            text-align: right;
+            font-weight: bold;
+            color: var(--heading-color);
+        }
+
         /* Alerta de Teto Salarial Geral */
         .alert-teto {
             color: var(--alert-color);
@@ -527,7 +550,9 @@
             qtdDocentes: 0,
             chDoutor: 0, 
             chMestre: 0, 
-            chEspec: 0 
+            chEspec: 0,
+            equipeCoord: [],
+            listaDocentesDetalhados: []
         };
 
         let contadorCustos = 2; 
@@ -646,7 +671,6 @@
             const regexNomeCurso = /Curso de Pós-Graduação Lato Sensu em\s*(.*?)(?:\s*(?:Conforme|Modelo|SEI|\[|$))/i;
             const matchCurso = texto.replace(/[\r\n]+/g, ' ').match(regexNomeCurso);
             let nomeCurso = matchCurso ? matchCurso[1].trim() : "NOME INDEFINIDO";
-            // Limpa o nome do curso removendo caracteres de parênteses abertos no final
             let nomeCursoLimpo = nomeCurso.replace(/\s*\(.*$/, '').trim(); 
             
             const regexCH = /Carga Horária Total:\s*([0-9]{2,4})\s*h/i;
@@ -657,9 +681,20 @@
             const matchVagas = texto.match(regexVagas);
             const vagas = matchVagas ? parseInt(matchVagas[1]) : 0;
             
-            const regexCoordenador = /Coordenador\(a\)\s+([A-Za-z\s]+)/i;
+            // Extração da Equipe (Vice e Apoio Admin)
+            // Regex ajustadas para serem mais robustas, pegando apenas o nome antes do tab/nova linha
+            const regexCoordenador = /Coordenador\(a\)\s+([A-Za-z\s]+)(?:[\s\t\n]|$)/i;
             const matchCoordenador = texto.match(regexCoordenador);
             const nomeCoordenador = matchCoordenador ? matchCoordenador[1].trim() : 'Não Encontrado';
+
+            const regexVice = /Vice-coordenador\(a\)\s+([A-Za-z\s]+)(?:[\s\t\n]|$)/i;
+            const matchVice = texto.match(regexVice);
+            const nomeVice = matchVice ? matchVice[1].trim() : 'Não Encontrado';
+
+            const regexApoio = /Apoio\s+Administrativo\*\s+([A-Za-z\s]+)(?:[\s\t\n]|$)/i;
+            const matchApoio = texto.match(regexApoio);
+            const nomeApoio = matchApoio ? matchApoio[1].trim() : 'Não Encontrado';
+
 
             // Extração de Datas para Duração em Meses
             const regexDatas = /(?:\s|Turma\s+\d:\s*)(\d{2}\/\d{2}\/\d{4})\s*[\s\t\-]*(?:a\s*)*(\d{2}\/\d{2}\/\d{4})/i;
@@ -689,12 +724,14 @@
                 }
             }
 
-            // Extração da Carga Horária Docente por Titulação
+            // Extração Detalhada de Docentes
             let somaCargaDocente = 0;
             let qtdDocentes = 0;
             let chDoutor = 0;
             let chMestre = 0;
             let chEspec = 0;
+            let listaDocentesNomes = []; // Apenas nomes para resumo
+            let listaDocentesDetalhados = []; // Objetos para a tabela final
             
             const regexDocentePorLinha = /([\w\sáéíóúãõç]+)[\s\t]+(doutorado|mestre|mestrado|especialista|dr|me|es)[\s\t]+(Docente|Externo)[\s\t]+(\d{1,3})/i;
             
@@ -704,30 +741,54 @@
                 const match = linha.match(regexDocentePorLinha);
                 
                 if (match) {
+                    const nome = match[1].trim();
+                    const titulacao = match[2].toLowerCase();
                     const carga = parseInt(match[4]);
+
                     somaCargaDocente += carga;
                     qtdDocentes++;
-                    
-                    const titulacao = match[2].toLowerCase();
+                    listaDocentesNomes.push(nome);
 
-                    if (titulacao.includes('doutor') || titulacao.includes('dr')) {
+                    let tituloSimples = '';
+                    if (titulacao.includes('doutorado') || titulacao.includes('dr')) {
                         chDoutor += carga;
+                        tituloSimples = 'Doutor';
                     } else if (titulacao.includes('mestre') || titulacao.includes('me') || titulacao.includes('mestrado')) {
                         chMestre += carga;
+                        tituloSimples = 'Mestre';
                     } else if (titulacao.includes('especialista') || titulacao.includes('es')) {
                         chEspec += carga;
-                    } 
+                        tituloSimples = 'Especialista';
+                    }
+                    
+                    listaDocentesDetalhados.push({
+                        nome: nome,
+                        funcao: `Docente (${tituloSimples}, ${carga}h)`,
+                        titulacao: tituloSimples,
+                        ch: carga
+                    });
                 }
             });
+
+            // Cria a lista de coordenação detalhada
+            const equipeCoord = [];
+            // Usamos os nomes extraídos (já estão limpos)
+            if (nomeCoordenador && nomeCoordenador !== 'Não Encontrado') equipeCoord.push({ nome: nomeCoordenador, funcao: 'Coordenador', base: 'coord', valor_mensal: 2023.77 }); 
+            if (nomeVice && nomeVice !== 'Não Encontrado') equipeCoord.push({ nome: nomeVice, funcao: 'Vice-coordenador', base: 'vice', valor_mensal: 0 }); 
+            if (nomeApoio && nomeApoio !== 'Não Encontrado') equipeCoord.push({ nome: nomeApoio, funcao: 'Apoio Administrativo', base: 'apoio', valor_mensal: 1488.00 });
+
 
             // --- Montagem da Saída ---
             let output = "";
             output += nomeCursoLimpo !== "NOME INDEFINIDO" ? `📘 Nome do Curso: ${nomeCursoLimpo}\n` : `<span class="alert">⚠️ Nome do curso NÃO ENCONTRADO.</span>\n`;
             output += `👤 Coordenador: ${nomeCoordenador}\n`;
-            output += cargaHorariaTotal ? `⏱️ Carga Horária Total: ${cargaHorariaTotal} horas\n` : `<span class="alert">⚠️ Carga horária NÃO ENCONTRADA.</span>\n`;
+            output += `👤 Vice-coordenador: ${nomeVice}\n`;
+            output += `🧑‍💼 Apoio Administrativo: ${nomeApoio}\n`;
+            output += `⏱️ Carga Horária Total: ${cargaHorariaTotal} horas\n`;
             output += `📅 Duração Calculada: ${duracaoMeses} meses\n`;
             output += `👥 Número de Vagas: ${vagas}\n`;
             output += `👨‍🏫 Docentes encontrados: ${qtdDocentes}\n`;
+            output += `  • Nomes: ${listaDocentesNomes.join(', ')}\n`;
             output += `📚 Carga Horária Docente Total: ${somaCargaDocente} horas\n`;
             output += `    • CH Doutores: ${chDoutor} horas\n`;
             output += `    • CH Mestres: ${chMestre} horas\n`;
@@ -735,17 +796,17 @@
 
             if (cargaHorariaTotal !== null) {
                 if (somaCargaDocente === cargaHorariaTotal) {
-                    output += `✅ CH dos docentes corresponde à carga total do curso.\n`;
+                    output += `✅ CH dos docentes corresponde à carga total do curso.`;
                 } else if (somaCargaDocente > cargaHorariaTotal) {
-                    output += `<span class="alert">⚠️ CH dos docentes EXCEDE em ${somaCargaDocente - cargaHorariaTotal} horas.</span>\n`;
+                    output += `<span class="alert">⚠️ CH dos docentes EXCEDE em ${somaCargaDocente - cargaHorariaTotal} horas.</span>`;
                 } else {
-                    output += `<span class="alert">⚠️ CH dos docentes está ABAIXO em ${cargaHorariaTotal - somaCargaDocente} horas.</span>\n`;
+                    output += `<span class="alert">⚠️ CH dos docentes está ABAIXO em ${cargaHorariaTotal - somaCargaDocente} horas.</span>`;
                 }
             }
 
             resultado.innerHTML = output; 
 
-            // ATUALIZAÇÃO DOS DADOS EXTRAÍDOS (Usamos o nome limpo aqui)
+            // ATUALIZAÇÃO DOS DADOS EXTRAÍDOS (ARMAZENA TODA A ESTRUTURA PARA CÁLCULO FINAL)
             dadosExtraidos = {
                 nomeCurso: nomeCursoLimpo,
                 cargaHorariaTotal: cargaHorariaTotal || 364, 
@@ -755,7 +816,9 @@
                 qtdDocentes: qtdDocentes,
                 chDoutor: chDoutor, 
                 chMestre: chMestre, 
-                chEspec: chEspec 
+                chEspec: chEspec,
+                equipeCoord: equipeCoord,
+                listaDocentesDetalhados: listaDocentesDetalhados
             };
 
             calcularOrcamento();
@@ -784,8 +847,8 @@
             const horaAulaMestre = parseFloat(document.getElementById("horaAulaMestre").value) || 0;
             const horaAulaEspec = parseFloat(document.getElementById("horaAulaEspec").value) || 0;
             const valOrientacaoHora = parseFloat(document.getElementById("valOrientacaoHora").value) || 0; 
-            const coord = parseFloat(document.getElementById("coord").value) || 0;
-            const apoio = parseFloat(document.getElementById("apoio").value) || 0;
+            const coordValor = parseFloat(document.getElementById("coord").value) || 0;
+            const apoioValor = parseFloat(document.getElementById("apoio").value) || 0;
             const tutor = parseFloat(document.getElementById("tutor").value) || 0;
             const palestrantes = parseFloat(document.getElementById("palestrantes").value) || 0;
             const materialMultimidia = parseFloat(document.getElementById("materialMultimidia").value) || 0;
@@ -804,7 +867,6 @@
             // Custos Adicionais
             let custosAdicionais = 0;
             const listaCustosAdicionais = [];
-            // Nota: O input container agora está na Etapa 4 (step-4)
             const custosContainer = document.getElementById("custosAdicionaisContainer");
             if (custosContainer) {
                 custosContainer.querySelectorAll('input[type="number"]').forEach(input => {
@@ -828,7 +890,7 @@
             const custoDocenciaEspec = chEspec * horaAulaEspec;
             const custoDocenciaTotal = custoDocenciaDoutor + custoDocenciaMestre + custoDocenciaEspec;
             
-            const custoEquipeCoord = (coord + apoio) * duracaoMeses; 
+            const custoEquipeCoord = (coordValor + apoioValor) * duracaoMeses; 
             const custoBolsasServicos = (tutor + materialMultimidia + palestrantes) * duracaoMeses;
             
             const custoApoioEnsino = (
@@ -879,34 +941,83 @@
                     <div class="orcamento-item" style="font-weight: bold; border-top: 1px solid var(--border-color);"><span>Total C. Adicionais (Insumos):</span><strong>${formatarMoeda(custosAdicionais)}</strong></div>
                 `;
             }
+            
+            // --- GERAÇÃO DA LISTA DETALHADA DA EQUIPE (ETAPA 5) ---
+            const equipeDetalhadaCompleta = [];
+            
+            // 1. Coordenadores e Apoio (Remuneração Fixa Mensal)
+            const coordData = dadosExtraidos.equipeCoord.find(m => m.funcao === 'Coordenador');
+            const viceData = dadosExtraidos.equipeCoord.find(m => m.funcao === 'Vice-coordenador');
+            const apoioData = dadosExtraidos.equipeCoord.find(m => m.funcao === 'Apoio Administrativo');
+            
+            if (coordData) equipeDetalhadaCompleta.push({ nome: coordData.nome, funcao: 'Coordenador', base: `${formatarMoeda(coordValor)}/mês`, total: (coordValor * duracaoMeses) });
+            if (viceData) equipeDetalhadaCompleta.push({ nome: viceData.nome, funcao: 'Vice-coordenador', base: `Não Remunerado`, total: 0 }); // Vice não tem custo aqui
+            if (apoioData) equipeDetalhadaCompleta.push({ nome: apoioData.nome, funcao: 'Apoio Administrativo', base: `${formatarMoeda(apoioValor)}/mês`, total: (apoioValor * duracaoMeses) });
 
-            const equipe = [
-                { nome: 'Coordenador', valor: coord, total: coord * duracaoMeses, display: `Coordenador: ${formatarMoeda(coord)}/mês` },
-                { nome: 'Apoio Administrativo', valor: apoio, total: apoio * duracaoMeses, display: `Apoio Admin.: ${formatarMoeda(apoio)}/mês` }
-            ].filter(m => m.valor > 0);
+            // 2. Bolsas e Serviços (Remuneração Fixa Mensal)
+            if (tutor > 0) equipeDetalhadaCompleta.push({ nome: 'N/A (Tutor(es))', funcao: 'Tutor UFG', base: `${formatarMoeda(tutor)}/mês`, total: (tutor * duracaoMeses) });
+            if (materialMultimidia > 0) equipeDetalhadaCompleta.push({ nome: 'N/A (Multimídia)', funcao: 'Elaboração Multimídia', base: `${formatarMoeda(materialMultimidia)}/mês`, total: (materialMultimidia * duracaoMeses) });
+            if (palestrantes > 0) equipeDetalhadaCompleta.push({ nome: 'N/A (Palestrantes)', funcao: 'Palestrantes/Convidados', base: `${formatarMoeda(palestrantes)}/mês`, total: (palestrantes * duracaoMeses) });
 
-            const bolsasEServicos = [
-                { nome: 'Tutor UFG', valor: tutor, total: tutor * duracaoMeses, display: `Tutor: ${formatarMoeda(tutor)}/mês` },
-                { nome: 'Elab. Multimídia', valor: materialMultimidia, total: materialMultimidia * duracaoMeses, display: `Multimídia: ${formatarMoeda(materialMultimidia)}/mês` },
-                { nome: 'Palestrantes/Convidados', valor: palestrantes, total: palestrantes * duracaoMeses, display: `Palestrantes: ${formatarMoeda(palestrantes)}/mês` }
-            ].filter(m => m.valor > 0);
+            // 3. Docentes e Orientação (Remuneração por CH)
+            const numDocentes = dadosExtraidos.listaDocentesDetalhados.length || 1;
+            const custoOrientacaoPorDocente = custoOrientacao / numDocentes;
 
-            const apoioEnsinoLista = [
-                { nome: 'Apoio Ensino - Doutor', qtd: qtdApoioEnsinoDoutor, valor_base: CUSTOS_APOIO_ENSINO_BASE.DOUTOR, total: qtdApoioEnsinoDoutor * CUSTOS_APOIO_ENSINO_BASE.DOUTOR * duracaoMeses },
-                { nome: 'Apoio Ensino - Mestre', qtd: qtdApoioEnsinoMestre, valor_base: CUSTOS_APOIO_ENSINO_BASE.MESTRE, total: qtdApoioEnsinoMestre * CUSTOS_APOIO_ENSINO_BASE.MESTRE * duracaoMeses },
-                { nome: 'Apoio Ensino - Especialista', qtd: qtdApoioEnsinoEspec, valor_base: CUSTOS_APOIO_ENSINO_BASE.ESPEC, total: qtdApoioEnsinoEspec * CUSTOS_APOIO_ENSINO_BASE.ESPEC * duracaoMeses },
-                { nome: 'Apoio Ensino - Superior', qtd: qtdApoioEnsinoSup, valor_base: CUSTOS_APOIO_ENSINO_BASE.SUP, total: qtdApoioEnsinoSup * CUSTOS_APOIO_ENSINO_BASE.SUP * duracaoMeses },
-                { nome: 'Apoio Ensino - Médio', qtd: qtdApoioEnsinoMedio, valor_base: CUSTOS_APOIO_ENSINO_BASE.MEDIO, total: qtdApoioEnsinoMedio * CUSTOS_APOIO_ENSINO_BASE.MEDIO * duracaoMeses }
-            ].filter(m => m.qtd > 0);
+            dadosExtraidos.listaDocentesDetalhados.forEach(doc => {
+                let valorHA = 0;
+                if (doc.titulacao === 'Doutor') valorHA = horaAulaDoutor;
+                else if (doc.titulacao === 'Mestre') valorHA = horaAulaMestre;
+                else if (doc.titulacao === 'Especialista') valorHA = horaAulaEspec;
+                
+                const custoDoc = doc.ch * valorHA;
+                const totalReceber = custoDoc + custoOrientacaoPorDocente;
 
-            let equipeHTML = '';
-            if (equipe.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.2. Coordenação / Administrativo (Total)</div>` + equipe.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
-            if (bolsasEServicos.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.3. Outros Serviços Contratados (Total)</div>` + bolsasEServicos.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
-            if (apoioEnsinoLista.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.4. Apoio ao Ensino (Total)</div>` + apoioEnsinoLista.map(m => `<div class="orcamento-item"><span>• ${m.nome} (${m.qtd}x ${formatarMoeda(m.valor_base)}/mês)</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
+                equipeDetalhadaCompleta.push({
+                    nome: doc.nome,
+                    funcao: `Docente (${doc.titulacao}, ${doc.ch}h) + Orientação TCC`,
+                    base: `R$ ${valorHA.toFixed(2)}/h`,
+                    total: totalReceber
+                });
+            });
+
+            // 4. Apoio ao Ensino (Quantidade de Bolsas)
+            if (qtdApoioEnsinoDoutor > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoDoutor}x Contrato`, funcao: 'Apoio Ensino - Doutor', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.DOUTOR.toFixed(2)}/mês`, total: (qtdApoioEnsinoDoutor * CUSTOS_APOIO_ENSINO_BASE.DOUTOR * duracaoMeses) });
+            if (qtdApoioEnsinoMestre > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoMestre}x Contrato`, funcao: 'Apoio Ensino - Mestre', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.MESTRE.toFixed(2)}/mês`, total: (qtdApoioEnsinoMestre * CUSTOS_APOIO_ENSINO_BASE.MESTRE * duracaoMeses) });
+            if (qtdApoioEnsinoEspec > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoEspec}x Contrato`, funcao: 'Apoio Ensino - Especialista', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.ESPEC.toFixed(2)}/mês`, total: (qtdApoioEnsinoEspec * CUSTOS_APOIO_ENSINO_BASE.ESPEC * duracaoMeses) });
+            if (qtdApoioEnsinoSup > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoSup}x Contrato`, funcao: 'Apoio Ensino - Superior', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.SUP.toFixed(2)}/mês`, total: (qtdApoioEnsinoSup * CUSTOS_APOIO_ENSINO_BASE.SUP * duracaoMeses) });
+            if (qtdApoioEnsinoMedio > 0) equipeDetalhadaCompleta.push({ nome: `${qtdApoioEnsinoMedio}x Contrato`, funcao: 'Apoio Ensino - Médio', base: `R$ ${CUSTOS_APOIO_ENSINO_BASE.MEDIO.toFixed(2)}/mês`, total: (qtdApoioEnsinoMedio * CUSTOS_APOIO_ENSINO_BASE.MEDIO * duracaoMeses) });
+
+            // Geração da Tabela de Equipe Detalhada
+            let equipeDetalhadaHTML = `
+                <h3 class="orcamento-section-title" style="margin-top: 40px;">5. Lista Detalhada da Equipe e Remuneração Total Estimada</h3>
+                <table class="equipe-table">
+                    <thead>
+                        <tr>
+                            <th>Nome / Qtd</th>
+                            <th>Função / Base de Cálculo</th>
+                            <th>Valor Total (R$)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            equipeDetalhadaCompleta.filter(m => parseFloat(m.total) > 0 || m.funcao === 'Vice-coordenador').forEach(membro => {
+                equipeDetalhadaHTML += `
+                    <tr>
+                        <td>${membro.nome}</td>
+                        <td>${membro.funcao} (${membro.base})</td>
+                        <td>${formatarMoeda(parseFloat(membro.total))}</td>
+                    </tr>
+                `;
+            });
+            equipeDetalhadaHTML += `
+                    </tbody>
+                </table>
+            `;
 
             // TÍTULO FINAL: Limpo (Nome do Curso)
             const nomeDoCursoParaTitulo = dadosExtraidos.nomeCurso.toLowerCase().includes('indefinido') ? dadosExtraidos.nomeCurso : `Curso de Especialização em ${dadosExtraidos.nomeCurso}`;
-            const duracaoTitulo = nomeDoCursoParaTitulo; // Nome limpo.
+            const duracaoTitulo = nomeDoCursoParaTitulo;
 
 
             const orcamentoHTML = `
@@ -928,9 +1039,13 @@
                 ${chDoutor > 0 ? `<div class="orcamento-item"><span>• Docência Doutor (${chDoutor}h):</span><strong>${formatarMoeda(custoDocenciaDoutor)}</strong></div>` : ''}
                 ${chMestre > 0 ? `<div class="orcamento-item"><span>• Docência Mestre (${chMestre}h):</span><strong>${formatarMoeda(custoDocenciaMestre)}</strong></div>` : ''}
                 ${chEspec > 0 ? `<div class="orcamento-item"><span>• Docência Especialista (${chEspec}h):</span><strong>${formatarMoeda(custoDocenciaEspec)}</strong></div>` : ''}
-                <div class="orcamento-item"><span>• Orientação TCC (${vagasTotais} alunos x ${HORAS_ORIENTACAO_TCC}h):</span><strong>${formatarMoeda(custoOrientacao)}</strong></div>
+                <div class="orcamento-item"><span>• Orientação TCC (Base):</span><strong>${formatarMoeda(custoOrientacao)}</strong></div>
                 
-                ${equipeHTML}
+                <div style="font-weight: bold; margin-top: 10px;">2.2. Coordenação, Apoio e Bolsas (Total)</div>
+                <div class="orcamento-item"><span>Total Coordenação e Apoio (Inputs fixos):</span><strong>${formatarMoeda(custoEquipeCoord)}</strong></div>
+                <div class="orcamento-item"><span>Total Bolsas/Serviços (Inputs fixos):</span><strong>${formatarMoeda(custoBolsasServicos)}</strong></div>
+                <div class="orcamento-item"><span>Total Apoio ao Ensino (Inputs por Qtd):</span><strong>${formatarMoeda(custoApoioEnsino)}</strong></div>
+
 
                 <div class="orcamento-section-title">3. Outros Custos e Taxas</div>
                 <div class="orcamento-item"><span>• Custo Certificados (R$ ${CUSTO_CERTIFICADO_BASE.toFixed(2)} x ${vagasTotais} alunos):</span><strong>${formatarMoeda(custoCertificados)}</strong></div>
@@ -941,7 +1056,7 @@
                 
                 <div style="font-weight: bold; margin-top: 15px;">4. Resultado Financeiro</div>
                 <div class="orcamento-item"><span>• Ressarcimento UFG (${(TAXA_RESSARCIMENTO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(ressarcimento)}</strong></div>
-                <div class="orcamento-item"><span>• Taxa de Gestão da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
+                <div class="orcamento-item"><span>• Despesa Administrativa e Operacional da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
 
                 <div class="orcamento-item" style="font-weight: bold; margin-top: 15px;"><span>💰 Mensalidade Necessária:</span><strong>R$ ${mensalidadeExibida}</strong></div>
                 <div class="orcamento-item"><span>💵 Receita Bruta Total Necessária:</span><strong>${formatarMoeda(receitaTotal)}</strong></div>
@@ -950,7 +1065,8 @@
                     <span>Total Geral de Custos: ${formatarMoeda(custoTotal)}</span>
                     <span>Saldo Final Estimado: <span class="valor">${formatarMoeda(saldo)}</span></span>
                 </div>
-            `;
+                
+                ${equipeDetalhadaHTML} `;
 
             document.getElementById("orcamento").innerHTML = orcamentoHTML;
         }
