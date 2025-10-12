@@ -52,6 +52,12 @@
             padding-bottom: 15px;
             font-weight: 300;
         }
+        /* Ajuste do tamanho e cor do ícone */
+        h1 .icon {
+            font-size: 1.2em; /* Ícone um pouco maior */
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
 
         /* --- CONTROLE DE ETAPAS --- */
         .step {
@@ -312,7 +318,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔍 Orçamento de Curso Lato Sensu (UFG)</h1>
+        <h1><span class="icon">🧮</span> Orçamento de Curso Lato Sensu (UFG)</h1>
 
         <div id="step-1" class="step active">
             <h2>1️⃣ Dados Básicos da Turma</h2>
@@ -475,10 +481,8 @@
         </div>
 
         <div id="step-5" class="step">
-            <h2>5️⃣ Projeção Orçamentária Final</h2>
+            <h2>5️⃣ Projeção</h2>
             
-            <h3 class="orcamento-section-title">Resultado Financeiro Completo</h3>
-
             <div id="orcamento">Aguardando cálculo...</div>
             
             <div class="navigation-buttons">
@@ -900,9 +904,9 @@
             if (bolsasEServicos.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.3. Outros Serviços Contratados (Total)</div>` + bolsasEServicos.map(m => `<div class="orcamento-item"><span>• ${m.display}</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
             if (apoioEnsinoLista.length > 0) { equipeHTML += `<div style="font-weight: bold; margin-top: 10px;">2.4. Apoio ao Ensino (Total)</div>` + apoioEnsinoLista.map(m => `<div class="orcamento-item"><span>• ${m.nome} (${m.qtd}x ${formatarMoeda(m.valor_base)}/mês)</span><strong>${formatarMoeda(m.total)}</strong></div>`).join(''); }
 
-            // TÍTULO FINAL: Limpo sem a duração
+            // TÍTULO FINAL: Limpo (Nome do Curso)
             const nomeDoCursoParaTitulo = dadosExtraidos.nomeCurso.toLowerCase().includes('indefinido') ? dadosExtraidos.nomeCurso : `Curso de Especialização em ${dadosExtraidos.nomeCurso}`;
-            const duracaoTitulo = `Projeção Orçamentária: ${nomeDoCursoParaTitulo}`;
+            const duracaoTitulo = nomeDoCursoParaTitulo; // Nome limpo.
 
 
             const orcamentoHTML = `
@@ -935,7 +939,7 @@
 
                 <div class="orcamento-item" style="font-weight: bold; padding-top: 15px; border-top: 2px solid var(--primary-color);"><span>Total Custo Operacional (sem taxas):</span><strong>${formatarMoeda(custoOperacional)}</strong></div>
                 
-                <div style="font-weight: bold; margin-top: 15px;">5.1. Taxas e Remuneração Necessária</div>
+                <div style="font-weight: bold; margin-top: 15px;">4. Resultado Financeiro</div>
                 <div class="orcamento-item"><span>• Ressarcimento UFG (${(TAXA_RESSARCIMENTO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(ressarcimento)}</strong></div>
                 <div class="orcamento-item"><span>• Taxa de Gestão da Fundação (${(TAXA_GESTAO_FIXA * 100).toFixed(0)}%):</span><strong>${formatarMoeda(taxaGestao)}</strong></div>
 
