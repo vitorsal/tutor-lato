@@ -397,13 +397,13 @@
             <div class="input-grid">
                 <div>
                     <label for="coord">Coordenador (8,5h x R$ 238,09):</label>
-                    <input type="number" id="coord" value="2023.77" oninput="checkTetoIndividual('coord'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
-                    <p id="alertCoord" class="alert-input"></p> 
+                    <input type="number" id="coord" value="2023.77" oninput="checkTetoIndividual('coord', 2023.77); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertCoord" class="alert-input">Valor excede o limite máximo mensal (R$ 2.023,77).</p> 
                 </div>
                 <div>
                     <label for="apoio">Apoio Administrativo (10h x R$ 148,80):</label>
-                    <input type="number" id="apoio" value="1488.00" oninput="checkTetoIndividual('apoio'); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
-                    <p id="alertApoio" class="alert-input"></p> 
+                    <input type="number" id="apoio" value="1488.00" oninput="checkTetoIndividual('apoio', 1488.00); calcularOrcamento();" onblur="formatarInputMonetario(this.id)" />
+                    <p id="alertApoio" class="alert-input">Valor excede o limite máximo mensal (R$ 1.488,00).</p> 
                 </div>
             </div>
 
@@ -520,7 +520,7 @@
         const TETO_GERAL_BRUTO = 29760.95; 
         const MAX_HR_VALUE = 437.49; 
         const DURACAO_MESES = 12; 
-        const HORAS_ORIENTACAO_TCC = 20; 
+        const HORAS_ORIENTACAO_TCC = 5; // MODIFICADO: 5 horas por aluno
         const PARCELAS_ABATIDAS = 4;
         
         // CONSTANTES FIXAS PARA CUSTOS E TAXAS
@@ -632,22 +632,32 @@
             inputElement.value = value.toFixed(2);
         }
 
-        function checkTetoIndividual(inputId, maxHrValue = 0) {
+        // Função universal de checagem de teto (por hora ou mensal)
+        function checkTetoIndividual(inputId, maxValor = 0) {
             const inputElement = document.getElementById(inputId);
             let value = parseFloat(inputElement.value) || 0;
             let alertElement = document.getElementById('alert' + inputId.charAt(0).toUpperCase() + inputId.slice(1));
             
-            const max = maxHrValue; 
+            const max = maxValor; 
 
-            if (inputId.startsWith('horaAula') || inputId === 'valOrientacaoHora') {
-                if (value > max) {
+            // Se for um campo com limite definido
+            if (max > 0) {
+                 if (value > max) {
                     inputElement.value = max.toFixed(2);
-                    if (alertElement) alertElement.textContent = `Valor redefinido para o máximo (R$ ${max.toFixed(2)}).`;
-                    if (alertElement) alertElement.style.display = 'block';
+                    if (alertElement) {
+                        // Ajusta a mensagem de alerta se for valor mensal ou hora
+                        if (inputId.includes('Aula') || inputId === 'valOrientacaoHora') {
+                            alertElement.textContent = `Valor redefinido para o máximo por hora (R$ ${max.toFixed(2)}).`;
+                        } else {
+                             alertElement.textContent = `Valor redefinido para o máximo mensal (R$ ${max.toFixed(2)}).`;
+                        }
+                        alertElement.style.display = 'block';
+                    }
                 } else {
                     if (alertElement) alertElement.style.display = 'none';
                 }
             } else {
+                // Para outros campos sem teto máximo definido
                 if (alertElement) alertElement.style.display = 'none';
             }
         }
@@ -681,21 +691,18 @@
             const matchVagas = texto.match(regexVagas);
             const vagas = matchVagas ? parseInt(matchVagas[1]) : 0;
             
-            // Extração da Equipe (Vice e Apoio Admin)
-            // Regex ajustadas para serem mais robustas, pegando apenas o nome antes do tab/nova linha
-            const regexCoordenador = /Coordenador\(a\)\s+([A-Za-z\s]+)(?:[\s\t\n]|$)/i;
-            const matchCoordenador = texto.match(regexCoordenador);
-            const nomeCoordenador = matchCoordenador ? matchCoordenador[1].trim() : 'Não Encontrado';
+            // Extração da Equipe (Vice e Apoio Admin) - CORRIGIDA a regex
+            const getNomeApos = (texto, label) => {
+                // Regex busca a label, ignora tab/espaços, ignora dois pontos opcionais, e captura o nome antes da quebra de linha/tab
+                const regex = new RegExp(label + '[\\s\\t]*:?\\s*([A-Za-z\\s]+)(?:\\n|\\t|$)', 'i');
+                const match = texto.match(regex);
+                return match ? match[1].trim() : 'Não Encontrado';
+            };
 
-            const regexVice = /Vice-coordenador\(a\)\s+([A-Za-z\s]+)(?:[\s\t\n]|$)/i;
-            const matchVice = texto.match(regexVice);
-            const nomeVice = matchVice ? matchVice[1].trim() : 'Não Encontrado';
-
-            const regexApoio = /Apoio\s+Administrativo\*\s+([A-Za-z\s]+)(?:[\s\t\n]|$)/i;
-            const matchApoio = texto.match(regexApoio);
-            const nomeApoio = matchApoio ? matchApoio[1].trim() : 'Não Encontrado';
-
-
+            const nomeCoordenador = getNomeApos(texto, 'Coordenador\\(a\\)');
+            const nomeVice = getNomeApos(texto, 'Vice-coordenador\\(a\\)');
+            const nomeApoio = getNomeApos(texto, 'Apoio Administrativo\\*?');
+            
             // Extração de Datas para Duração em Meses
             const regexDatas = /(?:\s|Turma\s+\d:\s*)(\d{2}\/\d{2}\/\d{4})\s*[\s\t\-]*(?:a\s*)*(\d{2}\/\d{2}\/\d{4})/i;
             const matchDatas = texto.match(regexDatas);
@@ -733,7 +740,7 @@
             let listaDocentesNomes = []; // Apenas nomes para resumo
             let listaDocentesDetalhados = []; // Objetos para a tabela final
             
-            const regexDocentePorLinha = /([\w\sáéíóúãõç]+)[\s\t]+(doutorado|mestre|mestrado|especialista|dr|me|es)[\s\t]+(Docente|Externo)[\s\t]+(\d{1,3})/i;
+            const regexDocentePorLinha = /([A-Za-z\s]+)[\s\t]+(doutorado|mestre|mestrado|especialista|dr|me|es)[\s\t]+(Docente|Externo)[\s\t]+(\d{1,3})/i; // Corrigida para ser mais tolerante com nomes
             
             const linhas = texto.split('\n');
             
@@ -772,7 +779,6 @@
 
             // Cria a lista de coordenação detalhada
             const equipeCoord = [];
-            // Usamos os nomes extraídos (já estão limpos)
             if (nomeCoordenador && nomeCoordenador !== 'Não Encontrado') equipeCoord.push({ nome: nomeCoordenador, funcao: 'Coordenador', base: 'coord', valor_mensal: 2023.77 }); 
             if (nomeVice && nomeVice !== 'Não Encontrado') equipeCoord.push({ nome: nomeVice, funcao: 'Vice-coordenador', base: 'vice', valor_mensal: 0 }); 
             if (nomeApoio && nomeApoio !== 'Não Encontrado') equipeCoord.push({ nome: nomeApoio, funcao: 'Apoio Administrativo', base: 'apoio', valor_mensal: 1488.00 });
@@ -941,7 +947,7 @@
                     <div class="orcamento-item" style="font-weight: bold; border-top: 1px solid var(--border-color);"><span>Total C. Adicionais (Insumos):</span><strong>${formatarMoeda(custosAdicionais)}</strong></div>
                 `;
             }
-            
+
             // --- GERAÇÃO DA LISTA DETALHADA DA EQUIPE (ETAPA 5) ---
             const equipeDetalhadaCompleta = [];
             
@@ -951,7 +957,7 @@
             const apoioData = dadosExtraidos.equipeCoord.find(m => m.funcao === 'Apoio Administrativo');
             
             if (coordData) equipeDetalhadaCompleta.push({ nome: coordData.nome, funcao: 'Coordenador', base: `${formatarMoeda(coordValor)}/mês`, total: (coordValor * duracaoMeses) });
-            if (viceData) equipeDetalhadaCompleta.push({ nome: viceData.nome, funcao: 'Vice-coordenador', base: `Não Remunerado`, total: 0 }); // Vice não tem custo aqui
+            if (viceData) equipeDetalhadaCompleta.push({ nome: viceData.nome, funcao: 'Vice-coordenador', base: `Não Remunerado`, total: 0 });
             if (apoioData) equipeDetalhadaCompleta.push({ nome: apoioData.nome, funcao: 'Apoio Administrativo', base: `${formatarMoeda(apoioValor)}/mês`, total: (apoioValor * duracaoMeses) });
 
             // 2. Bolsas e Serviços (Remuneração Fixa Mensal)
@@ -961,7 +967,8 @@
 
             // 3. Docentes e Orientação (Remuneração por CH)
             const numDocentes = dadosExtraidos.listaDocentesDetalhados.length || 1;
-            const custoOrientacaoPorDocente = custoOrientacao / numDocentes;
+            // Cálculo do custo de orientação TCC, distribuído igualmente entre todos os docentes (simplificação)
+            const custoOrientacaoPorDocente = custoOrientacao / (dadosExtraidos.listaDocentesDetalhados.length || 1);
 
             dadosExtraidos.listaDocentesDetalhados.forEach(doc => {
                 let valorHA = 0;
@@ -1073,33 +1080,28 @@
 
         // Inicializa a aplicação
         document.addEventListener('DOMContentLoaded', () => {
+            // Novo texto de exemplo focado (Banco de Dados e IA)
             const exemploTexto = `
-MINISTÉRIO DA EDUCAÇÃO
-UNIVERSIDADE FEDERAL DE GOIÁS
-PROJETO DE ENSINO
-Oferta de Turma(s) de
-Curso de Pós-Graduação Lato Sensu em Gestão de Projetos e Inovação 
-(Conforme Resolução CEPEC Nº 1952/2025 e Instrução Normativa PRPG/UFG)
 
-1. DADOS GERAIS
-Tipo de Curso: Curso de Especialização
-Carga Horária Total: 420 h (no mínimo 360 h)
-Número de Vagas: 50
-Data de Início e Encerramento da(s) Turma(s) Turma 1: 15/03/2026 a 15/09/2027
+Curso de Pós-Graduação Lato Sensu em Banco de Dados e IA
+
+Carga Horária Total: 367 h (no mínimo 360 h)
+Número de Vagas: 47
+Data de Início e Encerramento da(s) Turma(s) Turma 1: 12/12/2025 a 15/09/2027
 
 2. COORDENAÇÃO
 Coordenador(a): João Silva
 Vice-coordenador(a): Maria Costa
-Apoio Administrativo*: Pedro Souza
+Apoio Administrativo: Pedro Souza
 
 7. CORPO DOCENTE
 SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
-	Maria augusta	doutorado	Docente	90
-	Roberta miranda	doutorado	Docente	90
+	Maria augusta	doutorado	Docente	92
+	Roberta miranda	doutorado	Docente	84
 	Dias anas	doutorado	Docente	42
 	Paula marcos	doutorado	Docente	50
 	Mariana carlos	mestrado	docente	45
-	Junior CAssiano	especialista	docente	70
+	Junior CAssiano	especialista	docente	54
 `;
 
             const textarea = document.getElementById('texto');
@@ -1112,7 +1114,12 @@ SIAPE/CPF*	Nome	Titulação	Vínculo Institucional	Carga Horária
             inputIdsToFormat.forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
-                    checkTetoIndividual(id, parseFloat(element.value)); 
+                    // Força a checagem de teto nos valores fixos de coordenação
+                    let max = 0;
+                    if (id === 'coord') max = 2023.77;
+                    else if (id === 'apoio') max = 1488.00;
+                    
+                    checkTetoIndividual(id, max); 
                     formatarInputMonetario(id);
                 }
             });
