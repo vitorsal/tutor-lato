@@ -11,7 +11,7 @@
         :root {
             --primary-color: #38761D; /* Verde principal */
             --secondary-color: #FFFFFF;
-            --accent-bg: #E6F3E6; /* Fundo de destaque */
+            --accent-bg: #F8F9FA; /* Fundo de destaque mais claro */
             --text-color: #333333;
             --button-text-color: #FFFFFF;
             --hover-bg: #4CAF50;
@@ -20,6 +20,12 @@
             --modal-button-color: #D9534F; /* Vermelho do botão "Modelos" */
             --subtitulo-cor: #1D543B; 
             --alert-bg: #ffe4e1;
+            
+            /* Novas cores para melhor legibilidade */
+            --card-bg: #F8F9FA; /* Verde bem clarinho para fundo */
+            --card-text: #2C3E2F; /* Cinza escuro para texto */
+            --card-hover-bg: #38761D; /* Verde principal para hover */
+            --card-hover-text: #FFFFFF; /* Branco para texto no hover */
         }
 
         /* ESTILOS GERAIS */
@@ -243,7 +249,7 @@
 
 
         /* ==================== */
-        /* ESTILO DOS TUTORIAIS (MANTIDO) */
+        /* ESTILO DOS TUTORIAIS (MODIFICADO) */
         /* ==================== */
         .search-box {
             margin-bottom: 25px;
@@ -255,18 +261,113 @@
         .highlight { background-color: yellow; font-weight: bold; padding: 1px 3px; border-radius: 3px; }
         #searchInput { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
         .tutorial-item.hidden { display: none !important; }
-        .tutorial-header { background-color: var(--primary-color); color: var(--button-text-color); cursor: pointer; padding: 15px 25px; width: 100%; border: none; text-align: left; outline: none; font-size: 1.1em; transition: background-color 0.3s ease, border-radius 0.3s ease; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); }
-        .tutorial-header::after { content: "►"; margin-left: 10px; font-size: 1.2em; transition: transform 0.3s; }
-        .tutorial-header.active::after { transform: rotate(90deg); }
-        .content { padding: 0 25px; background-color: var(--accent-bg); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-left: 1px solid var(--primary-color); border-right: 1px solid var(--primary-color); border-bottom: 1px solid var(--primary-color); border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
-        .content-inner { padding: 20px 0; }
-        .content-inner h3 { color: var(--subtitulo-cor); font-size: 1.2em; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-top: 25px; }
-        .content-inner strong.atencao-block { display: block; background-color: var(--alert-bg); border-left: 4px solid var(--modal-button-color); padding: 10px; margin: 15px 0; font-weight: bold; color: var(--text-color); }
-        .content-inner a { color: var(--primary-color); font-weight: bold; text-decoration: none; }
-        .content-inner a:hover { text-decoration: underline; }
-        .content-inner .simple-list-style li { list-style-type: '★'; padding-left: 10px; margin-bottom: 5px; }
-        .content-inner .simple-list-style li ul li { list-style-type: disc; }
-        .voltar-topo { display: block; text-align: right; margin-top: 15px; padding-top: 5px; border-top: 1px dashed #ccc; font-size: 0.9em; }
+        
+        /* NOVO ESTILO PARA OS ITENS DOS TUTORIAIS */
+        .tutorial-item {
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .tutorial-header { 
+            background-color: var(--card-bg); 
+            color: var(--card-text); 
+            cursor: pointer; 
+            padding: 15px 25px; 
+            width: 100%; 
+            border: none; 
+            text-align: left; 
+            outline: none; 
+            font-size: 1.1em; 
+            transition: all 0.3s ease; 
+            margin-top: 0; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            border: 1px solid #e0e0e0;
+        }
+        
+        .tutorial-header:hover {
+            background-color: var(--card-hover-bg);
+            color: var(--card-hover-text);
+	}
+
+        /* ESTILO QUANDO O CARD ESTÁ ABERTO (ACTIVE) */
+        .tutorial-header.active {
+            background-color: var(--card-hover-bg);
+            color: var(--card-hover-text);
+	}
+        
+
+        .tutorial-header::after { 
+            content: "►"; 
+            margin-left: 10px; 
+            font-size: 1.2em; 
+            transition: transform 0.3s; 
+        }
+        .tutorial-header.active::after { 
+            transform: rotate(90deg); 
+        }
+        
+        .content { 
+            padding: 0 25px; 
+            background-color: var(--accent-bg); 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.4s ease-out; 
+            border-left: 1px solid #e0e0e0; 
+            border-right: 1px solid #e0e0e0; 
+            border-bottom: 1px solid #e0e0e0; 
+            border-bottom-left-radius: 8px; 
+            border-bottom-right-radius: 8px; 
+        }
+        
+        .content-inner { 
+            padding: 20px 0; 
+        }
+        .content-inner h3 { 
+            color: var(--subtitulo-cor); 
+            font-size: 1.2em; 
+            border-bottom: 1px solid #ddd; 
+            padding-bottom: 5px; 
+            margin-top: 25px; 
+        }
+        .content-inner strong.atencao-block { 
+            display: block; 
+            background-color: var(--alert-bg); 
+            border-left: 4px solid var(--modal-button-color); 
+            padding: 10px; 
+            margin: 15px 0; 
+            font-weight: bold; 
+            color: var(--text-color); 
+        }
+        .content-inner a { 
+            color: var(--primary-color); 
+            font-weight: bold; 
+            text-decoration: none; 
+        }
+        .content-inner a:hover { 
+            text-decoration: underline; 
+        }
+        .content-inner .simple-list-style li { 
+            list-style-type: '★'; 
+            padding-left: 10px; 
+            margin-bottom: 5px; 
+        }
+        .content-inner .simple-list-style li ul li { 
+            list-style-type: disc; 
+        }
+        .voltar-topo { 
+            display: block; 
+            text-align: right; 
+            margin-top: 15px; 
+            padding-top: 5px; 
+            border-top: 1px dashed #ccc; 
+            font-size: 0.9em; 
+        }
     </style>
 </head>
 <body>
@@ -494,7 +595,7 @@
                 <ul class="simple-list-style">
                     <li>Formulário específico, nato digital no **SEI**, assinado pelo Coordenador do curso;</li>
                     <li>Histórico Escolar do aluno;</li>
-                    <li>Enviar o processo à **Biblioteca da UFG** para que seja inserida a Declaração de “nada consta” emitida pelo Sistema de Bibliotecas;</li>
+                    <li>Enviar o processo à **Biblioteca da UFG** para que seja inserida a Declaração de "nada consta" emitida pelo Sistema de Bibliotecas;</li>
                     <li>Inserir o **Comprovante de quitação da taxa de expedição de certificado** (custo de **R$ 32,00** por certificado; para obter a GRU, entrar em contato com <strong class="email-contato">dfp.proad@ufg.br</strong> com a relação de alunos concluintes, o nome do curso e o período);</li>
                     <li>Após a inserção de todos os documentos, o processo deve ser encaminhado à **PRPG** para análise.</li>
                 </ul>
@@ -603,8 +704,8 @@
                 <p>A declaração de matrícula é um documento disponível diretamente no sistema **SIGAA**, acessível pelo próprio(a) discente. Para emiti-la, siga os passos:</p>
                 <ol>
                     <li>Acesse o **SIGAA – Portal do Discente**;</li>
-                    <li>No menu superior, clique em “Ensino”;</li>
-                    <li>Em seguida, selecione a opção “Declaração de Matrícula” ou “Declaração de Vínculo” (ambas são válidas para comprovar vínculo com o curso).</li>
+                    <li>No menu superior, clique em "Ensino";</li>
+                    <li>Em seguida, selecione a opção "Declaração de Matrícula" ou "Declaração de Vínculo" (ambas são válidas para comprovar vínculo com o curso).</li>
                 </ol>
                 <p>Observação: A emissão é feita de forma **automática** e o documento gerado possui **validade institucional**, com código de verificação.</p>
 
